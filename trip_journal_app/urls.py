@@ -5,5 +5,5 @@ from trip_journal_app import views
 
 urlpatterns = [
     url(r'^$', views.home, name='home'),
-    url(r'^edit/$', views.edit, name='edit')
+    url(r'^edit/(?P<story_name>[^/]*)$', views.edit, name='edit')
 ]

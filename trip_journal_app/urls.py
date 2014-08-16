@@ -5,4 +5,5 @@ from trip_journal_app import views
 
 urlpatterns = [
     url(r'^$', views.home, name='home'),
+    url(r'^edit/$', views.edit, name='edit')
 ]

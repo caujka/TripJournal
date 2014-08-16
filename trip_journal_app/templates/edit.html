@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    </head>
+    <body>
+        {% load staticfiles %}
+        <h2 id="story_name">Story</h2>
+        <div id="added_content"></div>
+        <form method="POST">{% csrf_token %}
+            <label for="text_box">Напишіть щось тут:</label>
+            <div>
+                <textarea id="text_box" name="new_text" cols="30" rows="10"></textarea>
+            </div>
+            <div>
+                <button type="button" id="button">Додати</button>
+            </div>
+        </form>
+
+        <p>Add tags <button onclick="addTag()">+ tag</button></p>
+        <div id="demo"><p></p></div>
+
+        <button id="publish_button">Publish</button>
+
+        <script type="text/javascript" charset="utf-8"
+                src="{% static "javascript/adding_blocks.js" %}"></script>
+        <script type="text/javascript" charset="utf-8"
+                src="{% static "javascript/xml_request.js" %}"></script>
+        <script type="text/javascript" charset="utf-8"
+                src="{% static "javascript/add_tag.js"%}"></script>
+    </body>
+</html>

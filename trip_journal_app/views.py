@@ -14,7 +14,10 @@ def home(request):
 
 
 def edit(request):
-    # import pdb; pdb.set_trace()
+    '''
+    Edit page view. When changes on the page are published
+    saves added content to file in media directory.
+    '''
     if request.method == 'POST':
         request_body = json.loads(request.body)
         story_title = request_body['title']

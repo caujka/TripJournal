@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'trip_journal_app',
 )
 
 MIDDLEWARE_CLASSES = (

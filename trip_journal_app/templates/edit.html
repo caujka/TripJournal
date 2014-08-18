@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        {% load staticfiles %}
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Edit: {{ title }}</title>
     </head>
     <body>
-        {% load staticfiles %}
-        <h2 id="story_name">Story</h2>
-        <div id="added_content"></div>
+	<h2 id="story_name">{{ title }}</h2>
+        <div id="added_content">
+	    {{ content|safe }}
+	</div>
         <form method="POST">{% csrf_token %}
             <label for="text_box">Напишіть щось тут:</label>
             <div>

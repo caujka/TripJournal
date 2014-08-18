@@ -1,9 +1,9 @@
 import json
 import os
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from TripJournal.settings import MEDIA_ROOT
-from trip_journal_app.utils import saved_stories
+from trip_journal_app.utils import saved_stories, unicode_slugify
 
 # Create your views here.
 
@@ -22,16 +22,28 @@ def edit(request, story_name):
     # POST requests for publishing
     if request.method == 'POST':
         request_body = json.loads(request.body)
-        story_title = request_body['title']
-        file_name = os.path.join(MEDIA_ROOT, story_title + '.json')
-        with open(file_name, 'w') as fh:
-            json.dump(request_body, fh)
+        story_title_slug = unicode_slugify(request_body['title'])
+        file_name = os.path.join(MEDIA_ROOT, story_title_slug + '.json')
+        with open(file_name, 'w') as story_file:
+            json.dump(request_body, story_file)
         return HttpResponse("ok")
-    else:
+
+    # GET requests
+    elif request.method == 'GET':
+
+        # for cases when there is no name or it's a new story
+        story_info = {'title': story_name}
         if story_name:
-            if story_name in saved_stories():
-                print "Such a story exists."
-            else:
-                print "New story"
-        return render(request, 'edit.html')
+            slugish_name = unicode_slugify(story_name)
+            if slugish_name in saved_stories():
+
+                # redirect to normal url
+                if slugish_name != story_name:
+                    return redirect('/edit/%s' % slugish_name)
+
+                file_name = os.path.join(MEDIA_ROOT, story_name + '.json')
+                with open(file_name, 'r') as story_file:
+                    story_info = json.load(story_file)
+
+        return render(request, 'edit.html', story_info)
 

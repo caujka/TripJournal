@@ -1,5 +1,7 @@
 import os
 from TripJournal.settings import MEDIA_ROOT
+from unidecode import unidecode
+from django.template.defaultfilters import slugify
 
 
 def saved_stories():
@@ -14,3 +16,6 @@ def saved_stories():
         )
     ]
 
+
+def unicode_slugify(uni_string):
+    return slugify(unidecode(uni_string))

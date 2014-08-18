@@ -10,7 +10,7 @@ from trip_journal_app.utils import saved_stories
 
 def home(request):
     # dummy view for home page
-    return HttpResponse('Welcome to TripJournal')
+    return render(request, 'index.html', {'stories': saved_stories()})
 
 
 def edit(request, story_name):

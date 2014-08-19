@@ -1,12 +1,20 @@
 <!DOCTYPE html>
 <html>
     <head>
+        {% load staticfiles %}
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" href="{% static "css/main.css" %}">
     </head>
     <body>
-	<h2>Existing stories</h2>        
-	{% for story in stories %}
-         <a href="/edit/{{ story }}">{{ story }}</a><br>
-	{% endfor %}
+        <div class="top_section">
+            <h1>Trip Journal</h1>
+        </div>
+        <div class="bottom_section">
+            <ul>
+	        {% for story in stories %}
+                <li><a href="/edit/{{ story.url }}">{{ story.title }}</a></li>
+	        {% endfor %}
+            </ul>
     </body>
+    <div>
 </html>

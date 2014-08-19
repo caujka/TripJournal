@@ -1,0 +1,39 @@
+html, body {
+    background-color: #ABC3CF;
+    height:100%;
+}
+
+.top_section, .bottom_section {        
+    position:relative;
+    height:75%;
+    margin: auto;
+    width:80%;
+    background-attachment:fixed;    /* this keeps the background in place */
+    background-size:100%;
+    background-repeat:no-repeat;
+    background-color: white;
+}
+
+.top_section {
+    background-image: url("../images/Great_Sand_Dunes_NP_1 copy.jpg");
+    display:table;
+}
+
+.top_section h1 {
+    color: white;
+    font-size: 3em;
+    padding-left: 20px;
+    display:table-cell;
+    position:relative;
+    vertical-align:middle;
+} 
+
+.bottom_section {
+    border-top: 20px solid #ABC3CF;
+}
+
+li {
+    padding: 5px;
+    color: #333333;
+    font-size: 1.2em;
+}

@@ -3,14 +3,19 @@ import os
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from TripJournal.settings import MEDIA_ROOT
-from trip_journal_app.utils import saved_stories, unicode_slugify
+from trip_journal_app.utils import (
+    saved_stories, unicode_slugify, load_story_info
+)
 
 # Create your views here.
 
 
 def home(request):
-    # dummy view for home page
-    return render(request, 'index.html', {'stories': saved_stories()})
+    stories = []
+    for story in saved_stories():
+        stories += [{'url': story,
+                    'title': load_story_info(story)['title']}]
+    return render(request, 'index.html', {'stories': stories})
 
 
 def edit(request, story_name):
@@ -41,9 +46,7 @@ def edit(request, story_name):
                 if slugish_name != story_name:
                     return redirect('/edit/%s' % slugish_name)
 
-                file_name = os.path.join(MEDIA_ROOT, story_name + '.json')
-                with open(file_name, 'r') as story_file:
-                    story_info = json.load(story_file)
+                story_info = load_story_info(story_name)
 
         return render(request, 'edit.html', story_info)
 

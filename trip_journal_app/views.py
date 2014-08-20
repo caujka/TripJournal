@@ -11,6 +11,9 @@ from trip_journal_app.utils import (
 
 
 def home(request):
+    """
+    Home page view.
+    """
     stories = []
     for story in saved_stories():
         stories += [{'url': story,

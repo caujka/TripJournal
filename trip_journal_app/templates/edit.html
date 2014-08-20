@@ -6,14 +6,18 @@
 	<title>Edit: {{ title }}</title>
     </head>
     <body>
-	<h2 id="story_name">{{ title }}</h2>
-        <div id="added_content">
+	<div id="add_title_block" style="display: none;">
+		Sotry title: <input type="text" id="title_text">
+		<button id="add_title">+</button>
+	</div>
+	<h2 id="story_title">{{ title }}</h2>
+        <div id="story_content">
 	    {{ content|safe }}
 	</div>
         <form method="POST">{% csrf_token %}
-            <label for="text_box">Напишіть щось тут:</label>
+            <label for="text_box">Story blocks:</label>
             <div>
-                <textarea id="text_box" name="new_text" cols="30" rows="10"></textarea>
+                <textarea id="text_box" name="new_text" cols="100" rows="10"></textarea>
             </div>
             <div>
                 <button type="button" id="button">Додати</button>
@@ -23,7 +27,7 @@
         <p>Add tags <button onclick="addTag()">+ tag</button></p>
         <div id="demo"><p></p></div>
 
-        <button id="publish_button">Publish</button>
+        <button id="publish">Publish</button>
 
         <script type="text/javascript" charset="utf-8"
                 src="{% static "javascript/adding_blocks.js" %}"></script>

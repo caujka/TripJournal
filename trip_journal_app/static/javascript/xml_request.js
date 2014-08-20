@@ -6,7 +6,7 @@ function getCookie(name) {
 
 (function() {
     var httpRequest;
-    document.getElementById('publish_button').onclick = function() {
+    document.getElementById('publish').onclick = function() {
         makeRequest('/edit/');
     };
 
@@ -29,19 +29,19 @@ function getCookie(name) {
             console.log('Giving up :\( Cannot create an XMLHTTP instance');
             return false;
         }
-        httpRequest.onreadystatechange = alertContents;
+        httpRequest.onreadystatechange = alertResult;
         httpRequest.open('POST', url);
         httpRequest.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
         httpRequest.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
         var request_body = JSON.stringify({
-            title: document.getElementById('story_name').innerHTML,
-            content: document.getElementById('added_content').innerHTML,
-            tags: document.getElementById('demo').innerHTML,
+            title: document.getElementById('story_title').innerHTML,
+            content: document.getElementById('story_content').innerHTML,
+            // tags: document.getElementById('demo').innerHTML,
         });
         httpRequest.send(request_body);
     }
 
-    function alertContents() {
+    function alertResult() {
         if (httpRequest.readyState === 4) {
             if (httpRequest.status === 200) {
                 alert('Your changes have been saved!');

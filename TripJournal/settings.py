@@ -61,7 +61,7 @@ WSGI_APPLICATION = 'TripJournal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'TripJournal',
+        'NAME': 'TripJournalModels',
         'USER': local_settings.db_user,
         'PASSWORD': local_settings.db_password,
     }

@@ -42,10 +42,10 @@ def save_pic(img, original_pic_name, suffix, path):
 
 
 if __name__ == '__main__':
-    widthes = [400, 700, 900, 1500]
+    NEW_WIDTH = [400, 700, 900, 1500]
     img_dir = sys.argv[1]
     for image in sys.argv[2:]:
-        for width in widthes:
+        for width in NEW_WIDTH:
             new_pic = resize(os.path.join(img_dir, image), width)
             if new_pic:
                 save_pic(new_pic, image, width, img_dir)

@@ -29,8 +29,8 @@ class Story(models.Model):
     date_travel = models.DateField()
     date_publish = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
-    track = models.TextField(blank=True)
-    rating = models.FloatField(blank=True)
+    track = models.TextField(blank=True, null=True)
+    rating = models.FloatField(blank=True, null=True)
     published = models.BooleanField(default=False)
     user = models.ForeignKey(User)
     tags = models.ManyToManyField(Tag)
@@ -73,7 +73,8 @@ class Story(models.Model):
 
 class Picture(models.Model):
     name = models.CharField(max_length=45, unique=True)
-    location = models.CharField(max_length=45)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
     story = models.ForeignKey(Story)
 
     def __unicode__(self):
@@ -115,7 +116,8 @@ class Comment(models.Model):
 class Map_artifact(models.Model):
     text = models.TextField()
     story = models.ForeignKey(Story)
-    location = models.CharField(max_length=45)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
     name = models.CharField(max_length=45, unique=True)
 
     def __unicode__(self):

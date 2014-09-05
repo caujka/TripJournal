@@ -1,0 +1,56 @@
+[
+    {
+        "pk": 1,
+        "model": "trip_journal_app.user",
+        "fields": {
+            "oauth_service": "",
+            "name": "Володя",
+            "oauth_id": ""
+        }
+    },
+    {
+        "pk": 2,
+        "model": "trip_journal_app.user",
+        "fields": {
+            "oauth_service": "google+",
+            "name": "Олеся",
+            "oauth_id": "+olesiahrydzhuk"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "trip_journal_app.user",
+        "fields": {
+            "oauth_service": "",
+            "name": "Ігор",
+            "oauth_id": ""
+        }
+    },
+    {
+        "pk": 4,
+        "model": "trip_journal_app.user",
+        "fields": {
+            "oauth_service": "",
+            "name": "Андрій",
+            "oauth_id": ""
+        }
+    },
+    {
+        "pk": 5,
+        "model": "trip_journal_app.user",
+        "fields": {
+            "oauth_service": "",
+            "name": "Марія",
+            "oauth_id": ""
+        }
+    },
+    {
+        "pk": 6,
+        "model": "trip_journal_app.user",
+        "fields": {
+            "oauth_service": "",
+            "name": "Саша",
+            "oauth_id": ""
+        }
+    }
+]

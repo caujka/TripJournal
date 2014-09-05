@@ -12,9 +12,9 @@
         "pk": 2,
         "model": "trip_journal_app.user",
         "fields": {
-            "oauth_service": "google+",
+            "oauth_service": "",
             "name": "Олеся",
-            "oauth_id": "+olesiahrydzhuk"
+            "oauth_id": ""
         }
     },
     {
@@ -51,6 +51,186 @@
             "oauth_service": "",
             "name": "Саша",
             "oauth_id": ""
+        }
+    },
+    {
+        "pk": 1,
+        "model": "trip_journal_app.story",
+        "fields": {
+            "rating": null,
+            "track": null,
+            "user": 1,
+            "title": "",
+            "date_publish": "",
+            "text": "",
+            "tags": [],
+            "date_travel": "",
+            "published": true
+        }
+    },
+    {
+        "pk": 2,
+        "model": "trip_journal_app.story",
+        "fields": {
+            "rating": null,
+            "track": null,
+            "user": 1,
+            "title": "",
+            "date_publish": "",
+            "text": "",
+            "tags": [],
+            "date_travel": "",
+            "published": true
+        }
+    },
+    {
+        "pk": 3,
+        "model": "trip_journal_app.story",
+        "fields": {
+            "rating": null,
+            "track": null,
+            "user": 2,
+            "title": "",
+            "date_publish": "",
+            "text": "",
+            "tags": [],
+            "date_travel": "",
+            "published": true
+        }
+    },
+    {
+        "pk": 4,
+        "model": "trip_journal_app.story",
+        "fields": {
+            "rating": null,
+            "track": null,
+            "user": 2,
+            "title": "",
+            "date_publish": "",
+            "text": "",
+            "tags": [],
+            "date_travel": "",
+            "published": true
+        }
+    },
+    {
+        "pk": 5,
+        "model": "trip_journal_app.story",
+        "fields": {
+            "rating": null,
+            "track": null,
+            "user": 3,
+            "title": "",
+            "date_publish": "",
+            "text": "",
+            "tags": [],
+            "date_travel": "",
+            "published": true
+        }
+    },
+    {
+        "pk": 6,
+        "model": "trip_journal_app.story",
+        "fields": {
+            "rating": null,
+            "track": null,
+            "user": 3,
+            "title": "",
+            "date_publish": "",
+            "text": "",
+            "tags": [],
+            "date_travel": "",
+            "published": true
+        }
+    },
+    {
+        "pk": 7,
+        "model": "trip_journal_app.story",
+        "fields": {
+            "rating": null,
+            "track": null,
+            "user": 4,
+            "title": "",
+            "date_publish": "",
+            "text": "",
+            "tags": [],
+            "date_travel": "",
+            "published": true
+        }
+    },
+    {
+        "pk": 8,
+        "model": "trip_journal_app.story",
+        "fields": {
+            "rating": null,
+            "track": null,
+            "user": 4,
+            "title": "",
+            "date_publish": "",
+            "text": "",
+            "tags": [],
+            "date_travel": "",
+            "published": true
+        }
+    },
+    {
+        "pk": 9,
+        "model": "trip_journal_app.story",
+        "fields": {
+            "rating": null,
+            "track": null,
+            "user": 5,
+            "title": "",
+            "date_publish": "",
+            "text": "",
+            "tags": [],
+            "date_travel": "",
+            "published": true
+        }
+    },
+    {
+        "pk": 10,
+        "model": "trip_journal_app.story",
+        "fields": {
+            "rating": null,
+            "track": null,
+            "user": 5,
+            "title": "",
+            "date_publish": "",
+            "text": "",
+            "tags": [],
+            "date_travel": "",
+            "published": true
+        }
+    },
+    {
+        "pk": 11,
+        "model": "trip_journal_app.story",
+        "fields": {
+            "rating": null,
+            "track": null,
+            "user": 6,
+            "title": "",
+            "date_publish": "",
+            "text": "",
+            "tags": [],
+            "date_travel": "",
+            "published": true
+        }
+    },
+    {
+        "pk": 12,
+        "model": "trip_journal_app.story",
+        "fields": {
+            "rating": null,
+            "track": null,
+            "user": 6,
+            "title": "",
+            "date_publish": "",
+            "text": "",
+            "tags": [],
+            "date_travel": "",
+            "published": true
         }
     }
 ]

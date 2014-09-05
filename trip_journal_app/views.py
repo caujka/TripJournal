@@ -3,7 +3,7 @@ import os
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from TripJournal.settings import MEDIA_ROOT
-from trip_journal_app.utils import (
+from trip_journal_app.utils.json_utils import (
     saved_stories, unicode_slugify, load_story_info
 )
 

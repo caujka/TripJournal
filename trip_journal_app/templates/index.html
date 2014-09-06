@@ -6,15 +6,34 @@
         <link rel="stylesheet" href="{% static "css/main.css" %}">
     </head>
     <body>
-        <div class="top_section">
+        <div id="header">
             <h1>Trip Journal</h1>
         </div>
-        <div class="bottom_section">
-            <ul>
-	        {% for story in stories %}
-                <li><a href="/edit/{{ story.url }}">{{ story.title }}</a></li>
-	        {% endfor %}
-            </ul>
+        <div id="content">
+<!--            <div id="content_type_box">
+                <div class="content_type">
+                    <button>My stories</button>
+                </div>
+                <div class="content_type">
+                    <button>New stories</button>
+                </div>
+                <div class="content_type">
+                    <button>Popular stories</button>
+                </div>
+                <div class="content_type">
+                    <button>New popular stories</button>
+                </div>
+                <div class="content_type">
+                    <button>Most popular stories</button>
+                </div>
+            </div> -->
+            {% for story in stories %}
+                <div class="story_list_container">
+                    <div class="story_name_container"><a href="/story/{{ story.url }}">{{ story.title }}</a></div>
+                    <div class="story_username_container">{{ story.user }}</div>
+                    <div class="story_datepublish_container">{{ story.date_publish }}</div>
+                </div>
+            {% endfor %}
+        </div>
     </body>
-    <div>
 </html>

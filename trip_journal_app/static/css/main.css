@@ -3,7 +3,7 @@ html, body {
     height:100%;
 }
 
-.top_section, .bottom_section {        
+#header, #content {        
     position:relative;
     height:75%;
     margin: auto;
@@ -14,12 +14,12 @@ html, body {
     background-color: white;
 }
 
-.top_section {
+#header {
     background-image: url("../images/Great_Sand_Dunes_NP_1 copy.jpg");
     display:table;
 }
 
-.top_section h1 {
+#content h1 {
     color: white;
     font-size: 3em;
     padding-left: 20px;
@@ -28,12 +28,44 @@ html, body {
     vertical-align:middle;
 } 
 
-.bottom_section {
-    border-top: 20px solid #ABC3CF;
+#content {
+    border-top: 10px solid #ABC3CF;
 }
 
-li {
-    padding: 5px;
-    color: #333333;
-    font-size: 1.2em;
+#content_type_box {
+    height: 30px;
+    width: 100%;
+    background-color: #a6b211;
+}
+
+.content_type {
+    height: 100%;
+    width: 20%;
+    position: relative;
+    float: left;
+}
+
+
+.story_list_container {
+    width: 100%;
+}
+
+
+.story_name_container {
+    height: 20px;
+    width: 69%;
+    float: left;
+    padding-left: 5px;
+}
+
+.story_datepublish_container {
+    height: 20px;
+    width: 10%;
+    float: left;
+}
+
+.story_username_container {
+    height: 20px;
+    width: 20%;
+    float: left;
 }

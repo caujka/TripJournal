@@ -179,3 +179,21 @@ main{
 #add_comment_t,#add_treasure_t,#add_comment_p,#add_treasure_p{
     display: none;
 }
+#top{
+    display: block;
+    width: 25px;
+    height: 25px;
+    top: 0px;
+    right: -40px;
+    border: none;
+    background:  url(../images/arrow-up.png) no-repeat;
+}
+#bottom{
+    display: block;
+    width: 25px;
+    height: 25px;
+    bottom: 0px;
+    right: -40px;
+    border: none;
+    background:  url(../images/arrow-down.png) no-repeat;
+}

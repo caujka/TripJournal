@@ -53,14 +53,14 @@ html, body {
 
 .story_name_container {
     height: 20px;
-    width: 69%;
+    width: 59%;
     float: left;
     padding-left: 5px;
 }
 
 .story_datepublish_container {
     height: 20px;
-    width: 10%;
+    width: 20%;
     float: left;
 }
 

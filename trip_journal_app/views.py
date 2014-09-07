@@ -15,13 +15,7 @@ def home(request):
     """
     Home page view.
     """
-    stories = []
-    for story in Story.objects.all():
-        stories += [{'url': story.id,
-                    'title': story.title,
-                    'user': story.user,
-                    'date': story.date_publish}]
-    return render(request, 'index.html', {'stories': stories})
+    return render(request, 'index.html', {'stories': Story.objects.all()})
 
 
 def save(request, story_id):

@@ -187,15 +187,18 @@ main{
 .block_story h3{
     margin-left: 50px;
 }
-#comment_but_t,#treasure_but_t,#comment_but_p,#treasure_but_p{
+.addcontent{
+	width: 580px;
+	height:800px;
+}
+#comment_but_t,#treasure_but_t{
     position: relative;
+    margin-left:100px;
 }
 #story_content,#title_panel,#text_panel,#photo_panel,#video_panel,#add_panel,#publish_panel{
     display: none;
 }
-#add_comment_t,#add_treasure_t,#add_comment_p,#add_treasure_p{
-    display: none;
-}
+
 #top{
     display: inline-block;
     width: 25px;

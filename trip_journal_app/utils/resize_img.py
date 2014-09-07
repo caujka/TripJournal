@@ -14,16 +14,17 @@ import sys
 import os.path
 
 
-def resize(original_pic, width):
+def resize(original_pic, size):
     """
     original_pic - name of picture file to resize.
     width - desirable width of new picture.
     The function returns resized picture.
     """
     img = Image.open(original_pic)
-    original_width = img.size[0]
-    if original_width > width:
-        height = int(img.size[1] * (width / float(original_width)))
+    original_size = max(img.size)
+    change_percent = size / float(original_size)
+    if change_percent < 1:
+        width, height = [int(s * change_percent) for s in img.size]
         img = img.resize((width, height), Image.ANTIALIAS)
         return img
     else:
@@ -42,10 +43,10 @@ def save_pic(img, original_pic_name, suffix, path):
 
 
 if __name__ == '__main__':
-    NEW_WIDTH = [400, 700, 900, 1500]
+    NEW_SIZES = [400, 700, 900, 1500]
     img_dir = sys.argv[1]
     for image in sys.argv[2:]:
-        for width in NEW_WIDTH:
+        for width in NEW_SIZES:
             new_pic = resize(os.path.join(img_dir, image), width)
             if new_pic:
                 save_pic(new_pic, image, width, img_dir)

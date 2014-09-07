@@ -21,6 +21,14 @@ def home(request):
     return render(request, 'index.html', {'stories': stories})
 
 
+def save(request, story_id):
+    pass
+
+
+def story(request, story_id):
+    return HttpResponse('OK')
+
+
 def edit(request, story_name):
     '''
     Edit page view. When changes on the page are published

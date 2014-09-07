@@ -6,6 +6,7 @@ from TripJournal.settings import MEDIA_ROOT
 from trip_journal_app.utils.json_utils import (
     saved_stories, unicode_slugify, load_story_info
 )
+from trip_journal_app.models import Story
 
 # Create your views here.
 
@@ -15,9 +16,11 @@ def home(request):
     Home page view.
     """
     stories = []
-    for story in saved_stories():
-        stories += [{'url': story,
-                    'title': load_story_info(story)['title']}]
+    for story in Story.objects.all():
+        stories += [{'url': story.id,
+                    'title': story.title,
+                    'user': story.user,
+                    'date': story.date_publish}]
     return render(request, 'index.html', {'stories': stories})
 
 

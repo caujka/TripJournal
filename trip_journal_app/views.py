@@ -22,8 +22,12 @@ def save(request, story_id):
     pass
 
 
+def upload_img(request, story_id):
+    pass
+
+
 def story(request, story_id):
-    return HttpResponse('OK')
+    return HttpResponse('You are reading story %s' % story_id)
 
 
 def edit(request, story_name):

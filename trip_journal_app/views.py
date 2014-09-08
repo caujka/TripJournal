@@ -15,7 +15,8 @@ def home(request):
     """
     Home page view.
     """
-    return render(request, 'index.html', {'stories': stories})
+    return render(request, 'index.html', {'stories': Story.objects.all()})
+
 
 
 def edit(request, story_name):

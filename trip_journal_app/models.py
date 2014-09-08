@@ -1,7 +1,9 @@
 from django.db import models
 import json
-
-# Create your models here.
+import os
+from PIL import Image
+from TripJournal.settings import MEDIA_ROOT, BASE_DIR
+from trip_journal_app.utils.resize_img import resize, save_pic
 
 
 class User(models.Model):
@@ -72,10 +74,10 @@ class Story(models.Model):
 
 
 class Picture(models.Model):
-    name = models.CharField(max_length=45, unique=True)
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     story = models.ForeignKey(Story)
+    SIZES = [400, 700, 900, 1500]
 
     def __unicode__(self):
         return self.name
@@ -93,11 +95,41 @@ class Picture(models.Model):
             return pic
         return story_pics.order_by('size').first()
 
+    def save_in_sizes(self, image):
+        img_name = image.name
+        img_extension = img_name.split('.')[1]
+        file_name = os.path.join(MEDIA_ROOT, img_name)
+        with open(file_name, 'w') as img_file:
+            for chunk in image.chunks():
+                img_file.write(chunk)
+        # original size
+        orig_img = Image.open(file_name)
+        orig_size = max(orig_img.size)
+        # for each size in desired sizes
+        for size in [s for s in self.SIZES if s < orig_size] + [orig_size]:
+            # try to resize picture
+            if size != orig_size:
+                resized_img = resize(file_name, size)
+            else:
+                resized_img = orig_img
+            stored_pic = Stored_picture(picture=self, size=size)
+            # and write file to destination
+            new_name = save_pic(
+                resized_img, str(self.id) + '.' + img_extension,
+                size, stored_pic.SAVE_PATH
+                )
+            stored_pic.url = stored_pic.URL_PREFIX + new_name
+            stored_pic.save()
+        # than don't forget to delete temp file
+        os.remove(file_name)
+
 
 class Stored_picture(models.Model):
     picture = models.ForeignKey(Picture)
     size = models.IntegerField()
     url = models.CharField(max_length=2000)
+    SAVE_PATH = os.path.join(os.path.dirname(BASE_DIR), 'Pictures')
+    URL_PREFIX = 'http://localhost:4000/'
 
     def __unicode__(self):
         return self.url

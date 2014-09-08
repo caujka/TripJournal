@@ -1,12 +1,13 @@
 import json
 import os
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from TripJournal.settings import MEDIA_ROOT
 from trip_journal_app.utils.json_utils import (
     saved_stories, unicode_slugify, load_story_info
 )
-from trip_journal_app.models import Story
+from trip_journal_app.models import Story, Picture
+from trip_journal_app.forms import UploadFileForm
 
 # Create your views here.
 
@@ -23,14 +24,24 @@ def save(request, story_id):
 
 
 def upload_img(request, story_id):
-    pass
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            img = request.FILES['file']
+            pic = Picture.objects.create(
+                story=Story.objects.get(pk=int(story_id))
+            )
+            pic.save_in_sizes(img)
+        return HttpResponseRedirect('/upload/%s' % story_id)
+    form = UploadFileForm()
+    return render(request, 'upload.html', {'form': form, 'story_id': story_id})
 
 
 def story(request, story_id):
     return HttpResponse('You are reading story %s' % story_id)
 
 
-def edit(request, story_name):
+def edit(request, story_id):
     '''
     Edit page view. When changes on the page are published
     saves added content to file in media directory.

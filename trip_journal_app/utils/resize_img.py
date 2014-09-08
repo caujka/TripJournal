@@ -40,6 +40,7 @@ def save_pic(img, original_pic_name, suffix, path):
     img_name_parts = original_pic_name.split('.')
     new_name = '%s_%i.%s' % (img_name_parts[0], suffix, img_name_parts[1])
     img.save(os.path.join(path, new_name))
+    return new_name
 
 
 if __name__ == '__main__':

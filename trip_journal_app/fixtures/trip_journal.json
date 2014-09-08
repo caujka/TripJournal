@@ -87,7 +87,6 @@
     "fields": {
         "latitude": null, 
         "story": 10, 
-        "name": "1.JPG", 
         "longitude": null
     }
 },
@@ -97,7 +96,6 @@
     "fields": {
         "latitude": null, 
         "story": 10, 
-        "name": "2.JPG", 
         "longitude": null
     }
 },
@@ -107,7 +105,6 @@
     "fields": {
         "latitude": null, 
         "story": 10, 
-        "name": "3.JPG", 
         "longitude": null
     }
 },

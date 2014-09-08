@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% load staticfiles %}
+        <meta charset="UTF-8">
+        <title>{% block title %}{% endblock %}</title>
+        {% block css %}{% endblock %}
+        {% block scripts %}{% endblock %}
+    </head>
+    <body>
+        <div id="header">
+            {% block header %}Trip Journal{% endblock %}
+        </div>
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+    </body>
+</html>

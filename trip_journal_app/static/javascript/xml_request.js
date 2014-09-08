@@ -6,8 +6,10 @@ function getCookie(name) {
 
 (function() {
     var httpRequest;
+    var curr_url = document.URL.split(['/']);
+    var story_id = curr_url[curr_url.length - 1];
     document.getElementById('publish').onclick = function() {
-        makeRequest('/edit/');
+        makeRequest('/save/' + story_id);
     };
 
     function makeRequest(url) {
@@ -33,18 +35,14 @@ function getCookie(name) {
         httpRequest.open('POST', url);
         httpRequest.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
         httpRequest.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-        var request_body = JSON.stringify({
-            title: document.getElementById('story_title').innerHTML,
-            content: document.getElementById('story_content').innerHTML,
-            // tags: document.getElementById('demo').innerHTML,
-        });
+        var request_body = '{"title":"Новий заголовок","blocks":[{"type":"text","content":"Один блок"},{"type":"text","content":"Інший блок"}]}';
         httpRequest.send(request_body);
     }
 
     function alertResult() {
         if (httpRequest.readyState === 4) {
             if (httpRequest.status === 200) {
-                alert('Your changes have been saved!');
+                alert(httpRequest.responseText);
             } else {
                 alert('There was a problem with the request.');
             }

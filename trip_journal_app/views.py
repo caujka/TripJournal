@@ -1,5 +1,6 @@
 import json
 import os
+import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from TripJournal.settings import MEDIA_ROOT
@@ -20,7 +21,16 @@ def home(request):
 
 
 def save(request, story_id):
-    pass
+    try:
+        story = Story.objects.get(pk=int(story_id))
+        request_body = json.loads(request.body)
+        story.title = request_body['title']
+        story.text = json.dumps(request_body['blocks'], ensure_ascii=False)
+        story.date_publish = datetime.datetime.now()
+        story.save()
+        return HttpResponse('ok')
+    except Story.DoesNotExist:
+        return HttpResponse("story doesn't exist")
 
 
 def upload_img(request, story_id):
@@ -60,16 +70,16 @@ def edit(request, story_id):
     elif request.method == 'GET':
 
         # for cases when there is no name or it's a new story
-        story_info = {'title': story_name}
-        if story_name:
-            slugish_name = unicode_slugify(story_name)
+        story_info = {'title': story_id}
+        if story_id:
+            slugish_name = unicode_slugify(story_id)
             if slugish_name in saved_stories():
 
                 # redirect to normal url
-                if slugish_name != story_name:
+                if slugish_name != story_id:
                     return redirect('/edit/%s' % slugish_name)
 
-                story_info = load_story_info(story_name)
+                story_info = load_story_info(story_id)
 
         return render(request, 'edit.html', story_info)
 

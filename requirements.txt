@@ -3,5 +3,7 @@ MySQL-python==1.2.5
 Pillow==2.5.3
 Unidecode==0.04.16
 coverage==3.7.1
+django-debug-toolbar==1.2.1
 mock==1.0.1
+sqlparse==0.1.11
 wsgiref==0.1.2

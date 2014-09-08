@@ -56,7 +56,7 @@ class Story(models.Model):
         '''
         pictures = Picture.objects.filter(story=self.id)
         return dict([
-            (pic.name, pic.get_stored_pic_by_size(max_size))
+            (pic.id, pic.get_stored_pic_by_size(max_size))
             for pic in pictures
         ])
 

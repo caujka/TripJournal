@@ -65,15 +65,8 @@ document.getElementById('comment_but_t').onclick = function() {
         treasure_t.style.display = 'inline-block';
         treasure_t.focus();
     }
-    document.getElementById('comment_but_p').onclick = function() {
-        comment_p.style.display = 'inline-block';
-        comment_p.focus();
-	
-    }
-    document.getElementById('treasure_but_p').onclick = function() {
-        treasure_p.style.display = 'inline-block';
-        treasure_p.focus();
-    }
+  
+  
    
   
     function add_img() {
@@ -187,7 +180,7 @@ var number = 1;
 var Blocks = new Array();
 var BlockTypes = new Array();
 
-function post_request(){
+function jsonForming(){
 	var title = document.getElementById('story_title').innerHTML;
 	blocks = new Array();
 	for (var i=0;i<Blocks.length; ++i){
@@ -208,11 +201,36 @@ function post_request(){
 
 	}
 	var body = {"title": title, "blocks": blocks};
-alert(JSON.stringify(body));
-	post("some_url", JSON.stringify(body));
+	return body;
 }
 
+var xhr;
+function post_data(){
+        if (window.XMLHttpRequest) {
+            httpRequest = new XMLHttpRequest();
+        } else if (window.ActiveXObject) {
+            try {
+                httpRequest = new ActiveXObject('Msxml2.XMLHTTP');
+            }
+            catch (e) {
+                try {
+                    httpRequest = new ActiveXObject('Microsoft.XMLHTTP');
+                }
+                catch (e) {}
+            }
+        }
 
+        if (!httpRequest) {
+            console.log('Giving up :\( Cannot create an XMLHTTP instance');
+            return false;
+        }
+
+        httpRequest.open('POST', 'http://localhost:8000/save/1');
+        httpRequest.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        httpRequest.setRequestHeader('Access-Control-Allow-Origin', '*');
+    	var request_body = JSON.stringify(jsonForming());
+        httpRequest.send(request_body);
+}
 
 function deleteBlock(itemstr){
 	var item = parseInt(itemstr);
@@ -272,9 +290,7 @@ var item = parseInt(itemstr);
 
 //igor
 
-function editBlock(itemstr){
-	return;
-}
+
 
 function delete_img(id) {
     alert(id);

@@ -4,12 +4,15 @@
         {% load staticfiles %}
         <meta charset="UTF-8">
         <title>{% block title %}{% endblock %}</title>
-        {% block css %}{% endblock %}
+	{% block css %}<link rel="stylesheet" href="{% static "css/base_style.css"%}">{% endblock %}
         {% block scripts %}{% endblock %}
     </head>
     <body>
         <div id="header">
-            {% block header %}Trip Journal{% endblock %}
+            {% block header %}
+	    	<p>Trip Journal</p>
+		<button type="button" id="login_button">Login</button>
+	    {% endblock %}
         </div>
         <div id="content">
             {% block content %}{% endblock %}

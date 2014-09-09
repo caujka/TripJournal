@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
+{% extends 'base.html' %}
     {% load staticfiles %}
-    <title>Create</title>
-    <link rel="stylesheet" href="{% static "css/style_edit.css" %}">
-    <script src="{% static "javascript/create.js" %}"></script>
-</head>
-
-<body>
+    {% block title %}Edit story{% endblock %}
+    {% block css %}
+        <link rel="stylesheet" href="{% static "css/base_style.css"%}">
+        <link rel="stylesheet" href="{% static "css/style_edit.css" %}">
+    {% endblock %}
+    {% block scripts %}<script src="{% static "javascript/create.js" %}"></script>{% endblock %}
+    {% block content %}
     <main>
         <div id="story_content" class="block">
             <h2 id="story_title" contenteditable="true"></h2>
@@ -79,6 +76,4 @@
             <button id="publish" class="button" onClick="post_data()">publish</button>
         </div>
     </main>
-</body>
-
-</html>
+    {% endblock %}

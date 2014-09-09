@@ -45,8 +45,9 @@ class StoryModelTest(TestCase):
            new=stub_get_stored_pic_by_size)
     def test_get_pictures_urls(self):
         story_ = Story.objects.get(title='Сивуля')
+        img_size = 400
         self.assertEqual(
-            story_.get_pictures_urls(400),
+            story_.get_pictures_urls(img_size),
             dict([
                 (pic.id, 'pic_400_url') for pic
                 in Picture.objects.filter(story=story_)

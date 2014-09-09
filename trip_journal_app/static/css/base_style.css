@@ -1,0 +1,26 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#header {
+    background-color: #83A054;
+    height: 50px;
+    margin-bottom: 20px;
+}
+
+#header p {
+    display: block;
+    float: left;
+    color: white;
+    padding: 0;
+    margin-left: 40px;
+    margin-top: 17px;
+    font-weight: bold;
+}
+
+#login_button {
+    margin-top: 13px;
+    margin-right: 50px;
+    float: right;
+}

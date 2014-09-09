@@ -9,7 +9,6 @@ from trip_journal_app.utils.json_utils import (
 )
 from trip_journal_app.models import Story, Picture
 from trip_journal_app.forms import UploadFileForm
-from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
@@ -20,7 +19,7 @@ def home(request):
     """
     return render(request, 'index.html', {'stories': Story.objects.all()})
 
-@csrf_exempt
+
 def save(request, story_id):
     try:
         story = Story.objects.get(pk=int(story_id))
@@ -54,33 +53,7 @@ def story(request, story_id):
 
 def edit(request, story_id):
     '''
-    Edit page view. When changes on the page are published
-    saves added content to file in media directory.
+    Edit page view.
     '''
-
-    # POST requests for publishing
-    if request.method == 'POST':
-        request_body = json.loads(request.body)
-        story_title_slug = unicode_slugify(request_body['title'])
-        file_name = os.path.join(MEDIA_ROOT, story_title_slug + '.json')
-        with open(file_name, 'w') as story_file:
-            json.dump(request_body, story_file)
-        return HttpResponse("ok")
-
-    # GET requests
-    elif request.method == 'GET':
-
-        # for cases when there is no name or it's a new story
-        story_info = {'title': story_id}
-        if story_id:
-            slugish_name = unicode_slugify(story_id)
-            if slugish_name in saved_stories():
-
-                # redirect to normal url
-                if slugish_name != story_id:
-                    return redirect('/edit/%s' % slugish_name)
-
-                story_info = load_story_info(story_id)
-
-        return render(request, 'edit.html', story_info)
+    return render(request, 'edit.html')
 

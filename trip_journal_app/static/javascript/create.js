@@ -204,30 +204,19 @@ function jsonForming(){
 	return body;
 }
 
+function getCookie(name) {
+  var value = '; ' + document.cookie;
+  var parts = value.split('; ' + name + '=');
+  if (parts.length == 2) return parts.pop().split(';').shift();
+}
+
 var xhr;
 function post_data(){
-        if (window.XMLHttpRequest) {
-            httpRequest = new XMLHttpRequest();
-        } else if (window.ActiveXObject) {
-            try {
-                httpRequest = new ActiveXObject('Msxml2.XMLHTTP');
-            }
-            catch (e) {
-                try {
-                    httpRequest = new ActiveXObject('Microsoft.XMLHTTP');
-                }
-                catch (e) {}
-            }
-        }
-
-        if (!httpRequest) {
-            console.log('Giving up :\( Cannot create an XMLHTTP instance');
-            return false;
-        }
-
+        httpRequest = new XMLHttpRequest();
         var curr_url = document.URL.split(['/']);
         var story_id = curr_url[curr_url.length - 1];
         httpRequest.open('POST', '/save/' + story_id);
+        httpRequest.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
         httpRequest.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     	var request_body = JSON.stringify(jsonForming());
         httpRequest.send(request_body);

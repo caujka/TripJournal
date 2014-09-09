@@ -111,7 +111,7 @@ document.getElementById('comment_but_t').onclick = function() {
     function clear() {
         var arr_1 = document.getElementsByClassName('add_block');
         for(var i=0; i<arr_1.length; i++) {
-            arr_1[i].style.background = 'url(images/plus-sign_2.png) 35px 35px no-repeat #83a054';
+            arr_1[i].style.background = 'url("{% static "images/plus-sign_2.png" %}") 35px 35px no-repeat #83a054';
         }
         var arr_2 = document.getElementsByClassName('hide');
         for(var i=0; i<arr_2.length; i++) {

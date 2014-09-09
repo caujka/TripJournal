@@ -17,12 +17,12 @@ main{
     margin: 2px;
     padding: 10px;
     display: inline-block;
-    background: url(../images/plus-sign_2.png) 35px 35px no-repeat #83a054;
+    background: url("../images/plus-sign_2.png") 35px 35px no-repeat #83a054;
     cursor: crosshair;
     position: relative;
 }
 .add_block:hover{
-    background: url(../images/plus-sign.png) 35px 35px no-repeat #8ed41f;
+    background: url("../images/plus-sign.png") 35px 35px no-repeat #8ed41f;
 
 }
 .key_panel{
@@ -83,7 +83,7 @@ main{
 #file{
     height: 100px;
     width: 642px;
-    background: url(../images/plus-sign.png) 290px 25px no-repeat #ddd;
+    background: url("../images/plus-sign.png") 290px 25px no-repeat #ddd;
     margin: 2px;
     margin-left: 72px;
 }
@@ -187,18 +187,15 @@ main{
 .block_story h3{
     margin-left: 50px;
 }
-.addcontent{
-	width: 580px;
-	height:800px;
-}
-#comment_but_t,#treasure_but_t{
+#comment_but_t,#treasure_but_t,#comment_but_p,#treasure_but_p{
     position: relative;
-    margin-left:100px;
 }
 #story_content,#title_panel,#text_panel,#photo_panel,#video_panel,#add_panel,#publish_panel{
     display: none;
 }
-
+#add_comment_t,#add_treasure_t,#add_comment_p,#add_treasure_p{
+    display: none;
+}
 #top{
     display: inline-block;
     width: 25px;
@@ -207,7 +204,7 @@ main{
     top: 0px;
     margin-right:10px;
     border: none;
-    background:  url(../images/arrow-up.png) no-repeat;
+    background:  url("../images/arrow-up.png") no-repeat;
 }
 #bottom{
     display: inline-block;
@@ -216,7 +213,7 @@ main{
     margin-right:10px;
   
     border: none;
-    background:  url(../images/arrow-down.png) no-repeat;
+    background:  url("../images/arrow-down.png") no-repeat;
 }
 
 #edit{
@@ -226,7 +223,7 @@ main{
     bottom: 0px;
     margin-right:10px;
     border: none;
-    background:  url(../images/edit.png) no-repeat;
+    background:  url("../images/edit.png") no-repeat;
 }
 #delete{
     display: inline-block;
@@ -235,5 +232,5 @@ main{
     bottom: 0px;
     margin-right:10px; 
     border: none;
-    background:  url(../images/delete.png) no-repeat;
+    background:  url("../images/delete.png") no-repeat;
 }

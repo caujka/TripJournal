@@ -87,5 +87,3 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# media files downloaded by user
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

@@ -2,7 +2,7 @@ from django.db import models
 import json
 import os
 from PIL import Image
-from TripJournal.settings import MEDIA_ROOT, BASE_DIR
+from TripJournal.settings import BASE_DIR
 from trip_journal_app.utils.resize_img import resize, save_pic
 
 
@@ -98,7 +98,7 @@ class Picture(models.Model):
     def save_in_sizes(self, image):
         img_name = image.name
         img_extension = img_name.split('.')[1]
-        file_name = os.path.join(MEDIA_ROOT, img_name)
+        file_name = os.path.join('/var/tmp', img_name)
         with open(file_name, 'w') as img_file:
             for chunk in image.chunks():
                 img_file.write(chunk)

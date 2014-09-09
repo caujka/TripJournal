@@ -14,6 +14,15 @@
 		<button type="button" id="login_button">Login</button>
 	    {% endblock %}
         </div>
+	<div id="messages">
+	    {% block messages %}
+		{% for message in messages %}
+		    <div {% if message.tags %} class="{{ message.tags }} {% endif %}">
+		    {{ message }}
+		    </div>
+		{% endfor %}
+	    {% endblock %}
+	</div>
         <div id="content">
             {% block content %}{% endblock %}
         </div>

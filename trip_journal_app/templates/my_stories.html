@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}My stories{% endblock %}
+{% block content %}
+    <h3>Your stories</h3>
+    <table>
+    {% for story in stories %}
+        <tr>
+            <td>{{ story.title }}</td>
+            <td><a href="{% url "story" story.id %}">View</a></td>
+            <td><a href="{% url "edit" story.id %}">Edit</a></td>
+        </tr>
+    {% endfor %}
+    </table>
+    <a href="{% url "edit" '' %}">Create new story</a>
+{% endblock %}

@@ -60,7 +60,7 @@ window.onload = function(){
             document.getElementById('story_content').style.display = 'block';
             clear();
         }
-document.getElementById('comment_but_t').onclick = function() {
+    document.getElementById('comment_but_t').onclick = function() {
         comment_t.style.display = 'inline-block';
         comment_t.focus();
     }
@@ -69,8 +69,6 @@ document.getElementById('comment_but_t').onclick = function() {
         treasure_t.focus();
     }
   
-  
-   
   
     function add_img() {
         files = file.files;

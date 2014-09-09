@@ -225,7 +225,9 @@ function post_data(){
             return false;
         }
 
-        httpRequest.open('POST', 'http://localhost:8000/save/1');
+        var curr_url = document.URL.split(['/']);
+        var story_id = curr_url[curr_url.length - 1];
+        httpRequest.open('POST', 'http://localhost:8000/save/' + story_id);
         httpRequest.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
         httpRequest.setRequestHeader('Access-Control-Allow-Origin', '*');
     	var request_body = JSON.stringify(jsonForming());

@@ -1,4 +1,4 @@
-Django==1.6.5
+Django==1.7
 MySQL-python==1.2.5
 Pillow==2.5.3
 Unidecode==0.04.16

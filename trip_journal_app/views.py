@@ -1,12 +1,7 @@
 import json
-import os
 import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from TripJournal.settings import MEDIA_ROOT
-from trip_journal_app.utils.json_utils import (
-    saved_stories, unicode_slugify, load_story_info
-)
 from trip_journal_app.models import Story, Picture
 from trip_journal_app.forms import UploadFileForm
 

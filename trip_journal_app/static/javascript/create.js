@@ -227,7 +227,7 @@ function post_data(){
 
         var curr_url = document.URL.split(['/']);
         var story_id = curr_url[curr_url.length - 1];
-        httpRequest.open('/save/' + story_id);
+        httpRequest.open('POST', '/save/' + story_id);
         httpRequest.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     	var request_body = JSON.stringify(jsonForming());
         httpRequest.send(request_body);

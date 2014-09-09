@@ -14,6 +14,8 @@ window.onload = function(){
     var photo_panel = document.getElementById('photo_panel');
     var video_panel = document.getElementById('video_panel');
     var title = document.getElementById('title');
+    var file = document.getElementById('type_file');
+    var arr = new Array;
 
 	textarea.onkeypress = function(e) {
 	    if (e.keyCode == 13) {
@@ -39,6 +41,7 @@ window.onload = function(){
 	    this.style.background = '#8ed41f';
 	    video_panel.style.display = 'block';
 	}
+    file.onchange = add_img;
 
 	
 	document.getElementById('title_panel').style.display = 'block';
@@ -70,16 +73,28 @@ document.getElementById('comment_but_t').onclick = function() {
    
   
     function add_img() {
-        var file = document.getElementById('type_file').value;
-        var url = file.substr(file.lastIndexOf('\\')+1);
-        var im = url.substr(0,url.indexOf('.'));
-        var ref = im*number;
-        document.getElementById('photo_cont').innerHTML +=
-            '<div class="img_block">'+
-            '<img src="images/'+url+'" id="'+ref+'" class="img_story '+number+'">'+
-            '<button onclick="delete_img('+ref+')" class="button_3">x</button>'+
-            '</div>';
-        document.getElementById('photo_cont').style.display = 'inline-block';
+        files = file.files;
+        if(files.length > 0) {
+            for (var i = 0; i < files.length; i++) {
+
+                var URL = window.URL, imageUrl, image;
+                if (URL) {
+                    imageUrl = URL.createObjectURL(files[i]);
+
+                    var id = 'story_'+number+'_'+files[i].name.substr(0,files[i].name.indexOf('.'));
+                    document.getElementById('photo_cont').innerHTML +=
+                        '<div id="'+id+'" class="img_block">'+
+                        '<img src="'+imageUrl+'" class="img_story '+number+'">'+
+                        '<button onclick="delete_img(\''+id+'\')" id="'+id+'_d" class="button_3">x</button>'+
+                        '</div>';
+                }
+
+            }
+
+            document.getElementById('photo_cont').style.display = 'inline-block';
+        } 
+            console.log(files);
+            console.log(arr);
     }
 
 
@@ -283,7 +298,8 @@ var item = parseInt(itemstr);
 
 
 function delete_img(id) {
-    alert(id);
-    var div = document.getElementById(id).parentNode;
-    div.parentNode.removeChild(div);
+    if(id) {
+        var div = document.getElementById(id);
+        div.parentNode.removeChild(div);
+    }
 }

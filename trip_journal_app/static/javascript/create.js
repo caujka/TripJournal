@@ -14,7 +14,12 @@ window.onload = function(){
     var photo_panel = document.getElementById('photo_panel');
     var video_panel = document.getElementById('video_panel');
     var title = document.getElementById('title');
-    var file = document.getElementById('type_file');
+
+    var fileSelect = document.getElementById('type_file');
+    var form = document.getElementById('file-form');
+    var upload=document.getElementById('publish');
+   
+    var uploadButton = document.getElementById('upload-button');
     var arr = new Array;
 
 	textarea.onkeypress = function(e) {
@@ -23,6 +28,14 @@ window.onload = function(){
 		return false;
 	    }
 	}
+
+	form.onsubmit = function(event) {
+  		event.preventDefault();
+  		uploadButton.innerHTML = 'Uploading...';
+	}
+	var filesget = fileSelect.files;
+	var formData = new FormData();
+
 
 	title.focus();
 	text.onclick = function() {
@@ -41,7 +54,7 @@ window.onload = function(){
 	    this.style.background = '#8ed41f';
 	    video_panel.style.display = 'block';
 	}
-    file.onchange = add_img;
+    fileSelect.onchange = add_img;
 
 	
 	document.getElementById('title_panel').style.display = 'block';
@@ -71,15 +84,21 @@ document.getElementById('comment_but_t').onclick = function() {
   
   
    
-  
+  var formData = new FormData();
     function add_img() {
-        files = file.files;
+        files = fileSelect.files;
         if(files.length > 0) {
             for (var i = 0; i < files.length; i++) {
-
-                var URL = window.URL, imageUrl, image;
+		var file = files[i];
+		if (!file.type.match('image.*')) {
+		    continue;
+		  }
+		var imageData = {image : file, state : 'temp', block : -1};
+		Images.push(imageData);
+		var URL = window.URL, imageUrl, image;
                 if (URL) {
                     imageUrl = URL.createObjectURL(files[i]);
+			
 
                     var id = 'story_'+number+'_'+files[i].name.substr(0,files[i].name.indexOf('.'));
                     document.getElementById('photo_cont').innerHTML +=
@@ -87,16 +106,14 @@ document.getElementById('comment_but_t').onclick = function() {
                         '<img src="'+imageUrl+'" class="img_story '+number+'">'+
                         '<button onclick="delete_img(\''+id+'\')" id="'+id+'_d" class="button_3">x</button>'+
                         '</div>';
-                }
-
             }
-
             document.getElementById('photo_cont').style.display = 'inline-block';
+	    
         } 
             console.log(files);
             console.log(arr);
     }
-
+};
 
     function save_text_story() {
         story_cont.style.display = 'block';
@@ -106,6 +123,15 @@ document.getElementById('comment_but_t').onclick = function() {
 	jsontext=textarea.value;
         appendBlock(story_cont, content, "text");
         clear();
+    }
+
+    function addImagesFromTemp(){
+	for(var i=0;i < Images.length; ++i){
+	    if(Images[i].state === 'temp'){
+		Images[i].state = 'loaded'; 
+		Images[i].block = number; 
+	    }
+	}
     }
 
     function save_photo_story() {
@@ -120,6 +146,7 @@ document.getElementById('comment_but_t').onclick = function() {
         
         var content = image + a + b;
 	    appendBlock(story_cont, content, "image");
+		
         clear();
     }
 
@@ -140,6 +167,21 @@ document.getElementById('comment_but_t').onclick = function() {
         textarea.value = '';
         photo_cont.innerHTML = '';
         photo_cont.style.display = 'none';
+	clearImagesFromTemp();
+    }
+	
+    function clearImagesFromTemp(){
+	var poss = 0;
+	while(true){
+	    if(poss == Images.length){
+		break;
+	    }
+	    if(Images[poss].state === 'temp'){
+		Images.splice(poss,1);
+		continue;
+	    }
+	    poss++;
+	}
     }
 
     // mariya
@@ -187,13 +229,19 @@ document.getElementById('comment_but_t').onclick = function() {
     	
     	Blocks.push(number);
 	BlockTypes.push(block_type);
+	if(block_type == 'image'){
+		addImagesFromTemp(number);
+	}
     	number++;
     }
 }
 
+
+
 var number = 1;
 var Blocks = new Array();
 var BlockTypes = new Array();
+var Images = new Array();
 
 function jsonForming(){
 	var title = document.getElementById('story_title').innerHTML;
@@ -210,13 +258,16 @@ function jsonForming(){
 			var blockitem=document.getElementById('contentarea_' + (Blocks[i]));
 			var block_text = blockitem.children[0];
 			block_content = block_text.src;
-		}
+		
+		
 		var block = {"type": type, "content": block_content};		
-		blocks.push(block);
+		blocks.push(block);}
 
 	}
 	var body = {"title": title, "blocks": blocks};
+//alert(JSON.stringify(body));
 	return body;
+
 }
 
 function getCookie(name) {
@@ -230,11 +281,43 @@ function post_data(){
         httpRequest = new XMLHttpRequest();
         var curr_url = document.URL.split(['/']);
         var story_id = curr_url[curr_url.length - 1];
+
         httpRequest.open('POST', '/save/' + story_id);
         httpRequest.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
         httpRequest.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     	var request_body = JSON.stringify(jsonForming());
         httpRequest.send(request_body);
+
+	post_images(story_id);
+}
+
+function post_images(story_id){	
+	for(var i=0;i<Images.length; ++i){	
+		var formData = new FormData();
+		formData.append('file', Images[i].image);
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', '/upload/' + story_id);
+		xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+		xhr.send(formData);
+	}
+}
+
+function deleteImagesFromBlock(blockNumber){
+    for(var i=0;i<Images.length; ++i){
+        if(Images[i].block === blockNumber){
+		Images.splice(i,1);
+	}
+    }
+}
+function swapImagesFromBlock(blockNumber1, blockNumber2){
+    for(var i=0;i<Images.length; ++i){
+        if(Images[i].block === blockNumber1){
+		Images[i].block = blockNumber2;
+	}
+	else if(Images[i].block === blockNumber2){
+		Images[i].block = blockNumber1;
+	}
+    }
 }
 
 function deleteBlock(itemstr){
@@ -245,6 +328,7 @@ function deleteBlock(itemstr){
 	block.parentNode.removeChild(block);
 	Blocks.splice(poss,1);
 	BlockTypes.splice(poss,1);
+	deleteImagesFromBlock(item);
 }
 
 function moveup(itemstr){
@@ -260,6 +344,7 @@ function moveup(itemstr){
 		block_type = BlockTypes[poss];
 		BlockTypes[poss] = BlockTypes[poss - 1];
 		BlockTypes[poss - 1] = block_type;
+		swapImagesFromBlock(Blocks[poss - 1], Blocks[poss]);
 	}		
 }
 
@@ -276,6 +361,7 @@ function movedown(itemstr){
 		block_type = BlockTypes[poss];
 		BlockTypes[poss] = BlockTypes[poss + 1];
 		BlockTypes[poss + 1] = block_type;
+		swapImagesFromBlock(Blocks[poss], Blocks[poss + 1]);
 	}
 }
 

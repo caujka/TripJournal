@@ -2,10 +2,13 @@
     {% load staticfiles %}
     {% block title %}Edit story{% endblock %}
     {% block css %}
-        <link rel="stylesheet" href="{% static "css/base_style.css"%}">
-        <link rel="stylesheet" href="{% static "css/style_edit.css" %}">
+        <link rel="stylesheet" href="{% static "css/base.css"%}">
+        <link rel="stylesheet" href="{% static "css/edit.css" %}">
     {% endblock %}
-    {% block scripts %}<script src="{% static "javascript/create.js" %}"></script>{% endblock %}
+    {% block scripts %}
+        <script src="{% static "javascript/create.js" %}"></script>
+	<script src="{% static "javascript/ajax_requests.js" %}"></script>
+    {% endblock %}
     {% block content %}
     <main>
         <div id="story_content" class="block">

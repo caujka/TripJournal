@@ -23,20 +23,14 @@ main{
 }
 .add_block:hover{
     background: url("../images/plus-sign.png") 35px 35px no-repeat #8ed41f;
-
 }
 .key_panel{
-
     width: 150px;
     height: 25px;
     border: 1px solid #aaa;
     border-radius: 5px;
     margin-left:600px;
-   
-    
     visibility:hidden;
- 
-    
 }
 .block_title{
     text-transform: uppercase;
@@ -91,7 +85,6 @@ main{
     outline: none;
     margin: 5px;
     border: 2px solid #ddd;
-    
 }
 .element_story{
     height: 70px;
@@ -140,7 +133,6 @@ main{
     display: none;
     position: relative;
 }
-
 
 .block_story{
     border: 1px solid #aaa;
@@ -198,7 +190,6 @@ main{
     display: inline-block;
     width: 25px;
     height: 25px;
-    
     top: 0px;
     margin-right:10px;
     border: none;
@@ -209,7 +200,6 @@ main{
     width: 25px;
     height: 25px;
     margin-right:10px;
-  
     border: none;
     background:  url("../images/arrow-down.png") no-repeat;
 }

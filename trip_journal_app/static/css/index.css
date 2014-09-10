@@ -1,5 +1,5 @@
 html, body {
-    background-color: #ABC3CF;
+    background-color: #DDDDDD;
     height:100%;
 }
 
@@ -14,8 +14,12 @@ html, body {
     background-color: white;
 }
 
+#menu {
+    width: 80%;
+    margin: auto;
+}
 #header {
-    background-image: url("../images/Great_Sand_Dunes_NP_1 copy.jpg");
+    background-image: url("../images/cover.jpg");
     display:table;
 }
 
@@ -29,7 +33,7 @@ html, body {
 } 
 
 #content {
-    border-top: 10px solid #ABC3CF;
+    border-top: 10px solid #DDDDDD;
 }
 
 #content_type_box {

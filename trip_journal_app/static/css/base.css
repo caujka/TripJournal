@@ -1,0 +1,45 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#header {
+    background-color: #83A054;
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+#header p {
+    display: block;
+    float: left;
+    color: white;
+    padding: 0;
+    margin-left: 40px;
+    margin-top: 17px;
+    font-weight: bold;
+}
+
+#login_button {
+    margin-top: 13px;
+    margin-right: 50px;
+    float: right;
+}
+
+.info {
+    border: solid #FFCC00;
+    padding: 5px 5px 5px 35px;
+    background: #FFEA99 url('../images/info.svg') no-repeat left top;
+    background-size: 30px 30px;
+}
+
+#menu div {
+    display: inline-block;
+    background-color: #83A054;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+#menu div a {
+    color: white;
+    font-weight: bold;
+}

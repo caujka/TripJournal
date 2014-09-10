@@ -58,7 +58,9 @@ def edit(request, story_id):
     else:
         try:
             story = Story.objects.get(pk=int(story_id))
-            print story.text
+            if story.text:
+                story_text = json.loads(story.text, encoding='utf-8')
+                print story_text
         # if story_id doesn't exist redirects user to list of his/her stoires
         except Story.DoesNotExist:
             msg = ("You've been redirected here because you tried to edit "
@@ -72,7 +74,7 @@ def user_stories(request):
     """
     Shows list of user stories and link to create new story.
     """
-    # user id hardcoded until we don't have users and sessions.
+    # user id hardcoded until we don't have real users and sessions.
     harcoded_user_id = 14
     stories = Story.objects.filter(user=harcoded_user_id)
     context = {'stories': stories}

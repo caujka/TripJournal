@@ -53,21 +53,25 @@ def edit(request, story_id):
     '''
     # if story_id is empty rednders template without added text
     if not story_id:
-        blocks = ''
+        story_blocks = ''
     # if story_id exists renders its content to edit.html page
     else:
         try:
             story = Story.objects.get(pk=int(story_id))
+            story_blocks = {}
             if story.text:
-                story_text = json.loads(story.text, encoding='utf-8')
-                print story_text
+                hardcoded_img_size = 900
+                story_blocks = (
+                    story.get_text_with_pic_urls(hardcoded_img_size)
+                )
         # if story_id doesn't exist redirects user to list of his/her stoires
         except Story.DoesNotExist:
             msg = ("You've been redirected here because you tried to edit "
                    "nonexisting story.")
             messages.info(request, msg)
             return redirect('/my_stories/')
-    return render(request, 'edit.html')
+    context = {'story_blocks': story_blocks}
+    return render(request, 'edit.html', context)
 
 
 def user_stories(request):

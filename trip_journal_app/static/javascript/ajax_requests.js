@@ -1,3 +1,7 @@
+/*
+Module for sending ajax POST request with block contents from edit page. 
+*/
+
 function getCookie(name) {
   var value = '; ' + document.cookie;
   var parts = value.split('; ' + name + '=');
@@ -14,5 +18,7 @@ function post_data(){
         httpRequest.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
         var request_body = JSON.stringify(jsonForming());
         httpRequest.send(request_body);
+
+        post_images(story_id);
 }
 

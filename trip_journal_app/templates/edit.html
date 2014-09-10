@@ -11,13 +11,33 @@
     {% endblock %}
     {% block content %}
     <main>
-        <div id="story_content" class="block">
-            <h2 id="story_title" contenteditable="true"></h2>
-        </div>
         <div id="title_panel" class="block hide">
             <input id="title" type="text" name="title_story" class="text_story" placeholder="+ Title of story">
             <button id="add_title" class="button_2">+</button>
+        </div>    	
+        <div id="story_content" class="block">
+            <h2 id="story_title" contenteditable="true"></h2>
+
+        {% for story_block in story_blocks %}
+	    {% if story_block.type == 'text' %}
+	    	<script type='text/javascript'>
+                    appendBlock(
+                        document.getElementById('story_content'), 
+			"<p class=\"description_story\">{{ story_block.content }}</p>", 
+			"text");
+		</script>
+	    {% elif story_block.type = 'img' %}
+	    	<script type='text/javascript'>
+                    appendBlock(
+                        document.getElementById('story_content'), 
+			('<img src="{{ story_block.url }}" class="image_story">' + 
+			'<p id="pic_id_in_db" style="display:none;">{{story_block.id}}</p>'),
+			"img");
+		</script>
+	    {% endif %}
+	{% endfor %}
         </div>
+
         <div id="text_panel" class="block hide" >
             <textarea id="textarea" name="text" class="element_story" placeholder="+ Text to story"></textarea>
 	    

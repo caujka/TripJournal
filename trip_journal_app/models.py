@@ -67,9 +67,9 @@ class Story(models.Model):
         '''
         pics = self.get_pictures_urls(max_pic_size)
         text = json.loads(self.text, encoding='utf8')
-        for block in text[u'content']:
+        for block in text:
             if block[u'type'] == u'img':
-                block[u'url'] = pics[block[u'name']]
+                block[u'url'] = pics[block[u'id']]
         return text
 
 

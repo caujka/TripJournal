@@ -7,7 +7,7 @@ urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^edit/(?P<story_id>\d*)$', views.edit, name='edit'),
     # saving contents of story
-    url(r'^save/(?P<story_id>\d+)$', views.save, name='save'),
+    url(r'^save/(?P<story_id>\d*)$', views.save, name='save'),
     # image uploads
     url(r'^upload/(?P<story_id>\d+)$', views.upload_img, name='upload_img'),
     # view story

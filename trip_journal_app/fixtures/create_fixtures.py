@@ -33,22 +33,16 @@ def create_stories():
         user=User.objects.get(name='Sasha'),
         text='{"content":[\
     { "type": "text",\
-      "location": "",\
       "content": "Одного разу ми поїхали на Сивулю. По дорозі ми побачили річечку"},\
     { "type": "img",\
-      "location": "",\
       "name": "1.JPG"},\
     { "type": "text",\
-      "location": "",\
-      "name": "І багато каменячок."},\
+      "content": "І багато каменячок."},\
     { "type": "img",\
-      "location": "",\
       "name": "2.JPG"},\
     { "type": "text",\
-      "location": "",\
       "content": "І водоспадик."},\
     { "type": "img",\
-      "location": "",\
       "name": "3.JPG"}\
     ]}',
         date_travel=datetime.date(2014, 7, 10),

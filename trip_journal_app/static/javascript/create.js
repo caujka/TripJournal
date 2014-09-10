@@ -1,391 +1,340 @@
-window.onload = function(){
+var number = 1,
+    Blocks = [],
+    BlockTypes = [],
+    Images = [];
 
-    var story_cont = document.getElementById('story_content');
-    var photo_cont = document.getElementById('photo_cont');
-    var comment_t = document.getElementById('add_comment_t');
-    var treasure_t = document.getElementById('add_treasure_t');
-    var comment_p = document.getElementById('add_comment_p');
-    var treasure_p = document.getElementById('add_treasure_p');
-    var textarea = document.getElementById('textarea');
-    var text = document.getElementById('added_text');
-    var photo = document.getElementById('added_image');
-    var video = document.getElementById('added_video');
-    var text_panel = document.getElementById('text_panel');
-    var photo_panel = document.getElementById('photo_panel');
-    var video_panel = document.getElementById('video_panel');
-    var title = document.getElementById('title');
-
-    var fileSelect = document.getElementById('type_file');
-    var form = document.getElementById('file-form');
-    var upload=document.getElementById('publish');
-   
-    var uploadButton = document.getElementById('upload-button');
-    var arr = new Array;
-
-	textarea.onkeypress = function(e) {
-	    if (e.keyCode == 13) {
-		save_text_story();
-		return false;
-	    }
-	}
-
-	form.onsubmit = function(event) {
-  		event.preventDefault();
-  		uploadButton.innerHTML = 'Uploading...';
-	}
-	var filesget = fileSelect.files;
-	var formData = new FormData();
-
-
-	title.focus();
-	text.onclick = function() {
-	    clear();
-	    this.style.background = '#8ed41f';
-	    text_panel.style.display = 'block';
-	    document.getElementById('textarea').focus();
-	}
-	photo.onclick = function() {
-	    clear();
-	    this.style.background = '#8ed41f';
-	    photo_panel.style.display = 'block';
-	}
-	video.onclick = function() {
-	    clear();
-	    this.style.background = '#8ed41f';
-	    video_panel.style.display = 'block';
-	}
-    fileSelect.onchange = add_img;
-
-	
-	document.getElementById('title_panel').style.display = 'block';
-	document.getElementById('add_panel').style.display = 'block';
-	document.getElementById('publish_panel').style.display = 'block';
-
-    document.getElementById('type_file').onchange = add_img;
-    document.getElementById('adds_block_t').onclick = save_text_story;
-    document.getElementById('clear_block_t').onclick = clear;
-    document.getElementById('adds_block_p').onclick = save_photo_story;
-    document.getElementById('clear_block_p').onclick = clear;
-    
-    
-    document.getElementById('add_title').onclick = function() {
-            document.getElementById('story_title').innerHTML = title.value;
-            document.getElementById('story_content').style.display = 'block';
-            clear();
+function deleteImagesFromBlock(blockNumber){
+    for (var i=0; i < Images.length; ++i){
+        if (Images[i].block === blockNumber){
+            Images.splice(i,1);
         }
-document.getElementById('comment_but_t').onclick = function() {
-        comment_t.style.display = 'inline-block';
-        comment_t.focus();
     }
-    document.getElementById('treasure_but_t').onclick = function() {
-        treasure_t.style.display = 'inline-block';
-        treasure_t.focus();
-    }
-  
-  
-   
-  var formData = new FormData();
-    function add_img() {
-        files = fileSelect.files;
-        if(files.length > 0) {
-            for (var i = 0; i < files.length; i++) {
-		var file = files[i];
-		if (!file.type.match('image.*')) {
-		    continue;
-		  }
-		var imageData = {image : file, state : 'temp', block : -1};
-		Images.push(imageData);
-		var URL = window.URL, imageUrl, image;
-                if (URL) {
-                    imageUrl = URL.createObjectURL(files[i]);
-			
+}
 
-                    var id = 'story_'+number+'_'+files[i].name.substr(0,files[i].name.indexOf('.'));
-                    document.getElementById('photo_cont').innerHTML +=
-                        '<div id="'+id+'" class="img_block">'+
-                        '<img src="'+imageUrl+'" class="img_story '+number+'">'+
-                        '<button onclick="delete_img(\''+id+'\')" id="'+id+'_d" class="button_3">x</button>'+
-                        '</div>';
-            }
-            document.getElementById('photo_cont').style.display = 'inline-block';
-	    
-        } 
-            console.log(files);
-            console.log(arr);
-    }
-};
-
-    function save_text_story() {
-        story_cont.style.display = 'block';
-        var a = b = '';
-      
-        var content =   '<p class="description_story">'+textarea.value+'</p>'+a+b;
-	jsontext=textarea.value;
-        appendBlock(story_cont, content, "text");
-        clear();
-    }
-
-    function addImagesFromTemp(){
-	for(var i=0;i < Images.length; ++i){
-	    if(Images[i].state === 'temp'){
-		Images[i].state = 'loaded'; 
-		Images[i].block = number; 
-	    }
-	}
-    }
-
-    function save_photo_story() {
-        story_cont.style.display = 'block';
-        var arr = document.getElementsByClassName(number);
-        var image = '';
-        for (var i = 0; i < arr.length; i++) {
-            image += '<img src="'+arr[i].src+'"class="image_story"><br>';
+function swapImagesFromBlock(blockNumber1, blockNumber2){
+    for (var i=0;i<Images.length; ++i){
+        if(Images[i].block === blockNumber1) {
+            Images[i].block = blockNumber2;
         }
-	
-        var a = b = '';
-        
-        var content = image + a + b;
-	    appendBlock(story_cont, content, "image");
-		
-        clear();
+        else if (Images[i].block === blockNumber2) {
+            Images[i].block = blockNumber1;
+        }
+    }
+}
+
+function addImagesFromTemp(){
+    var i
+    for(i=0; i < Images.length; ++i){
+        if (Images[i].state === 'temp') {
+            Images[i].state = 'loaded';
+            Images[i].block = number;
+        }
+    }
+}
+
+
+function appendBlock(story, blockContent, block_type) {
+    var container = document.createElement("div"),
+        keybar = document.createElement("div"),
+        buttons = [
+            ['top', 'moveup'],
+            ['bottom', 'movedown'],
+            ['edit', 'editBlock'],
+            ['delete', 'deleteBlock']
+        ];
+
+    function create_button(button_name_and_func) {
+        var button_name = button_name_and_func[0],
+            button_func = button_name_and_func[1],
+            button = document.createElement("button");
+        button.setAttribute('onClick', button_func + "('" + number + "')");
+        button.id = button_name;
+        keybar.appendChild(button);
+    }
+
+    container.setAttribute(
+        'onMouseOver',
+        "change_button_visibility('" + number + "', \"visible\")"
+    );
+    container.setAttribute(
+        'onMouseOut',
+        "change_button_visibility('" + number + "', \"hidden\")"
+    );
+    container.id = "block_" + number;
+    container.className = "block_story";
+
+    container.innerHTML =
+        '<div contenteditable="true" id="contentarea_' + number + '">' +
+        blockContent +
+        '</div>';
+
+    keybar.id = "keybar_" + number;
+    keybar.className = "key_panel";
+
+    buttons.forEach(create_button);
+
+    container.appendChild(keybar);
+    story.appendChild(container);
+
+    Blocks.push(number);
+    BlockTypes.push(block_type);
+	if (block_type == 'img') {
+        addImagesFromTemp(number);
+    }
+    number++;
+}
+
+function deleteBlock(itemstr) {
+    var item = parseInt(itemstr),
+        poss = Blocks.indexOf(item),
+        block = document.getElementById("block_" + Blocks[poss]);
+    block.parentNode.removeChild(block);
+    Blocks.splice(poss, 1);
+    BlockTypes.splice(poss, 1);
+    deleteImagesFromBlock(item);
+}
+
+
+function move_block(itemstr, direction) {
+    // direction (-1) - up, (+1) - down
+    var item = parseInt(itemstr),
+        block = document.getElementById('contentarea_' + item),
+        poss = Blocks.indexOf(item);
+    if ((poss + direction) in Blocks) {
+        var blockprev = document.getElementById('contentarea_' + (Blocks[poss + direction])),
+            prevconen = blockprev.innerHTML,
+            block_type = BlockTypes[poss];
+        blockprev.innerHTML = block.innerHTML;
+        block.innerHTML = prevconen;
+        BlockTypes[poss] = BlockTypes[poss + direction];
+        BlockTypes[poss + direction] = block_type;
+        swapImagesFromBlock(Blocks[poss + direction], Blocks[poss]);
+    }
+}
+
+function moveup(itemstr) {
+    move_block(itemstr, -1);
+}
+
+function movedown(itemstr) {
+    move_block(itemstr, 1);
+}
+
+function change_button_visibility(itemstr, visibility) {
+    var item = parseInt(itemstr);
+    document.getElementById('keybar_' + item).style.visibility = visibility;
+}
+
+function jsonForming() {
+    var i, type, block, body, block_content, block_text,
+        title = document.getElementById('story_title').innerHTML,
+        blocks = [];
+    for (i = 0; i < Blocks.length; ++i) {
+        type = BlockTypes[i];
+        block_text = document.getElementById(
+            'contentarea_' + (Blocks[i])
+        ).children[0];
+        if (type === "text") {
+            block_content = block_text.innerHTML;
+        }
+        if (type === "img") {
+            block_content = block_text.src;
+        }
+        block = {
+            "type": type,
+            "content": block_content
+        };
+        blocks.push(block);
+    }
+    body = {
+        "title": title,
+        "blocks": blocks
+    };
+    return body;
+}
+
+//igor
+function delete_img(id) {
+    if (id) {
+        var div = document.getElementById(id);
+        div.parentNode.removeChild(div);
+    }
+}
+
+function post_images(story_id){
+    var i, formData, xhr
+    for (i=0; i < Images.length; ++i){	
+        formData = new FormData();
+        formData.append('file', Images[i].image);
+        xhr = new XMLHttpRequest();
+        xhr.open('POST', '/upload/' + story_id);
+        xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+        xhr.send(formData);
+    }
+}
+
+window.onload = function() {
+
+    var story_cont = document.getElementById('story_content'),
+        photo_cont = document.getElementById('photo_cont'),
+        comment_t = document.getElementById('add_comment_t'),
+        treasure_t = document.getElementById('add_treasure_t'),
+        //comment_p = document.getElementById('add_comment_p'),
+        //treasure_p = document.getElementById('add_treasure_p'),
+        textarea = document.getElementById('textarea'),
+        text = document.getElementById('added_text'),
+        photo = document.getElementById('added_image'),
+        video = document.getElementById('added_video'),
+        text_panel = document.getElementById('text_panel'),
+        photo_panel = document.getElementById('photo_panel'),
+        video_panel = document.getElementById('video_panel'),
+        title = document.getElementById('title'),
+
+        fileSelect = document.getElementById('type_file');
+        form = document.getElementById('file-form'),
+        upload=document.getElementById('publish'),
+        uploadButton = document.getElementById('upload-button'),
+        filesget = fileSelect.files;
+        formData = new FormData();
+
+    function clearImagesFromTemp() {
+	    var poss = 0;
+	    while (true) {
+	        if (poss == Images.length) {
+		    break;
+	        }
+	        if (Images[poss].state === 'temp') {
+		        Images.splice(poss, 1);
+		        continue;
+	        }
+	    poss++;
+	    }
     }
 
     function clear() {
-        var arr_1 = document.getElementsByClassName('add_block');
-        for(var i=0; i<arr_1.length; i++) {
+        var arr_1 = document.getElementsByClassName('add_block'),
+            arr_2 = document.getElementsByClassName('hide'),
+            arr_3 = document.getElementsByClassName('clear_cont'),
+            i;
+
+        for (i = 0; i < arr_1.length; i++) {
             arr_1[i].style.background = 'url("{% static "images/plus-sign_2.png" %}") 35px 35px no-repeat #83a054';
         }
-        var arr_2 = document.getElementsByClassName('hide');
-        for(var i=0; i<arr_2.length; i++) {
+        for (i = 0; i < arr_2.length; i++) {
             arr_2[i].style.display = 'none';
         }
-        var arr_3 = document.getElementsByClassName('clear_cont');
-        for(var i=0; i<arr_3.length; i++) {
+        for (i = 0; i < arr_3.length; i++) {
             arr_3[i].value = '';
             arr_3[i].style.display = 'none';
         }
         textarea.value = '';
         photo_cont.innerHTML = '';
         photo_cont.style.display = 'none';
-	clearImagesFromTemp();
+        clearImagesFromTemp();
     }
 	
-    function clearImagesFromTemp(){
-	var poss = 0;
-	while(true){
-	    if(poss == Images.length){
-		break;
-	    }
-	    if(Images[poss].state === 'temp'){
-		Images.splice(poss,1);
-		continue;
-	    }
-	    poss++;
-	}
+    function save_text_story() {
+        story_cont.style.display = 'block';
+        var content = '<p class="description_story">' + textarea.value + '</p>';
+        appendBlock(story_cont, content, "text");
+        clear();
     }
 
-    // mariya
-
-    function appendBlock(story, blockContent, block_type){
-    	var container = document.createElement("div");
-	container.setAttribute('onMouseOver',"show_button('" + number + "')");
-	container.setAttribute('onMouseOut',"hide_button('" + number + "')");
-    	container.id = "block_" + number;
-    	container.className = "block_story";
-
-    	container.innerHTML = 
-    		'<div contenteditable="true" id="contentarea_'+ number +'">' + 
-    			blockContent + 
-    		'</div>';
-    	var keybar = document.createElement("div");
-	keybar.id="keybar_"+number;
-	keybar.className="key_panel"
-    	var up = document.createElement("button");
-    	up.setAttribute('onClick', "moveup('" + number + "')");
-    	
-    	up.id = "top";
-    	keybar.appendChild(up);
-	
-    	var down = document.createElement("button");
-    	down.setAttribute('onClick', "movedown('" + number + "')");
-    	
-    	down.id = "bottom";
-    	keybar.appendChild(down);
-
-    	var editBlock = document.createElement("button");
-    	editBlock.setAttribute('onClick', "editBlock('" + number + "')");
-    	
-    	editBlock.id = "edit";
-    	keybar.appendChild(editBlock);
-
-    	var removeBlock = document.createElement("button");
-    	removeBlock.setAttribute('onClick', "deleteBlock('" + number + "')");
-    	
-    	removeBlock.id = "delete";
-    	keybar.appendChild(removeBlock);
-
-	container.appendChild(keybar);
-    	story.appendChild(container);
-    	
-    	Blocks.push(number);
-	BlockTypes.push(block_type);
-	if(block_type == 'image'){
-		addImagesFromTemp(number);
-	}
-    	number++;
+    function save_photo_story() {
+        var i,
+            arr = document.getElementsByClassName(number),
+            content = '';
+        story_cont.style.display = 'block';
+        for (i = 0; i < arr.length; i++) {
+            content += '<img src="' + arr[i].src + '"class="image_story"><br>';
+        }
+        appendBlock(story_cont, content, "img");
+        clear();
     }
-}
 
-
-
-var number = 1;
-var Blocks = new Array();
-var BlockTypes = new Array();
-var Images = new Array();
-
-function jsonForming(){
-	var title = document.getElementById('story_title').innerHTML;
-	blocks = new Array();
-	for (var i=0;i<Blocks.length; ++i){
-		var type = BlockTypes[i];
-		var block_content = "";
-		if(type === "text"){
-			var blockitem=document.getElementById('contentarea_' + (Blocks[i]));
-			var block_text = blockitem.children[0];
-			block_content = block_text.innerHTML;
-		}
-		if(type === "image"){
-			var blockitem=document.getElementById('contentarea_' + (Blocks[i]));
-			var block_text = blockitem.children[0];
-			block_content = block_text.src;
-		
-		
-		var block = {"type": type, "content": block_content};		
-		blocks.push(block);}
-
-	}
-	var body = {"title": title, "blocks": blocks};
-//alert(JSON.stringify(body));
-	return body;
-
-}
-
-function getCookie(name) {
-  var value = '; ' + document.cookie;
-  var parts = value.split('; ' + name + '=');
-  if (parts.length == 2) return parts.pop().split(';').shift();
-}
-
-var xhr;
-function post_data(){
-        httpRequest = new XMLHttpRequest();
-        var curr_url = document.URL.split(['/']);
-        var story_id = curr_url[curr_url.length - 1];
-
-        httpRequest.open('POST', '/save/' + story_id);
-        httpRequest.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-        httpRequest.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-    	var request_body = JSON.stringify(jsonForming());
-        httpRequest.send(request_body);
-
-	post_images(story_id);
-}
-
-function post_images(story_id){	
-	for(var i=0;i<Images.length; ++i){	
-		var formData = new FormData();
-		formData.append('file', Images[i].image);
-		var xhr = new XMLHttpRequest();
-		xhr.open('POST', '/upload/' + story_id);
-		xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-		xhr.send(formData);
-	}
-}
-
-function deleteImagesFromBlock(blockNumber){
-    for(var i=0;i<Images.length; ++i){
-        if(Images[i].block === blockNumber){
-		Images.splice(i,1);
-	}
+    function add_img() {
+        var i, URL, imageUrl, id, file, imageData,
+            files = fileSelect.files;
+        if (files.length > 0) {
+            for (i = 0; i < files.length; i++) {
+                file = files[i];
+                if (!file.type.match('image.*')) {
+                    continue;
+                }
+                imageData = {image : file, state : 'temp', block : -1};
+                Images.push(imageData);
+                URL = window.URL;
+                if (URL) {
+                    imageUrl = URL.createObjectURL(files[i]);
+                    id = 'story_' + number + '_' + files[i].name.substr(0, files[i].name.indexOf('.'));
+                    document.getElementById('photo_cont').innerHTML +=
+                        '<div id="' + id + '" class="img_block">' +
+                        '<img src="' + imageUrl + '" class="img_story ' + number + '">' +
+                        '<button onclick="delete_img(\'' + id + '\')" id="' + id + '_d" class="button_3">x</button>' +
+                        '</div>';
+                }
+            }
+            document.getElementById('photo_cont').style.display = 'inline-block';
+        }
     }
-}
-function swapImagesFromBlock(blockNumber1, blockNumber2){
-    for(var i=0;i<Images.length; ++i){
-        if(Images[i].block === blockNumber1){
-		Images[i].block = blockNumber2;
-	}
-	else if(Images[i].block === blockNumber2){
-		Images[i].block = blockNumber1;
-	}
-    }
-}
 
-function deleteBlock(itemstr){
-	var item = parseInt(itemstr);
-	var block = document.getElementById('contentarea_' + item);
-	var poss = Blocks.indexOf(item);
-	var block = document.getElementById("block_"+Blocks[poss]);
-	block.parentNode.removeChild(block);
-	Blocks.splice(poss,1);
-	BlockTypes.splice(poss,1);
-	deleteImagesFromBlock(item);
-}
+    textarea.onkeypress = function(e) {
+        if (e.keyCode === 13) {
+            save_text_story();
+            return false;
+        }
+    };
 
-function moveup(itemstr){
-	var item = parseInt(itemstr);
-	var block = document.getElementById('contentarea_' + item);
-	var poss = Blocks.indexOf(item);
-	if(poss - 1 >= 0){
-		var blockprev=document.getElementById('contentarea_' + (Blocks[poss -1]));
-		var prevconen = blockprev.innerHTML;
-		blockprev.innerHTML = block.innerHTML;
-		block.innerHTML = prevconen;
+	form.onsubmit = function(event) {
+        event.preventDefault();
+        uploadButton.innerHTML = 'Uploading...';
+    };
 
-		block_type = BlockTypes[poss];
-		BlockTypes[poss] = BlockTypes[poss - 1];
-		BlockTypes[poss - 1] = block_type;
-		swapImagesFromBlock(Blocks[poss - 1], Blocks[poss]);
-	}		
-}
+    title.focus();
 
-function movedown(itemstr){
-	var item = parseInt(itemstr);
-	var block = document.getElementById('contentarea_' + item);
-	
-	var poss = Blocks.indexOf(item);
-	if(poss + 1 < Blocks.length){
-		var blockprev=document.getElementById('contentarea_' + Blocks[poss + 1]);
-		var prevconen = blockprev.innerHTML;
-		blockprev.innerHTML = block.innerHTML;
-		block.innerHTML = prevconen;
-		block_type = BlockTypes[poss];
-		BlockTypes[poss] = BlockTypes[poss + 1];
-		BlockTypes[poss + 1] = block_type;
-		swapImagesFromBlock(Blocks[poss], Blocks[poss + 1]);
-	}
-}
+    text.onclick = function() {
+        clear();
+        this.style.background = '#8ed41f';
+        text_panel.style.display = 'block';
+        document.getElementById('textarea').focus();
+    };
 
+    photo.onclick = function() {
+        clear();
+        this.style.background = '#8ed41f';
+        photo_panel.style.display = 'block';
+    };
 
+    video.onclick = function() {
+        clear();
+        this.style.background = '#8ed41f';
+        video_panel.style.display = 'block';
+    };
 
-function show_button(itemstr)
-{var item = parseInt(itemstr);
-	
-	document.getElementById('keybar_'+item).style.visibility="visible";
-}
-function hide_button(itemstr){
-var item = parseInt(itemstr);
-	document.getElementById('keybar_'+item).style.visibility="hidden";
-}
+    fileSelect.onchange = add_img;
 
+    document.getElementById('title_panel').style.display = 'block';
+    document.getElementById('add_panel').style.display = 'block';
+    document.getElementById('publish_panel').style.display = 'block';
 
+    document.getElementById('type_file').onchange = add_img;
+    document.getElementById('adds_block_t').onclick = save_text_story;
+    document.getElementById('clear_block_t').onclick = clear;
+    document.getElementById('adds_block_p').onclick = save_photo_story;
+    document.getElementById('clear_block_p').onclick = clear;
 
-//igor
+    document.getElementById('add_title').onclick = function() {
+        document.getElementById('story_title').innerHTML = title.value;
+        document.getElementById('story_content').style.display = 'block';
+        clear();
+    };
+    document.getElementById('comment_but_t').onclick = function() {
+        comment_t.style.display = 'inline-block';
+        comment_t.focus();
+    };
+    document.getElementById('treasure_but_t').onclick = function() {
+        treasure_t.style.display = 'inline-block';
+        treasure_t.focus();
+    };
+};
 
-
-
-function delete_img(id) {
-    if(id) {
-        var div = document.getElementById(id);
-        div.parentNode.removeChild(div);
-    }
-}

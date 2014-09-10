@@ -8,7 +8,45 @@ function getCookie(name) {
   if (parts.length == 2) return parts.pop().split(';').shift();
 }
 
-var xhr;
+function jsonForming() {
+    var i, type, block, body, block_content, block_text,
+        title = document.getElementById('story_title').innerHTML,
+        blocks = [];
+
+    for (i = 0; i < Blocks.length; ++i) {
+        type = BlockTypes[i];
+        html_block = document.getElementById('contentarea_' + (Blocks[i]));
+        block = {
+            "type": type
+        }
+        if (type === "text") {
+            block["content"] = html_block.children[0].innerHTML;
+        }
+        if (type === "img") {
+            block["id"] = parseInt(html_block.children[1].innerHTML);
+        }
+        blocks.push(block);
+    }
+    body = {
+        "title": title,
+        "blocks": blocks
+    };
+    return body;
+}
+
+
+function post_images(story_id){
+    var i, formData, xhr
+    for (i=0; i < Images.length; ++i){	
+        formData = new FormData();
+        formData.append('file', Images[i].image);
+        xhr = new XMLHttpRequest();
+        xhr.open('POST', '/upload/' + story_id);
+        xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+        xhr.send(formData);
+    }
+}
+
 function post_data(){
         httpRequest = new XMLHttpRequest();
         var curr_url = document.URL.split(['/']);

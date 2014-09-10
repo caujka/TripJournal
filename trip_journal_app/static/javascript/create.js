@@ -125,51 +125,11 @@ function change_button_visibility(itemstr, visibility) {
     document.getElementById('keybar_' + item).style.visibility = visibility;
 }
 
-function jsonForming() {
-    var i, type, block, body, block_content, block_text,
-        title = document.getElementById('story_title').innerHTML,
-        blocks = [];
-    for (i = 0; i < Blocks.length; ++i) {
-        type = BlockTypes[i];
-        block_text = document.getElementById(
-            'contentarea_' + (Blocks[i])
-        ).children[0];
-        if (type === "text") {
-            block_content = block_text.innerHTML;
-        }
-        if (type === "img") {
-            block_content = block_text.src;
-        }
-        block = {
-            "type": type,
-            "content": block_content
-        };
-        blocks.push(block);
-    }
-    body = {
-        "title": title,
-        "blocks": blocks
-    };
-    return body;
-}
-
 //igor
 function delete_img(id) {
     if (id) {
         var div = document.getElementById(id);
         div.parentNode.removeChild(div);
-    }
-}
-
-function post_images(story_id){
-    var i, formData, xhr
-    for (i=0; i < Images.length; ++i){	
-        formData = new FormData();
-        formData.append('file', Images[i].image);
-        xhr = new XMLHttpRequest();
-        xhr.open('POST', '/upload/' + story_id);
-        xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-        xhr.send(formData);
     }
 }
 

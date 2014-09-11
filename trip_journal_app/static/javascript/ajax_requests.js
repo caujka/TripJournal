@@ -34,7 +34,6 @@ function jsonForming() {
     return body;
 }
 
-
 function post_images(story_id){
     var i, formData, xhr
     for (i=0; i < Images.length; ++i){	
@@ -48,15 +47,34 @@ function post_images(story_id){
 }
 
 function post_data(){
-        httpRequest = new XMLHttpRequest();
-        var curr_url = document.URL.split(['/']);
-        var story_id = curr_url[curr_url.length - 1];
-        httpRequest.open('POST', '/save/' + story_id);
-        httpRequest.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-        httpRequest.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-        var request_body = JSON.stringify(jsonForming());
-        httpRequest.send(request_body);
+   var xhr = new XMLHttpRequest(),
+       curr_url = document.URL.split(['/']),
+       story_id = curr_url[curr_url.length - 1];
+       request_body = JSON.stringify(jsonForming());
 
-        post_images(story_id);
+    function changeUrl() {
+        // This function appends story id to page url
+        // if request was sent from /edit/ page.
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                new_id = xhr.responseText;
+                if (! document.URL.endsWith(new_id)) {
+                    window.history.pushState(
+                        'new_id', 'Title', '/edit/' + new_id
+                    );
+                }
+            } else {
+                alert('There was a problem with the request.');
+            }
+        }
+    }
+
+    xhr.onreadystatechange = changeUrl;
+    xhr.open('POST', '/save/' + story_id);
+    xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+    xhr.send(request_body);
+
+    post_images(story_id);
 }
 

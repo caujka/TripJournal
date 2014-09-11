@@ -4,7 +4,7 @@ from trip_journal_app import views
 
 
 urlpatterns = [
-    url(r'^$', views.home, name='home'),
+
     url(r'^edit/(?P<story_id>\d*)$', views.edit, name='edit'),
     # saving contents of story
     url(r'^save/(?P<story_id>\d*)$', views.save, name='save'),
@@ -14,4 +14,9 @@ urlpatterns = [
     url(r'^story/(?P<story_id>\d+)$', views.story, name='story'),
     # list of user stories
     url(r'^my_stories/$', views.user_stories, name='user_stories'),
+    # loging in user
+    url(r'^login/', views.login, name='login'),
+    # loging out user
+    url(r'^logout/', views.logout, name='logout'),
+    url(r'^$', views.home, name='home'),
 ]

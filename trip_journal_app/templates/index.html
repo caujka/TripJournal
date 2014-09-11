@@ -7,6 +7,21 @@
     <link rel="stylesheet" href="{% static "css/index.css" %}">
 {% endblock %}
 {% block header %}
+    <div class="login_form">
+        {% if user.id %}
+            <a href="/logout/">Logout ({{ user.username }})</a>
+        {% else %}
+            <form action="/login/" class="login_form" method="post">
+                {% csrf_token %}
+                <input type="text" name="username" id="username">
+                <input type="password" name="password" id="password">
+                {% if login_error %}
+                    <label class="error">{{ login_error }}</label>>
+                {% endif %}
+                <input type="submit" value="Login">
+            </form>
+        {% endif %}
+    </div>
     <h1>Trip Journal</h1>
 {% endblock %}
 {% block content %}

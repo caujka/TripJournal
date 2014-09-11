@@ -177,7 +177,7 @@ window.onload = function() {
             i;
 
         for (i = 0; i < arr_1.length; i++) {
-            arr_1[i].style.background = 'url("{% static "images/plus-sign_2.png" %}") 35px 35px no-repeat #83a054';
+            arr_1[i].style.background = "url(../static/images/plus-sign_2.png) 35px 35px no-repeat #83a054";
         }
         for (i = 0; i < arr_2.length; i++) {
             arr_2[i].style.display = 'none';
@@ -212,29 +212,6 @@ window.onload = function() {
     }
 
     function add_img() {
-        // var i, URL, imageUrl, id, file, imageData,
-        //     files = fileSelect.files;
-        // if (files.length > 0) {
-        //     for (i = 0; i < files.length; i++) {
-        //         file = files[i];
-        //         if (!file.type.match('image.*')) {
-        //             continue;
-        //         }
-        //         imageData = {image : file, state : 'temp', block : -1};
-        //         Images.push(imageData);
-        //         URL = window.URL;
-        //         if (URL) {
-        //             imageUrl = URL.createObjectURL(files[i]);
-        //             id = 'story_' + number + '_' + files[i].name.substr(0, files[i].name.indexOf('.'));
-        //             document.getElementById('photo_cont').innerHTML +=
-        //                 '<div id="' + id + '" class="img_block">' +
-        //                 '<img src="' + imageUrl + '" class="img_story ' + number + '">' +
-        //                 '<button onclick="delete_img(\'' + id + '\')" id="' + id + '_d" class="button_3">x</button>' +
-        //                 '</div>';
-        //         }
-        //     }
-        //     document.getElementById('photo_cont').style.display = 'inline-block';
-        // }
         var files = file.files;
         if(files.length > 0) {
             if (arr.length == 0) {

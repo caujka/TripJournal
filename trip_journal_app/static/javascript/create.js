@@ -125,7 +125,6 @@ function change_button_visibility(itemstr, visibility) {
     document.getElementById('keybar_' + item).style.visibility = visibility;
 }
 
-//igor
 function delete_img(id) {
     if (id) {
         var div = document.getElementById(id);
@@ -213,29 +212,68 @@ window.onload = function() {
     }
 
     function add_img() {
-        var i, URL, imageUrl, id, file, imageData,
-            files = fileSelect.files;
-        if (files.length > 0) {
-            for (i = 0; i < files.length; i++) {
-                file = files[i];
-                if (!file.type.match('image.*')) {
-                    continue;
+        // var i, URL, imageUrl, id, file, imageData,
+        //     files = fileSelect.files;
+        // if (files.length > 0) {
+        //     for (i = 0; i < files.length; i++) {
+        //         file = files[i];
+        //         if (!file.type.match('image.*')) {
+        //             continue;
+        //         }
+        //         imageData = {image : file, state : 'temp', block : -1};
+        //         Images.push(imageData);
+        //         URL = window.URL;
+        //         if (URL) {
+        //             imageUrl = URL.createObjectURL(files[i]);
+        //             id = 'story_' + number + '_' + files[i].name.substr(0, files[i].name.indexOf('.'));
+        //             document.getElementById('photo_cont').innerHTML +=
+        //                 '<div id="' + id + '" class="img_block">' +
+        //                 '<img src="' + imageUrl + '" class="img_story ' + number + '">' +
+        //                 '<button onclick="delete_img(\'' + id + '\')" id="' + id + '_d" class="button_3">x</button>' +
+        //                 '</div>';
+        //         }
+        //     }
+        //     document.getElementById('photo_cont').style.display = 'inline-block';
+        // }
+        var files = file.files;
+        if(files.length > 0) {
+            if (arr.length == 0) {
+                for (var i = 0; i < files.length; i++) {
+                    arr.push(files[i].name);
+                    add_images();
                 }
-                imageData = {image : file, state : 'temp', block : -1};
-                Images.push(imageData);
-                URL = window.URL;
+            } else {
+                for(var i = 0; i < files.length; i++) {
+                    var addFile = true;
+                    for (var k = 0; k < arr.length; k++) {
+                        if (arr[k] === files[i].name) {
+                            addFile = false;
+                            break;
+                        }
+                    }
+                    if (addFile) {
+                        arr.push(files[i].name);
+                        add_images();
+                    }
+                }
+            }
+
+            function add_images(){
+                var URL = window.URL, imageUrl, image;
                 if (URL) {
                     imageUrl = URL.createObjectURL(files[i]);
-                    id = 'story_' + number + '_' + files[i].name.substr(0, files[i].name.indexOf('.'));
+
+                    var id = 'story_'+number+'_'+files[i].name.substr(0,files[i].name.indexOf('.'));
                     document.getElementById('photo_cont').innerHTML +=
-                        '<div id="' + id + '" class="img_block">' +
-                        '<img src="' + imageUrl + '" class="img_story ' + number + '">' +
-                        '<button onclick="delete_img(\'' + id + '\')" id="' + id + '_d" class="button_3">x</button>' +
+                        '<div id="'+id+'" class="img_block">'+
+                        '<img src="'+imageUrl+'" class="img_story '+number+'">'+
+                        '<button onclick="delete_img(\''+id+'\')" id="'+id+'_d" class="button_3">x</button>'+
                         '</div>';
                 }
             }
+
             document.getElementById('photo_cont').style.display = 'inline-block';
-        }
+        } 
     }
 
     textarea.onkeypress = function(e) {
@@ -271,13 +309,15 @@ window.onload = function() {
         video_panel.style.display = 'block';
     };
 
+    var arr = new Array;
+    var file = document.getElementById('type_file');
     fileSelect.onchange = add_img;
 
     document.getElementById('title_panel').style.display = 'block';
     document.getElementById('add_panel').style.display = 'block';
     document.getElementById('publish_panel').style.display = 'block';
 
-    document.getElementById('type_file').onchange = add_img;
+    // document.getElementById('type_file').onchange = add_img;
     document.getElementById('adds_block_t').onclick = save_text_story;
     document.getElementById('clear_block_t').onclick = clear;
     document.getElementById('adds_block_p').onclick = save_photo_story;

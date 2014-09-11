@@ -31,7 +31,7 @@ def save(request, story_id):
     story.text = json.dumps(request_body['blocks'], ensure_ascii=False)
     story.date_publish = datetime.datetime.now()
     story.save()
-    return HttpResponse('ok')
+    return HttpResponse(story.id)
 
 
 def upload_img(request, story_id):

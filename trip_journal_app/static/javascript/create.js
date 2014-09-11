@@ -213,27 +213,43 @@ window.onload = function() {
     }
 
     function add_img() {
-        var i, URL, imageUrl, id, file, imageData,
-            files = fileSelect.files;
-        if (files.length > 0) {
-            for (i = 0; i < files.length; i++) {
-                file = files[i];
-                if (!file.type.match('image.*')) {
-                    continue;
+        var files = file.files;
+        if(files.length > 0) {
+            if (arr.length == 0) {
+                for (var i = 0; i < files.length; i++) {
+                    arr.push(files[i].name);
+                    add_images();
                 }
-                imageData = {image : file, state : 'temp', block : -1};
-                Images.push(imageData);
-                URL = window.URL;
+            } else {
+                for(var i = 0; i < files.length; i++) {
+                    var addFile = true;
+                    for (var k = 0; k < arr.length; k++) {
+                        if (arr[k] === files[i].name) {
+                            addFile = false;
+                            break;
+                        }
+                    }
+                    if (addFile) {
+                        arr.push(files[i].name);
+                        add_images();
+                    }
+                }
+            }
+
+            function add_images(){
+                var URL = window.URL, imageUrl, image;
                 if (URL) {
                     imageUrl = URL.createObjectURL(files[i]);
-                    id = 'story_' + number + '_' + files[i].name.substr(0, files[i].name.indexOf('.'));
+
+                    var id = 'story_'+number+'_'+files[i].name.substr(0,files[i].name.indexOf('.'));
                     document.getElementById('photo_cont').innerHTML +=
-                        '<div id="' + id + '" class="img_block">' +
-                        '<img src="' + imageUrl + '" class="img_story ' + number + '">' +
-                        '<button onclick="delete_img(\'' + id + '\')" id="' + id + '_d" class="button_3">x</button>' +
+                        '<div id="'+id+'" class="img_block">'+
+                        '<img src="'+imageUrl+'" class="img_story '+number+'">'+
+                        '<button onclick="delete_img(\''+id+'\')" id="'+id+'_d" class="button_3">x</button>'+
                         '</div>';
                 }
             }
+
             document.getElementById('photo_cont').style.display = 'inline-block';
         }
     }

@@ -211,10 +211,39 @@ window.onload = function() {
         clear();
     }
 
-    function add_img() {
-        var files = file.files;
+    // function add_img() {
+    //     var files = file.files;
+
+    //     if(files.length > 0) {
+
+    //         if (arr.length == 0) {
+    //             for (var i = 0; i < files.length; i++) {
+    //                 arr.push(files[i].name);
+    //                 add_images();
+    //             }
+    //         } else {
+    //             for(var i = 0; i < files.length; i++) {
+    //                 var addFile = true;
+    //                 for (var k = 0; k < arr.length; k++) {
+    //                     if (arr[k] === files[i].name) {
+    //                         addFile = false;
+    //                         break;
+    //                     }
+    //                 }
+    //                 if (addFile) {
+    //                     arr.push(files[i].name);
+    //                     add_images();
+    //                 }
+    //             }
+    //         }
+
+     function add_img() {
+
+        files = fileSelect.files;
+
         if(files.length > 0) {
-            if (arr.length == 0) {
+
+                    if (arr.length == 0) {
                 for (var i = 0; i < files.length; i++) {
                     arr.push(files[i].name);
                     add_images();
@@ -235,7 +264,23 @@ window.onload = function() {
                 }
             }
 
+            // for (var i = 0; i < files.length; i++) {
+            //     var file = files[i];
+            //     if (!file.type.match('image.*')) {
+            //         continue;
+            //       }
+
+            //     var imageData = {image : file, state : 'temp', block : -1};
+            //     Images.push(imageData);
+
+            //     add_images();
+            // } 
+
             function add_images(){
+
+                var imageData = {image : file, state : 'temp', block : -1};
+                Images.push(imageData);
+
                 var URL = window.URL, imageUrl, image;
                 if (URL) {
                     imageUrl = URL.createObjectURL(files[i]);
@@ -248,9 +293,10 @@ window.onload = function() {
                         '</div>';
                 }
             }
+                document.getElementById('photo_cont').style.display = 'inline-block';
 
-            document.getElementById('photo_cont').style.display = 'inline-block';
-        } 
+                    console.log(Images);
+        }
     }
 
     textarea.onkeypress = function(e) {

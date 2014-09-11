@@ -4,20 +4,7 @@ import os
 from PIL import Image
 from TripJournal.settings import BASE_DIR
 from trip_journal_app.utils.resize_img import resize, save_pic
-
-
-class User(models.Model):
-    '''
-    Fake class for user while we don't know what the real one will
-    look like.
-    '''
-    name = models.CharField(max_length=45, unique=True)
-    oauth_service = models.CharField(max_length=45)
-    oauth_id = models.CharField(max_length=45)
-
-    def __unicode__(self):
-        return self.name
-
+from django.contrib.auth.models import User
 
 class Tag(models.Model):
     name = models.CharField(max_length=255, unique=True)

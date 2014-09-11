@@ -23,7 +23,7 @@ function jsonForming() {
             block["content"] = html_block.children[0].innerHTML;
         }
         if (type === "img") {
-            block["id"] = parseInt(html_block.children[1].innerHTML);
+            block["id"] = parseInt(html_block.children[1].innerHTML);  
         }
         blocks.push(block);
     }
@@ -35,11 +35,24 @@ function jsonForming() {
 }
 
 function post_images(story_id){
-    var i, formData, xhr
+    var i, formData, xhr;
+
+    function add_image_id_from_db() {
+        // This function sets hidden element with
+        // picture id from database when picture is saved.
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                pic_id_in_db = parseInt(xhr.responseText);
+                alert(pic_id_in_db);
+                // '<p style="display:none;">{{story_block.id}}</p>'
+            }
+        } 
+    }
     for (i=0; i < Images.length; ++i){	
         formData = new FormData();
         formData.append('file', Images[i].image);
         xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = add_image_id_from_db;
         xhr.open('POST', '/upload/' + story_id);
         xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
         xhr.send(formData);
@@ -52,7 +65,7 @@ function post_data(){
        story_id = curr_url[curr_url.length - 1];
        request_body = JSON.stringify(jsonForming());
 
-    function changeUrl() {
+    function change_url() {
         // This function appends story id to page url
         // if request was sent from /edit/ page.
         if (xhr.readyState === 4) {
@@ -69,7 +82,7 @@ function post_data(){
         }
     }
 
-    xhr.onreadystatechange = changeUrl;
+    xhr.onreadystatechange = change_url;
     xhr.open('POST', '/save/' + story_id);
     xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');

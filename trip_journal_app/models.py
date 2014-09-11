@@ -87,6 +87,9 @@ class Picture(models.Model):
         Stores info about picture and it's thumbnails in database
         and writes them to path defined in Stored_picture class.
         '''
+        # check if Pictures directory exists
+        if not os.path.exists(Stored_picture.SAVE_PATH):
+            os.makedirs(Stored_picture.SAVE_PATH)
         img_name = image.name
         img_extension = img_name.split('.')[1]
         file_name = os.path.join('/var/tmp', img_name)

@@ -59,10 +59,10 @@ class StoryModelTest(TestCase):
     def test_get_text_with_pic_urls(self):
         story = Story.objects.get(title='Сивуля')
         text = story.get_text_with_pic_urls(400)
-        for block in text[u'content']:
+        for block in text:
             if block[u'type'] == u'img':
                 self.assertIn(u'url', block)
-                if block[u'name'] == '1.JPG':
+                if block[u'id'] == 1:
                     self.assertEqual(block[u'url'], u'url1')
 
 

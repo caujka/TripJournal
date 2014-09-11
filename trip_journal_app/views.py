@@ -1,8 +1,9 @@
 import json
 import datetime
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.contrib import messages
+from django.views.decorators.csrf import ensure_csrf_cookie
 from trip_journal_app.models import Story, Picture, User
 from trip_journal_app.forms import UploadFileForm
 
@@ -52,6 +53,7 @@ def story(request, story_id):
     return HttpResponse('You are reading story %s' % story_id)
 
 
+@ensure_csrf_cookie
 def edit(request, story_id):
     '''
     Edit page view.

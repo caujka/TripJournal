@@ -14,7 +14,7 @@ def stub_get_pictures_urls(obj, size):
     '''
     Stub of Stoyr stub_get_pictures_urls method.
     '''
-    return {u'1.JPG': u'url1',
-            u'2.JPG': u'url2',
-            u'3.JPG': u'url3'}
+    return {1: u'url1',
+            2: u'url2',
+            3: u'url3'}
 

@@ -34,8 +34,7 @@ def resize(original_pic, size):
 
 def save_pic(img, original_pic_name, suffix, path):
     """
-    Saves resized picture to the path
-    with the suffix added to the name.
+    Saves resized picture to the path with the suffix added to the name.
     """
     img_name_parts = original_pic_name.split('.')
     new_name = '%s_%i.%s' % (img_name_parts[0], suffix, img_name_parts[1])

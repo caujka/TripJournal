@@ -23,47 +23,42 @@
 	    	<script type='text/javascript'>
                     appendBlock(
                         document.getElementById('story_content'), 
-			"<p class=\"description_story\">{{ story_block.content }}</p>", 
-			"text");
-		</script>
-	    {% elif story_block.type = 'img' %}
-	    	<script type='text/javascript'>
+                        "<p class=\"description_story\">{{ story_block.content }}</p>", 
+                        "text");
+                </script>
+            {% elif story_block.type = 'img' %}
+            	<script type='text/javascript'>
                     appendBlock(
                         document.getElementById('story_content'), 
-			('<img src="{{ story_block.url }}" class="image_story">' + 
-			'<p style="display:none;">{{story_block.id}}</p>'),
-			"img");
-		</script>
+                        ('<img src="{{ story_block.url }}" class="image_story">' + 
+                        '<p style="display:none;">{{story_block.id}}</p>'),
+                        "img");
+                </script>
 	    {% endif %}
 	{% endfor %}
         </div>
 
         <div id="text_panel" class="block hide" >
             <textarea id="textarea" name="text" class="element_story" placeholder="+ Text to story"></textarea>
-	    
             <br>
-           
             <button id="adds_block_t" class="button_2 adds_block">+</button>
             <button id="clear_block_t" class="button_2 delete_block">-</button>
-            
         </div>
 
 
         <div id="photo_panel" class="block hide">
             <div id="file">
-
-		<form id="file-form"">
-	        	<input id="type_file" type="file" class="add_file" name="img" multiple>
+                <form id="file-form">
+	             <input id="type_file" type="file" class="add_file" name="img" multiple>
                 </form>
-                
             </div>
+
             <div id="photo_cont" class="">
             </div>
             <br>
-           
+
             <button id="adds_block_p" class="button_2 adds_block">+</button>
             <button id="clear_block_p" class="button_2 delete_block">-</button>
-            
         </div>
 
 
@@ -77,7 +72,6 @@
            
             <button id="adds_block_p" class="button_2 adds_block">+</button>
             <button id="clear_block_p" class="button_2 delete_block">-</button>
-          
         </div>
 	
         <div id="add_panel" class="block">
@@ -91,18 +85,16 @@
                 <span class="block_title">video</span>
             </div>
         </div>
+
 	<div class="block" >
-		<button id="comment_but_t" class="button_4" >Add Comments</button>
-	          <button id="treasure_but_t" class="button_4">Add Treasure</button>
-	
-	
+                <button id="comment_but_t" class="button_4" >Add Comments</button>
+	        <button id="treasure_but_t" class="button_4">Add Treasure</button>
+
 	    <input id="add_comment_t" type="text" name="title_story" class="element_story">
-           
             <input id="add_treasure_t" type="text" name="title_story" class="text_story clear_cont">
-       
-</div>
+        </div>
+
         <div id="publish_panel" class="block">
-	  
             <button id="view" class="button">view</button>
             <button id="publish" class="button" onClick="post_data()">publish</button>
         </div>

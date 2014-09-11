@@ -51,7 +51,7 @@ class Story(models.Model):
 
     def get_pictures_urls(self, max_size):
         '''
-        Returns a dictionary where pictures are keys and stored pictures
+        Returns a dictionary where pictures ids are keys and stored pictures
         of appropriate size are values.
         '''
         pictures = Picture.objects.filter(story=self.id)
@@ -62,8 +62,8 @@ class Story(models.Model):
 
     def get_text_with_pic_urls(self, max_pic_size):
         '''
-        Takes story text and desirable size of pictures and changes picture
-        names in text to respective urls.
+        Takes story text and desirable size of pictures and adds
+        urls to respective block of content.
         '''
         pics = self.get_pictures_urls(max_pic_size)
         text = json.loads(self.text, encoding='utf8')
@@ -86,7 +86,7 @@ class Picture(models.Model):
         '''
         Retrun the object Stored picture with the greatest size
         not bigger than max_accatible_size. If there isn't smaller
-        pictures returns the smalles from available.
+        pictures returns the smallest from available.
         '''
         story_pics = Stored_picture.objects.filter(picture=self.id)
         accetable_pics = story_pics.filter(size__lt=max_accatible_size)
@@ -96,31 +96,30 @@ class Picture(models.Model):
         return story_pics.order_by('size').first()
 
     def save_in_sizes(self, image):
+        '''
+        Stores info about picture and it's thumbnails in database
+        and writes them to path defined in Stored_picture class.
+        '''
         img_name = image.name
         img_extension = img_name.split('.')[1]
         file_name = os.path.join('/var/tmp', img_name)
         with open(file_name, 'w') as img_file:
             for chunk in image.chunks():
                 img_file.write(chunk)
-        # original size
         orig_img = Image.open(file_name)
         orig_size = max(orig_img.size)
-        # for each size in desired sizes
         for size in [s for s in self.SIZES if s < orig_size] + [orig_size]:
-            # try to resize picture
+            resized_img = orig_img
             if size != orig_size:
                 resized_img = resize(file_name, size)
-            else:
-                resized_img = orig_img
             stored_pic = Stored_picture(picture=self, size=size)
-            # and write file to destination
             new_name = save_pic(
                 resized_img, str(self.id) + '.' + img_extension,
                 size, stored_pic.SAVE_PATH
                 )
             stored_pic.url = stored_pic.URL_PREFIX + new_name
             stored_pic.save()
-        # than don't forget to delete temp file
+        # delete temp file
         os.remove(file_name)
 
 

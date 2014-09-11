@@ -18,9 +18,6 @@
 	     {% block menu %}
 	     <div><a href={% url 'home' %}>Main page</a></div>
 	     <div><a href="{% url 'user_stories' %}">My stories</a></div>
-	     <!-- This is here temporary. All pictures will be
-	     associated with story with id 10. -->
-	     <div><a href="{% url 'upload_img' '10' %}">Upload picture</a></div>
 	     {% endblock %}
 	</div>
 	<div id="messages">

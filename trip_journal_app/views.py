@@ -3,10 +3,8 @@ import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
-from trip_journal_app.models import Story, Picture
+from trip_journal_app.models import Story, Picture, User
 from trip_journal_app.forms import UploadFileForm
-
-# Create your views here.
 
 
 def home(request):
@@ -17,16 +15,23 @@ def home(request):
 
 
 def save(request, story_id):
-    try:
-        story = Story.objects.get(pk=int(story_id))
-        request_body = json.loads(request.body)
-        story.title = request_body['title']
-        story.text = json.dumps(request_body['blocks'], ensure_ascii=False)
-        story.date_publish = datetime.datetime.now()
-        story.save()
-        return HttpResponse('ok')
-    except Story.DoesNotExist:
-        return HttpResponse("story doesn't exist")
+    if story_id:
+        try:
+            story = Story.objects.get(pk=int(story_id))
+        except Story.DoesNotExist:
+            return HttpResponse("story doesn't exist")
+    else:
+        story = Story()
+        # some dafault values util we will have real users.
+        # it's suppoesed that trip_journal fixture is installed.
+        story.user = User.objects.get(pk=14)
+        story.date_travel = datetime.datetime.now().date()
+    request_body = json.loads(request.body)
+    story.title = request_body['title']
+    story.text = json.dumps(request_body['blocks'], ensure_ascii=False)
+    story.date_publish = datetime.datetime.now()
+    story.save()
+    return HttpResponse('ok')
 
 
 def upload_img(request, story_id):
@@ -38,9 +43,9 @@ def upload_img(request, story_id):
                 story=Story.objects.get(pk=int(story_id))
             )
             pic.save_in_sizes(img)
-        return HttpResponseRedirect('/upload/%s' % story_id)
-    form = UploadFileForm()
-    return render(request, 'upload.html', {'form': form, 'story_id': story_id})
+            return HttpResponse(pic.id)
+        else:
+            return HttpResponse('Sorry, your data was invalid')
 
 
 def story(request, story_id):

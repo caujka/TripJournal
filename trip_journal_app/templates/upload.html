@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}Image Upload {% endblock %}
+{% block content %}
+  <form action="/upload/{{ story_id }}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form }}
+  <input type="submit" value="Submit" />
+  </form>
+{% endblock %}

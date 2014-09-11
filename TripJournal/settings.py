@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
     'trip_journal_app',
 )
 
@@ -85,8 +86,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
-
-# media files downloaded by user
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'

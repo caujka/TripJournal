@@ -45,10 +45,11 @@ class StoryModelTest(TestCase):
            new=stub_get_stored_pic_by_size)
     def test_get_pictures_urls(self):
         story_ = Story.objects.get(title='Сивуля')
+        img_size = 400
         self.assertEqual(
-            story_.get_pictures_urls(400),
+            story_.get_pictures_urls(img_size),
             dict([
-                (pic.name, 'pic_400_url') for pic
+                (pic.id, 'pic_400_url') for pic
                 in Picture.objects.filter(story=story_)
             ])
         )
@@ -72,11 +73,10 @@ class PictureModelTest(TestCase):
         saved_pictures = Picture.objects.all()
         self.assertEqual(saved_pictures.count(), 3)
         first_pic = saved_pictures[0]
-        self.assertEqual(first_pic.name, '1.JPG')
         self.assertEqual(first_pic.story, Story.objects.get(title='Сивуля'))
 
     def test_get_stored_pic_by_size(self):
-        pic = Picture.objects.get(name='1.JPG')
+        pic = Picture.objects.get(id=1)
         self.assertEqual(
             pic.get_stored_pic_by_size(503),
             Stored_picture.objects.filter(picture=pic).get(size=480)
@@ -99,7 +99,7 @@ class StoredPictureModelTest(TestCase):
         self.assertEqual(stored_pictures.count(), 12)
 
         last_pic = stored_pictures[11]
-        self.assertEqual(last_pic.picture, Picture.objects.get(name='3.JPG'))
+        self.assertEqual(last_pic.picture, Picture.objects.get(id=3))
         self.assertEqual(
             last_pic.size,
             3072

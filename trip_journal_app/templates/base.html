@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% load staticfiles %}
+        <meta charset="UTF-8">
+        <title>{% block title %}{% endblock %}</title>
+	{% block css %}<link rel="stylesheet" href="{% static "css/base.css"%}">{% endblock %}
+        {% block scripts %}{% endblock %}
+    </head>
+    <body>
+        <div id="header">
+            {% block header %}
+	    	<p>Trip Journal</p>
+		<button type="button" id="login_button">Login</button>
+	    {% endblock %}
+        </div>
+	<div id="menu">
+	     {% block menu %}
+	     <div><a href={% url 'home' %}>Main page</a></div>
+	     <div><a href="{% url 'user_stories' %}">My stories</a></div>
+	     {% endblock %}
+	</div>
+	<div id="messages">
+	    {% block messages %}
+		{% for message in messages %}
+		    <div {% if message.tags %} class="{{ message.tags }} {% endif %}">
+		    {{ message }}
+		    </div>
+		{% endfor %}
+	    {% endblock %}
+	</div>
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+    </body>
+</html>

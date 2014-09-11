@@ -17,28 +17,20 @@ main{
     margin: 2px;
     padding: 10px;
     display: inline-block;
-    background: url(../images/plus-sign_2.png) 35px 35px no-repeat #83a054;
+    background: url("../images/plus-sign_2.png") 35px 35px no-repeat #83a054;
     cursor: crosshair;
     position: relative;
 }
 .add_block:hover{
-    background: url(../images/plus-sign.png) 35px 35px no-repeat #8ed41f;
-
+    background: url("../images/plus-sign.png") 35px 35px no-repeat #8ed41f;
 }
 .key_panel{
-
     width: 150px;
     height: 25px;
     border: 1px solid #aaa;
     border-radius: 5px;
     margin-left:600px;
-   
-    
     visibility:hidden;
- 
-   
-   
-    
 }
 .block_title{
     text-transform: uppercase;
@@ -83,7 +75,7 @@ main{
 #file{
     height: 100px;
     width: 642px;
-    background: url(../images/plus-sign.png) 290px 25px no-repeat #ddd;
+    background: url("../images/plus-sign.png") 290px 25px no-repeat #ddd;
     margin: 2px;
     margin-left: 72px;
 }
@@ -93,7 +85,6 @@ main{
     outline: none;
     margin: 5px;
     border: 2px solid #ddd;
-    
 }
 .element_story{
     height: 70px;
@@ -143,7 +134,6 @@ main{
     position: relative;
 }
 
-
 .block_story{
     border: 1px solid #aaa;
     border-radius: 10px;
@@ -187,53 +177,35 @@ main{
 .block_story h3{
     margin-left: 50px;
 }
-.addcontent{
-	width: 580px;
-	height:800px;
-}
-#comment_but_t,#treasure_but_t{
+#comment_but_t,#treasure_but_t,#comment_but_p,#treasure_but_p{
     position: relative;
-    margin-left:100px;
 }
-#story_content,#title_panel,#text_panel,#photo_panel,#video_panel,#add_panel,#publish_panel{
+#title_panel,#text_panel,#photo_panel,#video_panel,#add_panel,#publish_panel{
     display: none;
 }
-
-#top{
+#add_comment_t,#add_treasure_t,#add_comment_p,#add_treasure_p{
+    display: none;
+}
+#bottom, #edit, #delete, #top{
     display: inline-block;
     width: 25px;
     height: 25px;
-    
-    top: 0px;
     margin-right:10px;
     border: none;
-    background:  url(../images/arrow-up.png) no-repeat;
 }
 #bottom{
-    display: inline-block;
-    width: 25px;
-    height: 25px;
-    margin-right:10px;
-  
-    border: none;
-    background:  url(../images/arrow-down.png) no-repeat;
+    background:  url("../images/arrow-down.png") no-repeat;
+}
+#top{
+    top: 0px;
+    background:  url("../images/arrow-up.png") no-repeat;
 }
 
 #edit{
-    display: inline-block;
-    width: 25px;
-    height: 25px;
     bottom: 0px;
-    margin-right:10px;
-    border: none;
-    background:  url(../images/edit.png) no-repeat;
+    background:  url("../images/edit.png") no-repeat;
 }
 #delete{
-    display: inline-block;
-    width: 25px;
-    height: 25px;
     bottom: 0px;
-    margin-right:10px; 
-    border: none;
-    background:  url(../images/delete.png) no-repeat;
+    background:  url("../images/delete.png") no-repeat;
 }

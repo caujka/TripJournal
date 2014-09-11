@@ -89,3 +89,4 @@ STATIC_URL = '/static/'
 # media files downloaded by user
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'

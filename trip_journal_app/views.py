@@ -7,6 +7,8 @@ from trip_journal_app.utils.json_utils import (
     saved_stories, unicode_slugify, load_story_info
 )
 from trip_journal_app.models import Story
+#from django import session
+from trip_journal_app.models import User
 
 # Create your views here.
 

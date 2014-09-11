@@ -32,7 +32,6 @@ function addImagesFromTemp(){
     }
 }
 
-
 function appendBlock(story, blockContent, block_type) {
     var container = document.createElement("div"),
         keybar = document.createElement("div"),

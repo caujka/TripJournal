@@ -23,7 +23,7 @@ function jsonForming() {
             block["content"] = html_block.children[0].innerHTML;
         }
         if (type === "img") {
-            block["id"] = parseInt(html_block.children[1].innerHTML);
+            block["id"] = parseInt(html_block.children[1].innerHTML);  
         }
         blocks.push(block);
     }
@@ -42,15 +42,17 @@ function post_images(story_id){
         // picture id from database when picture is saved.
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
+                pic_id_in_db = parseInt(xhr.responseText);
+                alert(pic_id_in_db);
+                // '<p style="display:none;">{{story_block.id}}</p>'
             }
-        } else {
-            alert('There was a problem with request.')
-        }
+        } 
     }
     for (i=0; i < Images.length; ++i){	
         formData = new FormData();
         formData.append('file', Images[i].image);
         xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = add_image_id_from_db;
         xhr.open('POST', '/upload/' + story_id);
         xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
         xhr.send(formData);

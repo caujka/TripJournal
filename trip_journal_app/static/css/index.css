@@ -73,3 +73,11 @@ html, body {
     width: 17%;
     float: left;
 }
+
+.login_form {
+    float: right;
+}
+
+.login_form input {
+    display: inline-block;
+}

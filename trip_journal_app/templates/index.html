@@ -11,7 +11,7 @@
         {% if user.id %}
             <a href="/logout/">Logout ({{ user.username }})</a>
         {% else %}
-            <form action="/login/" class="login_form" method="post">
+            <form action="/login/" method="post">
                 {% csrf_token %}
                 <input type="text" name="username" id="username">
                 <input type="password" name="password" id="password">

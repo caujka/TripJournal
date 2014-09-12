@@ -1,7 +1,7 @@
 import json
 import datetime
-from django.shortcuts import render, redirect, render_to_response
-from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from django.http import HttpResponse, Http404
 from django.contrib import messages
 from django.views.decorators.csrf import ensure_csrf_cookie
 from trip_journal_app.models import Story, Picture
@@ -21,27 +21,33 @@ def home(request):
 
 
 def save(request, story_id):
-    if story_id:
-        try:
-            story = Story.objects.get(pk=int(story_id))
-        except Story.DoesNotExist:
-            return HttpResponse("story doesn't exist")
+    """
+    View for saving story contents. Responds only to ajax POST requests.
+    """
+    if request.is_ajax() and request.method == "POST":
+        if story_id:
+            try:
+                story = Story.objects.get(pk=int(story_id))
+            except Story.DoesNotExist:
+                return HttpResponse("story doesn't exist")
+        else:
+            story = Story()
+            # some dafault values util we will have real users.
+            # it's suppoesed that trip_journal fixture is installed.
+            story.user = User.objects.get(pk=14)
+            story.date_travel = datetime.datetime.now().date()
+        request_body = json.loads(request.body)
+        story.title = request_body['title']
+        story.text = json.dumps(request_body['blocks'], ensure_ascii=False)
+        story.date_publish = datetime.datetime.now()
+        story.save()
+        return HttpResponse(story.id)
     else:
-        story = Story()
-        # some dafault values util we will have real users.
-        # it's suppoesed that trip_journal fixture is installed.
-        story.user = User.objects.get(pk=14)
-        story.date_travel = datetime.datetime.now().date()
-    request_body = json.loads(request.body)
-    story.title = request_body['title']
-    story.text = json.dumps(request_body['blocks'], ensure_ascii=False)
-    story.date_publish = datetime.datetime.now()
-    story.save()
-    return HttpResponse(story.id)
+        raise Http404
 
 
 def upload_img(request, story_id):
-    if request.method == 'POST':
+    if request.is_ajax() and request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             img = request.FILES['file']
@@ -52,6 +58,8 @@ def upload_img(request, story_id):
             return HttpResponse(pic.id)
         else:
             return HttpResponse('Sorry, your data was invalid')
+    else:
+        raise Http404
 
 
 def story(request, story_id):
@@ -110,7 +118,7 @@ def login(request):
             messages.info(request, "User doesn't exist")
             return redirect('/', args)
     else:
-        return render_to_response('index.html', args)
+        raise Http404
 
 
 def logout(request):

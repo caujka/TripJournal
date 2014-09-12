@@ -1,13 +1,16 @@
 import json
 import datetime
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, Http404
-from django.contrib import messages
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.core.context_processors import csrf
+from django.http import HttpResponse
+from django.contrib import messages, auth
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.http import require_POST
+
 from trip_journal_app.models import Story, Picture
 from trip_journal_app.forms import UploadFileForm
-from django.contrib import auth
-from django.core.context_processors import csrf
 
 
 def home(request):
@@ -20,52 +23,53 @@ def home(request):
     )
 
 
+@login_required
+@require_POST
 def save(request, story_id):
     """
     View for saving story contents. Responds only to ajax POST requests.
     """
-    if request.is_ajax() and request.method == "POST":
-        if story_id:
-            try:
-                story = Story.objects.get(pk=int(story_id))
-            except Story.DoesNotExist:
-                return HttpResponse("story doesn't exist")
-        else:
-            story = Story()
-            # some dafault values util we will have real users.
-            # it's suppoesed that trip_journal fixture is installed.
-            story.user = User.objects.get(pk=14)
-            story.date_travel = datetime.datetime.now().date()
-        request_body = json.loads(request.body)
-        story.title = request_body['title']
-        story.text = json.dumps(request_body['blocks'], ensure_ascii=False)
-        story.date_publish = datetime.datetime.now()
-        story.save()
-        return HttpResponse(story.id)
+    user = auth.get_user(request)
+    if story_id:
+        story = get_object_or_404(Story, pk=int(story_id))
+        if user != story.user:
+            return HttpResponse('Unauthorized', status=401)
     else:
-        raise Http404
+        story = Story()
+        story.user = auth.get_user(request)
+        story.date_travel = datetime.datetime.now().date()
+    request_body = json.loads(request.body)
+    story.title = request_body['title']
+    story.text = json.dumps(request_body['blocks'], ensure_ascii=False)
+    story.date_publish = datetime.datetime.now()
+    story.save()
+    return HttpResponse(story.id)
 
 
+@login_required
+@require_POST
 def upload_img(request, story_id):
-    if request.is_ajax() and request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            img = request.FILES['file']
-            pic = Picture.objects.create(
-                story=Story.objects.get(pk=int(story_id))
-            )
-            pic.save_in_sizes(img)
-            return HttpResponse(pic.id)
-        else:
-            return HttpResponse('Sorry, your data was invalid')
+    # authorization part
+    story = get_object_or_404(Story, pk=int(story_id))
+    user = auth.get_user(request)
+    if user != story.user:
+        return HttpResponse('Unauthorized', status=401)
+
+    form = UploadFileForm(request.POST, request.FILES)
+    if form.is_valid():
+        img = request.FILES['file']
+        pic = Picture.objects.create(story=story)
+        pic.save_in_sizes(img)
+        return HttpResponse(pic.id)
     else:
-        raise Http404
+        return HttpResponse('Sorry, your data was invalid', status=400)
 
 
 def story(request, story_id):
     return HttpResponse('You are reading story %s' % story_id)
 
 
+@login_required
 @ensure_csrf_cookie
 def edit(request, story_id):
     '''
@@ -77,7 +81,11 @@ def edit(request, story_id):
     # if story_id exists renders its content to edit.html page
     else:
         try:
+            user = auth.get_user(request)
             story = Story.objects.get(pk=int(story_id))
+            if user != story.user:
+                messages.info(request, 'Edit your own stories!')
+                return redirect('/my_stories/')
             story_blocks = {}
             if story.text:
                 hardcoded_img_size = 900
@@ -86,25 +94,26 @@ def edit(request, story_id):
                 )
         # if story_id doesn't exist redirects user to list of his/her stoires
         except Story.DoesNotExist:
-            msg = ("You've been redirected here because you tried to edit "
-                   "nonexisting story.")
+            msg = ("Such a story doesn't exist. But you can create a new one.")
             messages.info(request, msg)
             return redirect('/my_stories/')
     context = {'story_blocks': story_blocks}
     return render(request, 'edit.html', context)
 
 
+@login_required
 def user_stories(request):
     """
     Shows list of user stories and link to create new story.
     """
-    # user id hardcoded until we don't have real users and sessions.
-    harcoded_user_id = 14
-    stories = Story.objects.filter(user=harcoded_user_id)
-    context = {'stories': stories}
-    return render(request, 'my_stories.html', context)
+    user = auth.get_user(request)
+    if user:
+        stories = Story.objects.filter(user=user)
+        context = {'stories': stories}
+        return render(request, 'my_stories.html', context)
 
 
+@require_POST
 def login(request):
     args = csrf(request)
     if request.method == 'POST':
@@ -113,14 +122,14 @@ def login(request):
         user = auth.authenticate(username=username, password=password)
         if user is not None:
             auth.login(request, user)
-            return redirect('/', args)
         else:
             messages.info(request, "User doesn't exist")
-            return redirect('/', args)
-    else:
-        raise Http404
+        # next page user goes to
+        next_url = request.POST.get('next', '/')
+        return redirect(next_url, args)
 
 
 def logout(request):
     auth.logout(request)
     return redirect("/")
+

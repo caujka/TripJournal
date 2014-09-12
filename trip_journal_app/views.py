@@ -9,11 +9,15 @@ from trip_journal_app.forms import UploadFileForm
 from django.contrib import auth
 from django.core.context_processors import csrf
 
+
 def home(request):
     """
     Home page view.
     """
-    return render(request, 'index.html', {'stories': Story.objects.all(), 'user': auth.get_user(request)})
+    return render(
+        request, 'index.html',
+        {'stories': Story.objects.all(), 'user': auth.get_user(request)}
+    )
 
 
 def save(request, story_id):
@@ -92,23 +96,22 @@ def user_stories(request):
     context = {'stories': stories}
     return render(request, 'my_stories.html', context)
 
+
 def login(request):
-    args = {}
-    args.update(csrf(request))
+    args = csrf(request)
     if request.method == 'POST':
         username = request.POST.get('username', '')
         password = request.POST.get('password', '')
         user = auth.authenticate(username=username, password=password)
         if user is not None:
             auth.login(request, user)
-            return redirect('/')
+            return redirect('/', args)
         else:
-            args['login_error'] = "User doesn't exist"
-            return render_to_response('index.html', args)
+            messages.info(request, "User doesn't exist")
+            return redirect('/', args)
     else:
         return render_to_response('index.html', args)
-    
-    
+
 
 def logout(request):
     auth.logout(request)

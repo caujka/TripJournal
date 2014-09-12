@@ -6,6 +6,7 @@ from TripJournal.settings import BASE_DIR
 from trip_journal_app.utils.resize_img import resize, save_pic
 from django.contrib.auth.models import User
 
+
 class Tag(models.Model):
     name = models.CharField(max_length=255, unique=True)
 

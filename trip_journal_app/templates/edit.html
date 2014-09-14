@@ -20,20 +20,14 @@
 
         {% for story_block in story_blocks %}
 	    {% if story_block.type == 'text' %}
-	    	<script type='text/javascript'>
-                    appendBlock(
-                        document.getElementById('story_content'), 
-                        "<p class=\"description_story\">{{ story_block.content|safe }}</p>", 
-                        "text");
-                </script>
+                <div class="saved text">
+		    <p>{{ story_block.content|safe }}</p>
+		</div>
             {% elif story_block.type = 'img' %}
-            	<script type='text/javascript'>
-                    appendBlock(
-                        document.getElementById('story_content'), 
-                        ('<img src="{{ story_block.url }}" class="image_story">' + 
-                        '<p style="display:none;">{{story_block.id}}</p>'),
-                        "img");
-                </script>
+	        <div class="saved img">
+		     <p>{{ story_block.url }}</p>
+                     <p style="display:none;">{{story_block.id}}</p>
+		</div>
 	    {% endif %}
 	{% endfor %}
         </div>

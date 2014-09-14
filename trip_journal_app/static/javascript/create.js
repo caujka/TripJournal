@@ -135,6 +135,39 @@ function escape_html_tags(str) {
     return str.replace(/>/g, '&gt;').replace(/</g, '&lt;');
 }
 
+function text_block_template(text) {
+    return (
+        '<p class="description_story">' +
+        text + '</p>'
+    );
+}
+
+function img_block_template(src) {
+    return '<img src="' + src + '"class="image_story"><br>';
+}
+
+function add_saved_blocks() {
+    var i, block, block_text, block_type,
+        blocks = document.getElementsByClassName('saved'),
+        blocks_num = blocks.length,
+        story_content = document.getElementById('story_content');
+    console.log(blocks);
+    for (i=0; i < blocks_num; i++) {
+        block = blocks[0];
+        block_type = block.classList[1];
+        if (block_type === 'text') {
+            block_text = text_block_template(block.innerHTML);
+        } else if (block_type === 'img') {
+            block_text = (
+                img_block_template(block.children[0].innerHTML) +
+                block.children[1].outerHTML
+            );
+        }
+        block.parentNode.removeChild(block);
+        appendBlock(story_content, block_text, block_type);
+    }
+}
+
 window.onload = function() {
 
     var story_cont = document.getElementById('story_content'),
@@ -200,11 +233,8 @@ window.onload = function() {
 	
     function save_text_story() {
         story_cont.style.display = 'block';
-        var text = escape_html_tags(textarea.value);
-        var content = (
-            '<p class="description_story">' + 
-            text + '</p>'
-        );
+        var text = escape_html_tags(textarea.value),
+            content = text_block_template(text);
         appendBlock(story_cont, content, "text");
         clear();
     }
@@ -215,7 +245,7 @@ window.onload = function() {
             content = '';
         story_cont.style.display = 'block';
         for (i = 0; i < arr.length; i++) {
-            content += '<img src="' + arr[i].src + '"class="image_story"><br>';
+            content += img_block_template(arr[i].src);
         }
         appendBlock(story_cont, content, "img");
         clear();
@@ -246,6 +276,8 @@ window.onload = function() {
         document.getElementById('photo_cont').style.display = 'inline-block';
     }
     }
+
+    add_saved_blocks();
 
     textarea.onkeypress = function(e) {
         if (e.keyCode === 13) {

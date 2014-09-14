@@ -18,12 +18,12 @@ function jsonForming() {
         html_block = document.getElementById('contentarea_' + (Blocks[i]));
         block = {
             "type": type
-        }
+        };
         if (type === "text") {
-            block["content"] = html_block.children[0].innerHTML;
+            block.content = html_block.children[0].innerHTML;
         }
         if (type === "img") {
-            block["id"] = parseInt(html_block.children[1].innerHTML);  
+            block.id = parseInt(html_block.children[1].innerHTML);
         }
         blocks.push(block);
     }
@@ -35,24 +35,31 @@ function jsonForming() {
 }
 
 function post_images(story_id){
-    var i, formData, xhr;
+    var i, formData, xhr, img_block_index, img,
+        number_of_img = Images.length;
 
-    function add_image_id_from_db() {
+    function add_image_id_from_db(block_num) {
         // This function sets hidden element with
         // picture id from database when picture is saved.
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
+                var block_container = document.getElementById(
+                    'contentarea_' + block_num.toString()
+                );
                 pic_id_in_db = parseInt(xhr.responseText);
-                alert(pic_id_in_db);
-                // '<p style="display:none;">{{story_block.id}}</p>'
+                block_container.children[1].innerHTML = pic_id_in_db;
             }
         } 
     }
-    for (i=0; i < Images.length; ++i){	
+    for (i=0; i < number_of_img; ++i){
         formData = new FormData();
-        formData.append('file', Images[i].image);
+        img = Images.shift();
+        formData.append('file', img.image);
         xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = add_image_id_from_db;
+        img_block_index = img.block;
+        xhr.onreadystatechange = function() {
+            add_image_id_from_db(img_block_index);
+        };
         xhr.open('POST', '/upload/' + story_id);
         xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
         xhr.send(formData);

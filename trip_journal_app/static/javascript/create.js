@@ -6,7 +6,7 @@ var number = 1,
 function deleteImagesFromBlock(blockNumber){
     for (var i=0; i < Images.length; ++i){
         if (Images[i].block === blockNumber){
-            Images.splice(i,1);
+            Images.splice(i, 1);
         }
     }
 }
@@ -142,8 +142,11 @@ function text_block_template(text) {
     );
 }
 
-function img_block_template(src) {
-    return '<img src="' + src + '"class="image_story">';
+function img_block_template(src, img_id) {
+    return (
+        '<img src="' + src + '"class="image_story">' +
+        '<p style="display:none;">' + img_id + '</p>'
+    );
 }
 
 function add_saved_blocks() {
@@ -157,9 +160,9 @@ function add_saved_blocks() {
         if (block_type === 'text') {
             block_text = text_block_template(block.children[0].innerHTML);
         } else if (block_type === 'img') {
-            block_text = (
-                img_block_template(block.children[0].innerHTML) +
-                block.children[1].outerHTML
+            block_text = img_block_template(
+                block.children[0].innerHTML,
+                block.children[1].innerHTML
             );
         }
         block.parentNode.removeChild(block);
@@ -255,25 +258,25 @@ window.onload = function() {
             files = fileSelect.files;
         if (files.length > 0) {
             for (i = 0; i < files.length; i++) {
-            file = files[i];
-            if (!file.type.match('image.*')) {
-                continue;
+                file = files[i];
+                if (!file.type.match('image.*')) {
+                    continue;
+                }
+                imageData = {image : file, state : 'temp', block : -1};
+                Images.push(imageData);
+                URL = window.URL;
+                if (URL) {
+                    imageUrl = URL.createObjectURL(files[i]);
+                    id = 'story_' + number + '_' + files[i].name.substr(0, files[i].name.indexOf('.'));
+                    document.getElementById('photo_cont').innerHTML +=
+                    '<div id="' + id + '" class="img_block">' +
+                    '<img src="' + imageUrl + '" class="img_story ' + number + '">' +
+                    '<button onclick="delete_img(\'' + id + '\')" id="' + id + '_d" class="button_3">x</button>' +
+                    '</div>';
+                }
             }
-        imageData = {image : file, state : 'temp', block : -1};
-        Images.push(imageData);
-        URL = window.URL;
-        if (URL) {
-            imageUrl = URL.createObjectURL(files[i]);
-            id = 'story_' + number + '_' + files[i].name.substr(0, files[i].name.indexOf('.'));
-            document.getElementById('photo_cont').innerHTML +=
-            '<div id="' + id + '" class="img_block">' +
-            '<img src="' + imageUrl + '" class="img_story ' + number + '">' +
-            '<button onclick="delete_img(\'' + id + '\')" id="' + id + '_d" class="button_3">x</button>' +
-            '</div>';
-            }
-        }
         document.getElementById('photo_cont').style.display = 'inline-block';
-    }
+        }
     }
 
     add_saved_blocks();
@@ -323,7 +326,8 @@ window.onload = function() {
             clear();
         };
     }
-    if (story_cont.children.length > 1) {
+    if (story_cont.children.length > 1 ||
+            document.getElementById('story_title').textContent) {
         story_content.style.display = 'block';
     }
     document.getElementById('add_panel').style.display = 'block';

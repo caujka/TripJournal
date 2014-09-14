@@ -11,12 +11,14 @@
     {% endblock %}
     {% block content %}
     <main>
+        {% if not story.title %}
         <div id="title_panel" class="block hide">
             <input id="title" type="text" name="title_story" class="text_story" placeholder="+ Title of story">
             <button id="add_title" class="button_2">+</button>
-        </div>    	
+        </div>
+	{% endif %}	
         <div id="story_content" class="block">
-            <h2 id="story_title" contenteditable="true"></h2>
+	    <h2 id="story_title" contenteditable="true">{{story.title}}</h2>
 
         {% for story_block in story_blocks %}
 	    {% if story_block.type == 'text' %}

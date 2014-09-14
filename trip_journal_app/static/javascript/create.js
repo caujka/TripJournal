@@ -143,7 +143,7 @@ function text_block_template(text) {
 }
 
 function img_block_template(src) {
-    return '<img src="' + src + '"class="image_story"><br>';
+    return '<img src="' + src + '"class="image_story">';
 }
 
 function add_saved_blocks() {
@@ -151,12 +151,11 @@ function add_saved_blocks() {
         blocks = document.getElementsByClassName('saved'),
         blocks_num = blocks.length,
         story_content = document.getElementById('story_content');
-    console.log(blocks);
     for (i=0; i < blocks_num; i++) {
         block = blocks[0];
         block_type = block.classList[1];
         if (block_type === 'text') {
-            block_text = text_block_template(block.innerHTML);
+            block_text = text_block_template(block.children[0].innerHTML);
         } else if (block_type === 'img') {
             block_text = (
                 img_block_template(block.children[0].innerHTML) +
@@ -291,7 +290,6 @@ window.onload = function() {
         uploadButton.innerHTML = 'Uploading...';
     };
 
-    title.focus();
 
     text.onclick = function() {
         clear();
@@ -314,7 +312,20 @@ window.onload = function() {
 
     fileSelect.onchange = add_img;
 
-    document.getElementById('title_panel').style.display = 'block';
+    if (!document.getElementById('story_title').textContent) {
+        document.getElementById('title_panel').style.display = 'block';
+        title.focus();
+        document.getElementById('add_title').onclick = function() {
+            document.getElementById('story_title').innerHTML = (
+                escape_html_tags(title.value)
+            );
+            document.getElementById('story_content').style.display = 'block';
+            clear();
+        };
+    }
+    if (story_cont.children.length > 1) {
+        story_content.style.display = 'block';
+    }
     document.getElementById('add_panel').style.display = 'block';
     document.getElementById('publish_panel').style.display = 'block';
 
@@ -324,13 +335,6 @@ window.onload = function() {
     document.getElementById('adds_block_p').onclick = save_photo_story;
     document.getElementById('clear_block_p').onclick = clear;
 
-    document.getElementById('add_title').onclick = function() {
-        document.getElementById('story_title').innerHTML = (
-            escape_html_tags(title.value)
-        );
-        document.getElementById('story_content').style.display = 'block';
-        clear();
-    };
     document.getElementById('comment_but_t').onclick = function() {
         comment_t.style.display = 'inline-block';
         comment_t.focus();

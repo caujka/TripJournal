@@ -76,17 +76,16 @@ def edit(request, story_id):
     Edit page view.
     '''
     # if story_id is empty rednders template without added text
-    if not story_id:
-        story_blocks = ''
+    story_blocks = {}
+    story = Story()
     # if story_id exists renders its content to edit.html page
-    else:
+    if story_id:
         try:
             user = auth.get_user(request)
             story = Story.objects.get(pk=int(story_id))
             if user != story.user:
                 messages.info(request, 'Edit your own stories!')
                 return redirect('/my_stories/')
-            story_blocks = {}
             if story.text:
                 hardcoded_img_size = 900
                 story_blocks = (
@@ -97,7 +96,10 @@ def edit(request, story_id):
             msg = ("Such a story doesn't exist. But you can create a new one.")
             messages.info(request, msg)
             return redirect('/my_stories/')
-    context = {'story_blocks': story_blocks}
+    context = {
+        'story_blocks': story_blocks,
+        'story': story,
+    }
     return render(request, 'edit.html', context)
 
 

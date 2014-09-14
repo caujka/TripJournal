@@ -23,7 +23,7 @@
 	    	<script type='text/javascript'>
                     appendBlock(
                         document.getElementById('story_content'), 
-                        "<p class=\"description_story\">{{ story_block.content }}</p>", 
+                        "<p class=\"description_story\">{{ story_block.content|safe }}</p>", 
                         "text");
                 </script>
             {% elif story_block.type = 'img' %}

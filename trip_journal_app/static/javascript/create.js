@@ -23,7 +23,7 @@ function swapImagesFromBlock(blockNumber1, blockNumber2){
 }
 
 function addImagesFromTemp(){
-    var i
+    var i;
     for(i=0; i < Images.length; ++i){
         if (Images[i].state === 'temp') {
             Images[i].state = 'loaded';
@@ -131,6 +131,10 @@ function delete_img(id) {
     }
 }
 
+function escape_html_tags(str) {
+    return str.replace(/>/g, '&gt;').replace(/</g, '&lt;');
+}
+
 window.onload = function() {
 
     var story_cont = document.getElementById('story_content'),
@@ -152,8 +156,11 @@ window.onload = function() {
         form = document.getElementById('file-form'),
         upload=document.getElementById('publish'),
         uploadButton = document.getElementById('upload-button'),
-        filesget = fileSelect.files;
-        formData = new FormData();
+        filesget = fileSelect.files,
+        formData = new FormData(),
+        arr = [],
+        file = document.getElementById('type_file');
+
 
     function clearImagesFromTemp() {
 	    var poss = 0;
@@ -193,7 +200,11 @@ window.onload = function() {
 	
     function save_text_story() {
         story_cont.style.display = 'block';
-        var content = '<p class="description_story">' + textarea.value + '</p>';
+        var text = escape_html_tags(textarea.value);
+        var content = (
+            '<p class="description_story">' + 
+            text + '</p>'
+        );
         appendBlock(story_cont, content, "text");
         clear();
     }
@@ -269,8 +280,6 @@ window.onload = function() {
         video_panel.style.display = 'block';
     };
 
-    var arr = new Array;
-    var file = document.getElementById('type_file');
     fileSelect.onchange = add_img;
 
     document.getElementById('title_panel').style.display = 'block';
@@ -284,7 +293,9 @@ window.onload = function() {
     document.getElementById('clear_block_p').onclick = clear;
 
     document.getElementById('add_title').onclick = function() {
-        document.getElementById('story_title').innerHTML = title.value;
+        document.getElementById('story_title').innerHTML = (
+            escape_html_tags(title.value)
+        );
         document.getElementById('story_content').style.display = 'block';
         clear();
     };

@@ -180,6 +180,12 @@ window.onload = function(){
     	removeBlock.id = "delete";
     	keybar.appendChild(removeBlock);
 
+        //var centerMarker = document.createElement("buu");
+        //centerMarker.setAttribute('onClick', "centerMap(' + i + ')")
+
+        //centerMarker.id = "buu";
+        //keybar.appendChild(centerMarker);
+
 	container.appendChild(keybar);
     	story.appendChild(container);
     	
@@ -301,3 +307,131 @@ function delete_img(id) {
         div.parentNode.removeChild(div);
     }
 }
+
+//Volodya
+var geocoder;
+var markersArray = [];
+function initialize() {
+    geocoder = new google.maps.Geocoder();
+    var mapOptions = {
+    zoom: 14
+};
+    map = new google.maps.Map(document.getElementById('map-canvas'),
+							  mapOptions);
+    google.maps.event.addListener(map, 'click', function(event) {
+    	placeMarker(event.latLng);
+});
+
+    if(navigator.geolocation) {
+    	navigator.geolocation.getCurrentPosition(function(position) {
+        	var pos = new google.maps.LatLng(position.coords.latitude,
+                                            position.coords.longitude);
+
+    var infowindow = new google.maps.InfoWindow({
+        map: map,
+        position: pos,
+        content: "I'm here"
+    });
+
+    map.setCenter(pos);
+    }, function() {
+      handleNoGeolocation(true);
+    });
+  } else {
+    // browser doesn't support geolocation
+    heNoGeolocation(false);
+  }
+  var drawingManager = new google.maps.drawing.DrawingManager({
+    drawingControlOptions: {
+      drawingModes: [
+        google.maps.drawing.OverlayType.POLYLINE
+      ]
+    },
+
+  });
+  drawingManager.setMap(map);
+}
+$ = jQuery;
+function handleNoGeolocation(errorFlag) {
+  if (errorFlag) {
+    var content = 'Error: The Geolocation service failed.';
+  } else {
+    var content = 'Error: Your browser doesn\'t support geolocation.';
+  }
+
+  var options = {
+    map: map,
+    position: new google.maps.LatLng(49.839754, 24.029846),
+    content: content
+  };
+  var infowindow = new google.maps.InfoWindow(options);
+  map.setCenter(options.position);
+}
+
+// Add a marker to the map and push to the array.
+function placeMarker(location, bar_id) {
+    var marker = new google.maps.Marker({
+        position: location,
+        map: map
+    });
+    //Get last added textarea id
+    var textboxes;
+    textboxes = document.getElementsByClassName('key_panel');
+    last_element = textboxes[textboxes.length-1]
+    bar_id='#'+last_element.id;
+    //add marker in markers array
+
+    markersArray.push(marker);
+    i = markersArray.length - 1;
+    jQuery(bar_id).append('<button onclick="centerMap(' + i + '); return false;">Marker</button>');
+
+    //var markerButton = document.createElement("button");
+    //	markerButton.setAttribute('onClick', "centerMap(' + i + '); return false;");
+    //	markerButton.id = "buu";
+    //	document.getElementById("#keybar_"+number).append(markerButton);
+    //var markerButton = document.getElementsByClassName("key_panel");
+    //<button onclick="centerMap(' + i + '); return false;">Marker</button>
+    //var keybar = document.createElement("div");
+	//keybar.id="keybar_"+number;
+	//keybar.className="key_panel"
+
+}
+
+// Sets the map on all markers in the array.
+function setAllMap(map) {
+  for (var i = 0; i < markersArray.length; i++) {
+    markersArray[i].setMap(map);
+  }
+}
+
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers() {
+  setAllMap(null);
+}
+
+// Shows any markers currently in the array.
+function showMarkers() {
+  setAllMap(map);
+}
+
+// Deletes all markers in the array by removing references to them.
+function deleteMarkers() {
+  clearMarkers();
+  markersArray = [];
+}
+
+function codeAddress() {
+  var address = document.getElementById('address').value;
+  geocoder.geocode( { 'address': address}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+        map.setCenter(results[0].geometry.location);
+      } else {
+      alert('Geocode was not successful for the following reason: ' + status);
+    }
+  });
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+	function centerMap(i) {
+        map.setCenter(markersArray[i].getPosition());
+	}

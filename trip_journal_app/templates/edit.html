@@ -6,13 +6,29 @@
         <link rel="stylesheet" href="{% static "css/edit.css" %}">
     {% endblock %}
     {% block scripts %}
+        <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false&libraries=drawing">
+</script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
         <script src="{% static "javascript/create.js" %}"></script>
 	<script src="{% static "javascript/ajax_requests.js" %}"></script>
     {% endblock %}
     {% block content %}
     <main>
+
+        <div id="map-canvas"></div>
+        <div id="panel">
+            <input id="address" type="textbox" value="">
+            <input type="button" value="Знайти" onclick="codeAddress()">
+            <input onclick="clearMarkers();" type=button value="Hide Markers">
+            <input onclick="showMarkers();" type=button value="Show All Markers">
+            <input onclick="deleteMarkers();" type=button value="Delete Markers">
+        </div>
+        <div id="content_panel">
+
+        <br class="clear">
         <div id="story_content" class="block">
             <h2 id="story_title" contenteditable="true"></h2>
+
         </div>
         <div id="title_panel" class="block hide">
             <input id="title" type="text" name="title_story" class="text_story" placeholder="+ Title of story">
@@ -25,6 +41,8 @@
            
             <button id="adds_block_t" class="button_2 adds_block">+</button>
             <button id="clear_block_t" class="button_2 delete_block">-</button>
+
+
             
         </div>
         <div id="photo_panel" class="block hide">
@@ -37,7 +55,7 @@
            
             <button id="adds_block_p" class="button_2 adds_block">+</button>
             <button id="clear_block_p" class="button_2 delete_block">-</button>
-            
+
         </div>
         <div id="video_panel" class="block hide">
             <div id="file">
@@ -46,9 +64,10 @@
             <div id="photo_cont" class="">
             </div>
             <br>
-           
+
             <button id="adds_block_p" class="button_2 adds_block">+</button>
             <button id="clear_block_p" class="button_2 delete_block">-</button>
+
           
         </div>
 	
@@ -78,5 +97,6 @@
             <button id="view" class="button">view</button>
             <button id="publish" class="button" onClick="post_data()">publish</button>
         </div>
+            </div>
     </main>
     {% endblock %}

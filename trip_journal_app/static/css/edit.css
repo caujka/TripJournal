@@ -1,3 +1,23 @@
+#map-canvas {
+    position: fixed;
+    top: 0;
+    height: 400px;
+    width: 390px;
+    left: 860px;
+    right: 2px;
+}
+.clear{
+    clear: both;
+}
+#panel {
+    position: fixed;
+    top: 110px;
+    margin-left: 820px;
+    z-index: 5;
+    padding: 4px;
+    border: 1px solid #999;
+}
+
 body{
     background-color: #ddd;
     margin: 0;
@@ -5,8 +25,10 @@ body{
 }
 main{
     margin: 0 auto;
+    padding: 0;
     width: 800px;
     text-align: center;
+    position: relative;
 }
 .add_block{
     width: 100px;
@@ -25,7 +47,7 @@ main{
     background: url("../images/plus-sign.png") 35px 35px no-repeat #8ed41f;
 }
 .key_panel{
-    width: 150px;
+    width: 200px;
     height: 25px;
     border: 1px solid #aaa;
     border-radius: 5px;
@@ -194,6 +216,10 @@ main{
     margin-right:10px;
     border: none;
     background:  url("../images/arrow-up.png") no-repeat;
+}
+#content_panel{
+    position: absolute;
+    top: 0;
 }
 #bottom{
     display: inline-block;

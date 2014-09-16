@@ -1,239 +1,581 @@
 [
 {
-    "pk": 13, 
-    "model": "trip_journal_app.user", 
     "fields": {
-        "oauth_service": "fb", 
-        "name": "Sasha", 
-        "oauth_id": "some_id"
-    }
+        "codename": "add_logentry",
+        "name": "Can add log entry",
+        "content_type": 1
+    },
+    "model": "auth.permission",
+    "pk": 1
 },
 {
-    "pk": 14, 
-    "model": "trip_journal_app.user", 
     "fields": {
-        "oauth_service": "google+", 
-        "name": "Olesia", 
-        "oauth_id": "some_other_id"
-    }
+        "codename": "change_logentry",
+        "name": "Can change log entry",
+        "content_type": 1
+    },
+    "model": "auth.permission",
+    "pk": 2
 },
 {
-    "pk": 5, 
-    "model": "trip_journal_app.tag", 
+    "fields": {
+        "codename": "delete_logentry",
+        "name": "Can delete log entry",
+        "content_type": 1
+    },
+    "model": "auth.permission",
+    "pk": 3
+},
+{
+    "fields": {
+        "codename": "add_permission",
+        "name": "Can add permission",
+        "content_type": 2
+    },
+    "model": "auth.permission",
+    "pk": 4
+},
+{
+    "fields": {
+        "codename": "change_permission",
+        "name": "Can change permission",
+        "content_type": 2
+    },
+    "model": "auth.permission",
+    "pk": 5
+},
+{
+    "fields": {
+        "codename": "delete_permission",
+        "name": "Can delete permission",
+        "content_type": 2
+    },
+    "model": "auth.permission",
+    "pk": 6
+},
+{
+    "fields": {
+        "codename": "add_group",
+        "name": "Can add group",
+        "content_type": 3
+    },
+    "model": "auth.permission",
+    "pk": 7
+},
+{
+    "fields": {
+        "codename": "change_group",
+        "name": "Can change group",
+        "content_type": 3
+    },
+    "model": "auth.permission",
+    "pk": 8
+},
+{
+    "fields": {
+        "codename": "delete_group",
+        "name": "Can delete group",
+        "content_type": 3
+    },
+    "model": "auth.permission",
+    "pk": 9
+},
+{
+    "fields": {
+        "codename": "add_user",
+        "name": "Can add user",
+        "content_type": 4
+    },
+    "model": "auth.permission",
+    "pk": 10
+},
+{
+    "fields": {
+        "codename": "change_user",
+        "name": "Can change user",
+        "content_type": 4
+    },
+    "model": "auth.permission",
+    "pk": 11
+},
+{
+    "fields": {
+        "codename": "delete_user",
+        "name": "Can delete user",
+        "content_type": 4
+    },
+    "model": "auth.permission",
+    "pk": 12
+},
+{
+    "fields": {
+        "codename": "add_contenttype",
+        "name": "Can add content type",
+        "content_type": 5
+    },
+    "model": "auth.permission",
+    "pk": 13
+},
+{
+    "fields": {
+        "codename": "change_contenttype",
+        "name": "Can change content type",
+        "content_type": 5
+    },
+    "model": "auth.permission",
+    "pk": 14
+},
+{
+    "fields": {
+        "codename": "delete_contenttype",
+        "name": "Can delete content type",
+        "content_type": 5
+    },
+    "model": "auth.permission",
+    "pk": 15
+},
+{
+    "fields": {
+        "codename": "add_session",
+        "name": "Can add session",
+        "content_type": 6
+    },
+    "model": "auth.permission",
+    "pk": 16
+},
+{
+    "fields": {
+        "codename": "change_session",
+        "name": "Can change session",
+        "content_type": 6
+    },
+    "model": "auth.permission",
+    "pk": 17
+},
+{
+    "fields": {
+        "codename": "delete_session",
+        "name": "Can delete session",
+        "content_type": 6
+    },
+    "model": "auth.permission",
+    "pk": 18
+},
+{
+    "fields": {
+        "codename": "add_tag",
+        "name": "Can add tag",
+        "content_type": 7
+    },
+    "model": "auth.permission",
+    "pk": 19
+},
+{
+    "fields": {
+        "codename": "change_tag",
+        "name": "Can change tag",
+        "content_type": 7
+    },
+    "model": "auth.permission",
+    "pk": 20
+},
+{
+    "fields": {
+        "codename": "delete_tag",
+        "name": "Can delete tag",
+        "content_type": 7
+    },
+    "model": "auth.permission",
+    "pk": 21
+},
+{
+    "fields": {
+        "codename": "add_story",
+        "name": "Can add story",
+        "content_type": 8
+    },
+    "model": "auth.permission",
+    "pk": 22
+},
+{
+    "fields": {
+        "codename": "change_story",
+        "name": "Can change story",
+        "content_type": 8
+    },
+    "model": "auth.permission",
+    "pk": 23
+},
+{
+    "fields": {
+        "codename": "delete_story",
+        "name": "Can delete story",
+        "content_type": 8
+    },
+    "model": "auth.permission",
+    "pk": 24
+},
+{
+    "fields": {
+        "codename": "add_picture",
+        "name": "Can add picture",
+        "content_type": 9
+    },
+    "model": "auth.permission",
+    "pk": 25
+},
+{
+    "fields": {
+        "codename": "change_picture",
+        "name": "Can change picture",
+        "content_type": 9
+    },
+    "model": "auth.permission",
+    "pk": 26
+},
+{
+    "fields": {
+        "codename": "delete_picture",
+        "name": "Can delete picture",
+        "content_type": 9
+    },
+    "model": "auth.permission",
+    "pk": 27
+},
+{
+    "fields": {
+        "codename": "add_stored_picture",
+        "name": "Can add stored_picture",
+        "content_type": 10
+    },
+    "model": "auth.permission",
+    "pk": 28
+},
+{
+    "fields": {
+        "codename": "change_stored_picture",
+        "name": "Can change stored_picture",
+        "content_type": 10
+    },
+    "model": "auth.permission",
+    "pk": 29
+},
+{
+    "fields": {
+        "codename": "delete_stored_picture",
+        "name": "Can delete stored_picture",
+        "content_type": 10
+    },
+    "model": "auth.permission",
+    "pk": 30
+},
+{
+    "fields": {
+        "codename": "add_comment",
+        "name": "Can add comment",
+        "content_type": 11
+    },
+    "model": "auth.permission",
+    "pk": 31
+},
+{
+    "fields": {
+        "codename": "change_comment",
+        "name": "Can change comment",
+        "content_type": 11
+    },
+    "model": "auth.permission",
+    "pk": 32
+},
+{
+    "fields": {
+        "codename": "delete_comment",
+        "name": "Can delete comment",
+        "content_type": 11
+    },
+    "model": "auth.permission",
+    "pk": 33
+},
+{
+    "fields": {
+        "codename": "add_map_artifact",
+        "name": "Can add map_artifact",
+        "content_type": 12
+    },
+    "model": "auth.permission",
+    "pk": 34
+},
+{
+    "fields": {
+        "codename": "change_map_artifact",
+        "name": "Can change map_artifact",
+        "content_type": 12
+    },
+    "model": "auth.permission",
+    "pk": 35
+},
+{
+    "fields": {
+        "codename": "delete_map_artifact",
+        "name": "Can delete map_artifact",
+        "content_type": 12
+    },
+    "model": "auth.permission",
+    "pk": 36
+},
+{
+    "fields": {
+        "username": "Sasha",
+        "first_name": "",
+        "last_name": "",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": "2014-09-12T13:28:11Z",
+        "groups": [],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$12000$nW49HrU9Iehb$AD6keGH62+Z2qClLjY7kj3QmJ3qq9GgULhXvcXQRvyI=",
+        "email": "sasha@gmail.com",
+        "date_joined": "2014-09-12T13:28:11Z"
+    },
+    "model": "auth.user",
+    "pk": 4
+},
+{
+    "fields": {
+        "username": "Olesia",
+        "first_name": "",
+        "last_name": "",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": "2014-09-12T13:28:11Z",
+        "groups": [],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$12000$hBZ3uzNp4MKB$j+j/dbyZYDnlYUFtIIb2rz4baaiL/7kCwQRSTgDRiuI=",
+        "email": "olesia.hr@gmail.com",
+        "date_joined": "2014-09-12T13:28:11Z"
+    },
+    "model": "auth.user",
+    "pk": 5
+},
+{
     "fields": {
         "name": "empty story"
-    }
+    },
+    "model": "trip_journal_app.tag",
+    "pk": 1
 },
 {
-    "pk": 6, 
-    "model": "trip_journal_app.tag", 
     "fields": {
         "name": "old story"
-    }
+    },
+    "model": "trip_journal_app.tag",
+    "pk": 2
 },
 {
-    "pk": 10, 
-    "model": "trip_journal_app.story", 
     "fields": {
-        "rating": 3.0, 
-        "title": "Сивуля", 
-        "date_publish": "2014-09-05T17:20:13Z", 
-        "text": "[    { \"type\": \"text\",      \"location\": \"\",      \"content\": \"Одного разу ми поїхали на Сивулю. По дорозі ми побачили річечку\"},    { \"type\": \"img\",      \"location\": \"\",      \"name\": \"1.JPG\"},    { \"type\": \"text\",      \"location\": \"\",      \"name\": \"\u0406 \u0431\u0430\u0433\u0430\u0442\u043e \u043a\u0430\u043c\u0435\u043d\u044f\u0447\u043e\u043a.\"},    { \"type\": \"img\",      \"location\": \"\",      \"name\": \"2.JPG\"},    { \"type\": \"text\",      \"location\": \"\",      \"content\": \"\u0406 \u0432\u043e\u0434\u043e\u0441\u043f\u0430\u0434\u0438\u043a.\"},    { \"type\": \"img\",      \"location\": \"\",      \"name\": \"3.JPG\"}    ]", 
-        "tags": [], 
-        "track": null, 
-        "user": 13, 
-        "published": true, 
+        "rating": 3.0,
+        "title": "\u0421\u0438\u0432\u0443\u043b\u044f",
+        "date_publish": "2014-09-12T13:28:11Z",
+        "text": "[    { \"type\": \"text\",      \"content\": \"\u041e\u0434\u043d\u043e\u0433\u043e \u0440\u0430\u0437\u0443 \u043c\u0438 \u043f\u043e\u0457\u0445\u0430\u043b\u0438 \u043d\u0430 \u0421\u0438\u0432\u0443\u043b\u044e. \u041f\u043e \u0434\u043e\u0440\u043e\u0437\u0456 \u043c\u0438 \u043f\u043e\u0431\u0430\u0447\u0438\u043b\u0438 \u0440\u0456\u0447\u0435\u0447\u043a\u0443\"},    { \"type\": \"img\",      \"id\": 1},    { \"type\": \"text\",      \"content\": \"\u0406 \u0431\u0430\u0433\u0430\u0442\u043e \u043a\u0430\u043c\u0435\u043d\u044f\u0447\u043e\u043a.\"},    { \"type\": \"img\",      \"id\": 2},    { \"type\": \"text\",      \"content\": \"\u0406 \u0432\u043e\u0434\u043e\u0441\u043f\u0430\u0434\u0438\u043a.\"},    { \"type\": \"img\",      \"id\": 3}    ]",
+        "tags": [],
+        "track": null,
+        "user": 4,
+        "published": true,
         "date_travel": "2014-07-10"
-    }
+    },
+    "model": "trip_journal_app.story",
+    "pk": 1
 },
 {
-    "pk": 11, 
-    "model": "trip_journal_app.story", 
     "fields": {
-        "rating": 5.0, 
-        "title": "\u041f\u043e\u0440\u043e\u0436\u043d\u044f \u0456\u0441\u0442\u043e\u0440\u0456\u044f", 
-        "date_publish": "2014-09-05T17:20:13Z", 
-        "text": "", 
+        "rating": 5.0,
+        "title": "\u041f\u043e\u0440\u043e\u0436\u043d\u044f \u0456\u0441\u0442\u043e\u0440\u0456\u044f",
+        "date_publish": "2014-09-12T13:28:11Z",
+        "text": "",
         "tags": [
-            5
-        ], 
-        "track": null, 
-        "user": 14, 
-        "published": true, 
+            1
+        ],
+        "track": null,
+        "user": 5,
+        "published": true,
         "date_travel": "2010-02-02"
-    }
+    },
+    "model": "trip_journal_app.story",
+    "pk": 2
 },
 {
-    "pk": 12, 
-    "model": "trip_journal_app.story", 
     "fields": {
-        "rating": 2.0, 
-        "title": "\u0414\u0430\u0432\u043d\u044f \u0456\u0441\u0442\u043e\u0440\u0456\u044f", 
-        "date_publish": "2014-09-05T17:20:13Z", 
-        "text": "", 
+        "rating": 2.0,
+        "title": "\u0414\u0430\u0432\u043d\u044f \u0456\u0441\u0442\u043e\u0440\u0456\u044f",
+        "date_publish": "2014-09-12T13:28:11Z",
+        "text": "",
         "tags": [
-            5, 
-            6
-        ], 
-        "track": null, 
-        "user": 14, 
-        "published": true, 
+            1,
+            2
+        ],
+        "track": null,
+        "user": 5,
+        "published": true,
         "date_travel": "2009-03-02"
-    }
+    },
+    "model": "trip_journal_app.story",
+    "pk": 3
 },
 {
-    "pk": 1, 
-    "model": "trip_journal_app.picture", 
     "fields": {
-        "latitude": null, 
-        "story": 10, 
+        "latitude": null,
+        "story": 1,
         "longitude": null
-    }
+    },
+    "model": "trip_journal_app.picture",
+    "pk": 1
 },
 {
-    "pk": 2, 
-    "model": "trip_journal_app.picture", 
     "fields": {
-        "latitude": null, 
-        "story": 10, 
+        "latitude": null,
+        "story": 1,
         "longitude": null
-    }
+    },
+    "model": "trip_journal_app.picture",
+    "pk": 2
 },
 {
-    "pk": 3, 
-    "model": "trip_journal_app.picture", 
     "fields": {
-        "latitude": null, 
-        "story": 10, 
+        "latitude": null,
+        "story": 1,
         "longitude": null
-    }
+    },
+    "model": "trip_journal_app.picture",
+    "pk": 3
 },
 {
-    "pk": 1, 
-    "model": "trip_journal_app.stored_picture", 
     "fields": {
-        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/1_240.JPG", 
-        "picture": 1, 
+        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/1_240.JPG",
+        "picture": 1,
         "size": 240
-    }
+    },
+    "model": "trip_journal_app.stored_picture",
+    "pk": 1
 },
 {
-    "pk": 2, 
-    "model": "trip_journal_app.stored_picture", 
     "fields": {
-        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/1_480.JPG", 
-        "picture": 1, 
+        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/1_480.JPG",
+        "picture": 1,
         "size": 480
-    }
+    },
+    "model": "trip_journal_app.stored_picture",
+    "pk": 2
 },
 {
-    "pk": 3, 
-    "model": "trip_journal_app.stored_picture", 
     "fields": {
-        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/1_960.JPG", 
-        "picture": 1, 
+        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/1_960.JPG",
+        "picture": 1,
         "size": 960
-    }
+    },
+    "model": "trip_journal_app.stored_picture",
+    "pk": 3
 },
 {
-    "pk": 4, 
-    "model": "trip_journal_app.stored_picture", 
     "fields": {
-        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/1_orig.JPG", 
-        "picture": 1, 
+        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/1_orig.JPG",
+        "picture": 1,
         "size": 2304
-    }
+    },
+    "model": "trip_journal_app.stored_picture",
+    "pk": 4
 },
 {
-    "pk": 5, 
-    "model": "trip_journal_app.stored_picture", 
     "fields": {
-        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/2_320.JPG", 
-        "picture": 2, 
+        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/2_320.JPG",
+        "picture": 2,
         "size": 320
-    }
+    },
+    "model": "trip_journal_app.stored_picture",
+    "pk": 5
 },
 {
-    "pk": 6, 
-    "model": "trip_journal_app.stored_picture", 
     "fields": {
-        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/2_640.JPG", 
-        "picture": 2, 
+        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/2_640.JPG",
+        "picture": 2,
         "size": 640
-    }
+    },
+    "model": "trip_journal_app.stored_picture",
+    "pk": 6
 },
 {
-    "pk": 7, 
-    "model": "trip_journal_app.stored_picture", 
     "fields": {
-        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/2_1024.JPG", 
-        "picture": 2, 
+        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/2_1024.JPG",
+        "picture": 2,
         "size": 1024
-    }
+    },
+    "model": "trip_journal_app.stored_picture",
+    "pk": 7
 },
 {
-    "pk": 8, 
-    "model": "trip_journal_app.stored_picture", 
     "fields": {
-        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/2_orig.JPG", 
-        "picture": 2, 
+        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/2_orig.JPG",
+        "picture": 2,
         "size": 3072
-    }
+    },
+    "model": "trip_journal_app.stored_picture",
+    "pk": 8
 },
 {
-    "pk": 9, 
-    "model": "trip_journal_app.stored_picture", 
     "fields": {
-        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/3_320.JPG", 
-        "picture": 3, 
+        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/3_320.JPG",
+        "picture": 3,
         "size": 320
-    }
+    },
+    "model": "trip_journal_app.stored_picture",
+    "pk": 9
 },
 {
-    "pk": 10, 
-    "model": "trip_journal_app.stored_picture", 
     "fields": {
-        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/3_640.JPG", 
-        "picture": 3, 
+        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/3_640.JPG",
+        "picture": 3,
         "size": 640
-    }
+    },
+    "model": "trip_journal_app.stored_picture",
+    "pk": 10
 },
 {
-    "pk": 11, 
-    "model": "trip_journal_app.stored_picture", 
     "fields": {
-        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/3_1024.JPG", 
-        "picture": 3, 
+        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/3_1024.JPG",
+        "picture": 3,
         "size": 1024
-    }
+    },
+    "model": "trip_journal_app.stored_picture",
+    "pk": 11
 },
 {
-    "pk": 12, 
-    "model": "trip_journal_app.stored_picture", 
     "fields": {
-        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/3_orig.JPG", 
-        "picture": 3, 
+        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/3_orig.JPG",
+        "picture": 3,
         "size": 3072
-    }
+    },
+    "model": "trip_journal_app.stored_picture",
+    "pk": 12
 },
 {
-    "pk": 1, 
-    "model": "trip_journal_app.comment", 
     "fields": {
-        "text": "\u042f \u0442\u0435\u0436 \u0442\u0430\u043c \u0431\u0443\u043b\u0430!", 
-        "story": 10, 
-        "user": 14, 
-        "time": "2014-09-05T17:20:14Z"
-    }
+        "text": "\u042f \u0442\u0435\u0436 \u0442\u0430\u043c \u0431\u0443\u043b\u0430!",
+        "story": 1,
+        "user": 5,
+        "time": "2014-09-12T13:28:12Z"
+    },
+    "model": "trip_journal_app.comment",
+    "pk": 1
 },
 {
-    "pk": 2, 
-    "model": "trip_journal_app.comment", 
     "fields": {
-        "text": "\u041d\u0430\u043f\u0438\u0448\u0438 \u0449\u043e\u0441\u044c.", 
-        "story": 11, 
-        "user": 13, 
-        "time": "2014-09-05T17:20:14Z"
-    }
+        "text": "\u041d\u0430\u043f\u0438\u0448\u0438 \u0449\u043e\u0441\u044c.",
+        "story": 2,
+        "user": 4,
+        "time": "2014-09-12T13:28:12Z"
+    },
+    "model": "trip_journal_app.comment",
+    "pk": 2
 }
 ]

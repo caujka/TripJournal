@@ -17,8 +17,8 @@ class UserModelTest(TestCase):
         self.assertEqual(saved_users.count(), 2)
         first_saved_user = saved_users[0]
         second_saved_user = saved_users[1]
-        self.assertEqual(first_saved_user.name, 'Sasha')
-        self.assertEqual(second_saved_user.name, 'Olesia')
+        self.assertEqual(first_saved_user.username, 'Sasha')
+        self.assertEqual(second_saved_user.username, 'Olesia')
 
 
 class StoryModelTest(TestCase):
@@ -29,7 +29,7 @@ class StoryModelTest(TestCase):
         self.assertEqual(saved_stories.count(), 3)
         first_story = saved_stories[0]
         self.assertEqual(first_story.title, u'Сивуля')
-        self.assertEqual(first_story.user, User.objects.get(name='Sasha'))
+        self.assertEqual(first_story.user, User.objects.get(username='Sasha'))
 
     def test_get_comments(self):
         story_ = Story.objects.get(title='Сивуля')
@@ -59,10 +59,10 @@ class StoryModelTest(TestCase):
     def test_get_text_with_pic_urls(self):
         story = Story.objects.get(title='Сивуля')
         text = story.get_text_with_pic_urls(400)
-        for block in text[u'content']:
+        for block in text:
             if block[u'type'] == u'img':
                 self.assertIn(u'url', block)
-                if block[u'name'] == '1.JPG':
+                if block[u'id'] == 1:
                     self.assertEqual(block[u'url'], u'url1')
 
 
@@ -76,7 +76,7 @@ class PictureModelTest(TestCase):
         self.assertEqual(first_pic.story, Story.objects.get(title='Сивуля'))
 
     def test_get_stored_pic_by_size(self):
-        pic = Picture.objects.get(id=1)
+        pic = Picture.objects.all()[0]
         self.assertEqual(
             pic.get_stored_pic_by_size(503),
             Stored_picture.objects.filter(picture=pic).get(size=480)
@@ -99,7 +99,7 @@ class StoredPictureModelTest(TestCase):
         self.assertEqual(stored_pictures.count(), 12)
 
         last_pic = stored_pictures[11]
-        self.assertEqual(last_pic.picture, Picture.objects.get(id=3))
+        self.assertEqual(last_pic.picture, Picture.objects.all()[2])
         self.assertEqual(
             last_pic.size,
             3072
@@ -123,7 +123,7 @@ class CommentModelTest(TestCase):
         self.assertEqual(Comment.objects.all().count(), 2)
         self.assertEqual(
             Comment.objects.first().user,
-            User.objects.get(name='Olesia'))
+            User.objects.get(username='Olesia'))
 
         self.assertEqual(
             Comment.objects.first().story,

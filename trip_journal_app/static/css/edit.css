@@ -202,49 +202,39 @@ main{
 #comment_but_t,#treasure_but_t,#comment_but_p,#treasure_but_p{
     position: relative;
 }
-#story_content,#title_panel,#text_panel,#photo_panel,#video_panel,#add_panel,#publish_panel{
+#title_panel,#text_panel,#photo_panel,#video_panel,#add_panel,#publish_panel{
     display: none;
 }
 #add_comment_t,#add_treasure_t,#add_comment_p,#add_treasure_p{
     display: none;
 }
-#top{
+#bottom, #edit, #delete, #top{
     display: inline-block;
     width: 25px;
     height: 25px;
-    top: 0px;
     margin-right:10px;
     border: none;
-    background:  url("../images/arrow-up.png") no-repeat;
 }
 #content_panel{
     position: absolute;
     top: 0;
 }
 #bottom{
-    display: inline-block;
-    width: 25px;
-    height: 25px;
-    margin-right:10px;
-    border: none;
     background:  url("../images/arrow-down.png") no-repeat;
+}
+#top{
+    top: 0px;
+    background:  url("../images/arrow-up.png") no-repeat;
 }
 
 #edit{
-    display: inline-block;
-    width: 25px;
-    height: 25px;
     bottom: 0px;
-    margin-right:10px;
-    border: none;
     background:  url("../images/edit.png") no-repeat;
 }
 #delete{
-    display: inline-block;
-    width: 25px;
-    height: 25px;
     bottom: 0px;
-    margin-right:10px; 
-    border: none;
     background:  url("../images/delete.png") no-repeat;
+}
+#story_content{
+    display: none;
 }

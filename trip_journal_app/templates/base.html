@@ -9,19 +9,20 @@
     </head>
     <body>
         <div id="header">
-            {% block header %}
+        {% block header %}
 	    	<p>Trip Journal</p>
-		<button type="button" id="login_button">Login</button>
-	    {% endblock %}
+	{% endblock %}
         </div>
 	<div id="menu">
-	     {% block menu %}
-	     <div><a href={% url 'home' %}>Main page</a></div>
-	     <div><a href="{% url 'user_stories' %}">My stories</a></div>
-	     <!-- This is here temporary. All pictures will be
-	     associated with story with id 10. -->
-	     <div><a href="{% url 'upload_img' '10' %}">Upload picture</a></div>
-	     {% endblock %}
+	{% block menu %}
+	    <div><a href={% url 'home' %}>Main page</a></div>
+            {% if user.id %}
+            {% block usermenu %}
+                <div><a href="{% url 'user_stories' %}">My stories</a></div>
+            {% endblock %}
+        {% endif %}
+        {% endblock %}
+
 	</div>
 	<div id="messages">
 	    {% block messages %}

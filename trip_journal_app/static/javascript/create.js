@@ -232,38 +232,6 @@ window.onload = function() {
         photo_cont.style.display = 'none';
         clearImagesFromTemp();
     }
-	
-
-    	var down = document.createElement("button");
-    	down.setAttribute('onClick', "movedown('" + number + "')");
-    	
-    	down.id = "bottom";
-    	keybar.appendChild(down);
-
-    	var editBlock = document.createElement("button");
-    	editBlock.setAttribute('onClick', "editBlock('" + number + "')");
-    	
-    	editBlock.id = "edit";
-    	keybar.appendChild(editBlock);
-
-    	var removeBlock = document.createElement("button");
-    	removeBlock.setAttribute('onClick', "deleteBlock('" + number + "')");
-    	
-    	removeBlock.id = "delete";
-    	keybar.appendChild(removeBlock);
-
-        //var centerMarker = document.createElement("buu");
-        //centerMarker.setAttribute('onClick', "centerMap(' + i + ')")
-
-        //centerMarker.id = "buu";
-        //keybar.appendChild(centerMarker);
-
-	container.appendChild(keybar);
-    	story.appendChild(container);
-    	
-    	Blocks.push(number);
-	BlockTypes.push(block_type);
-    	number++;
 
     function save_text_story() {
         story_cont.style.display = 'block';

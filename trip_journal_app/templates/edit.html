@@ -6,36 +6,45 @@
         <link rel="stylesheet" href="{% static "css/edit.css" %}">
     {% endblock %}
     {% block scripts %}
+        <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false&libraries=drawing">
+</script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
         <script src="{% static "javascript/create.js" %}"></script>
 	<script src="{% static "javascript/ajax_requests.js" %}"></script>
     {% endblock %}
     {% block content %}
     <main>
-        <div id="title_panel" class="block hide">
-            <input id="title" type="text" name="title_story" class="text_story" placeholder="+ Title of story">
-            <button id="add_title" class="button_2">+</button>
-        </div>    	
-        <div id="story_content" class="block">
-            <h2 id="story_title" contenteditable="true"></h2>
+        <div id="map-canvas"></div>
+        <div id="panel">
+            <input id="address" type="textbox" value="">
+            <input type="button" value="Знайти" onclick="codeAddress()">
+            <input onclick="clearMarkers();" type=button value="Hide Markers">
+            <input onclick="showMarkers();" type=button value="Show All Markers">
+            <input onclick="deleteMarkers();" type=button value="Delete Markers">
+        </div>
 
-        {% for story_block in story_blocks %}
-	    {% if story_block.type == 'text' %}
-	    	<script type='text/javascript'>
-                    appendBlock(
-                        document.getElementById('story_content'), 
-                        "<p class=\"description_story\">{{ story_block.content }}</p>", 
-                        "text");
-                </script>
-            {% elif story_block.type = 'img' %}
-            	<script type='text/javascript'>
-                    appendBlock(
-                        document.getElementById('story_content'), 
-                        ('<img src="{{ story_block.url }}" class="image_story">' + 
-                        '<p style="display:none;">{{story_block.id}}</p>'),
-                        "img");
-                </script>
-	    {% endif %}
-	{% endfor %}
+        <div id="story_content" class="block">
+            {% if not story.title %}
+            <div id="title_panel" class="block hide">
+                <input id="title" type="text" name="title_story" class="text_story" placeholder="+ Title of story">
+                <button id="add_title" class="button_2">+</button>
+            </div>
+            {% endif %}
+
+            <h2 id="story_title" contenteditable="true">{{story.title}}</h2>
+
+            {% for story_block in story_blocks %}
+	        {% if story_block.type == 'text' %}
+                    <div class="saved text">
+		        <p>{{ story_block.content|safe }}</p>
+		    </div>
+                {% elif story_block.type = 'img' %}
+	            <div class="saved img">
+		        <p>{{ story_block.url }}</p>
+                        <p style="display:none;">{{story_block.id}}</p>
+		    </div>
+	        {% endif %}
+	    {% endfor %}
         </div>
 
         <div id="text_panel" class="block hide" >
@@ -43,6 +52,7 @@
             <br>
             <button id="adds_block_t" class="button_2 adds_block">+</button>
             <button id="clear_block_t" class="button_2 delete_block">-</button>
+
         </div>
 
 
@@ -59,6 +69,7 @@
 
             <button id="adds_block_p" class="button_2 adds_block">+</button>
             <button id="clear_block_p" class="button_2 delete_block">-</button>
+
         </div>
 
 
@@ -69,7 +80,7 @@
             <div id="photo_cont" class="">
             </div>
             <br>
-           
+
             <button id="adds_block_p" class="button_2 adds_block">+</button>
             <button id="clear_block_p" class="button_2 delete_block">-</button>
         </div>

@@ -7,6 +7,7 @@ https://docs.djangoproject.com/en/1.6/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
@@ -25,6 +26,10 @@ SECRET_KEY = '@n=0!!+!agam579351jf=+ka7xp&-6j)ofv_2j38au#$lp@hv4'
 DEBUG = True
 
 TEMPLATE_DEBUG = True
+
+TEMPLATE_CONTEXT_PROCESSORS += (
+    "django.core.context_processors.request",
+)
 
 ALLOWED_HOSTS = []
 
@@ -86,4 +91,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# login url is main page for now
+LOGIN_URL = '/'
 

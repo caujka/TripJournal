@@ -6,7 +6,7 @@ var number = 1,
 function deleteImagesFromBlock(blockNumber){
     for (var i=0; i < Images.length; ++i){
         if (Images[i].block === blockNumber){
-            Images.splice(i,1);
+            Images.splice(i, 1);
         }
     }
 }
@@ -23,7 +23,7 @@ function swapImagesFromBlock(blockNumber1, blockNumber2){
 }
 
 function addImagesFromTemp(){
-    var i
+    var i;
     for(i=0; i < Images.length; ++i){
         if (Images[i].state === 'temp') {
             Images[i].state = 'loaded';
@@ -131,6 +131,45 @@ function delete_img(id) {
     }
 }
 
+function escape_html_tags(str) {
+    return str.replace(/>/g, '&gt;').replace(/</g, '&lt;');
+}
+
+function text_block_template(text) {
+    return (
+        '<p class="description_story">' +
+        text + '</p>'
+    );
+}
+
+function img_block_template(src, img_id) {
+    return (
+        '<img src="' + src + '"class="image_story">' +
+        '<p style="display:none;">' + img_id + '</p>'
+    );
+}
+
+function add_saved_blocks() {
+    var i, block, block_text, block_type,
+        blocks = document.getElementsByClassName('saved'),
+        blocks_num = blocks.length,
+        story_content = document.getElementById('story_content');
+    for (i=0; i < blocks_num; i++) {
+        block = blocks[0];
+        block_type = block.classList[1];
+        if (block_type === 'text') {
+            block_text = text_block_template(block.children[0].innerHTML);
+        } else if (block_type === 'img') {
+            block_text = img_block_template(
+                block.children[0].innerHTML,
+                block.children[1].innerHTML
+            );
+        }
+        block.parentNode.removeChild(block);
+        appendBlock(story_content, block_text, block_type);
+    }
+}
+
 window.onload = function() {
 
     var story_cont = document.getElementById('story_content'),
@@ -152,8 +191,11 @@ window.onload = function() {
         form = document.getElementById('file-form'),
         upload=document.getElementById('publish'),
         uploadButton = document.getElementById('upload-button'),
-        filesget = fileSelect.files;
-        formData = new FormData();
+        filesget = fileSelect.files,
+        formData = new FormData(),
+        arr = [],
+        file = document.getElementById('type_file');
+
 
     function clearImagesFromTemp() {
 	    var poss = 0;
@@ -190,12 +232,14 @@ window.onload = function() {
         photo_cont.style.display = 'none';
         clearImagesFromTemp();
     }
-	
+
     function save_text_story() {
         story_cont.style.display = 'block';
-        var content = '<p class="description_story">' + textarea.value + '</p>';
+        var text = escape_html_tags(textarea.value),
+            content = text_block_template(text);
         appendBlock(story_cont, content, "text");
         clear();
+
     }
 
     function save_photo_story() {
@@ -204,7 +248,7 @@ window.onload = function() {
             content = '';
         story_cont.style.display = 'block';
         for (i = 0; i < arr.length; i++) {
-            content += '<img src="' + arr[i].src + '"class="image_story"><br>';
+            content += img_block_template(arr[i].src);
         }
         appendBlock(story_cont, content, "img");
         clear();
@@ -215,26 +259,28 @@ window.onload = function() {
             files = fileSelect.files;
         if (files.length > 0) {
             for (i = 0; i < files.length; i++) {
-            file = files[i];
-            if (!file.type.match('image.*')) {
-                continue;
+                file = files[i];
+                if (!file.type.match('image.*')) {
+                    continue;
+                }
+                imageData = {image : file, state : 'temp', block : -1};
+                Images.push(imageData);
+                URL = window.URL;
+                if (URL) {
+                    imageUrl = URL.createObjectURL(files[i]);
+                    id = 'story_' + number + '_' + files[i].name.substr(0, files[i].name.indexOf('.'));
+                    document.getElementById('photo_cont').innerHTML +=
+                    '<div id="' + id + '" class="img_block">' +
+                    '<img src="' + imageUrl + '" class="img_story ' + number + '">' +
+                    '<button onclick="delete_img(\'' + id + '\')" id="' + id + '_d" class="button_3">x</button>' +
+                    '</div>';
+                }
             }
-        imageData = {image : file, state : 'temp', block : -1};
-        Images.push(imageData);
-        URL = window.URL;
-        if (URL) {
-            imageUrl = URL.createObjectURL(files[i]);
-            id = 'story_' + number + '_' + files[i].name.substr(0, files[i].name.indexOf('.'));
-            document.getElementById('photo_cont').innerHTML +=
-            '<div id="' + id + '" class="img_block">' +
-            '<img src="' + imageUrl + '" class="img_story ' + number + '">' +
-            '<button onclick="delete_img(\'' + id + '\')" id="' + id + '_d" class="button_3">x</button>' +
-            '</div>';
-            }
-        }
         document.getElementById('photo_cont').style.display = 'inline-block';
+        }
     }
-    }
+
+    add_saved_blocks();
 
     textarea.onkeypress = function(e) {
         if (e.keyCode === 13) {
@@ -248,7 +294,6 @@ window.onload = function() {
         uploadButton.innerHTML = 'Uploading...';
     };
 
-    title.focus();
 
     text.onclick = function() {
         clear();
@@ -269,11 +314,23 @@ window.onload = function() {
         video_panel.style.display = 'block';
     };
 
-    var arr = new Array;
-    var file = document.getElementById('type_file');
     fileSelect.onchange = add_img;
 
-    document.getElementById('title_panel').style.display = 'block';
+    if (!document.getElementById('story_title').textContent) {
+        document.getElementById('title_panel').style.display = 'block';
+        title.focus();
+        document.getElementById('add_title').onclick = function() {
+            document.getElementById('story_title').innerHTML = (
+                escape_html_tags(title.value)
+            );
+            document.getElementById('story_content').style.display = 'block';
+            clear();
+        };
+    }
+    if (story_cont.children.length > 1 ||
+            document.getElementById('story_title').textContent) {
+        story_content.style.display = 'block';
+    }
     document.getElementById('add_panel').style.display = 'block';
     document.getElementById('publish_panel').style.display = 'block';
 
@@ -283,11 +340,6 @@ window.onload = function() {
     document.getElementById('adds_block_p').onclick = save_photo_story;
     document.getElementById('clear_block_p').onclick = clear;
 
-    document.getElementById('add_title').onclick = function() {
-        document.getElementById('story_title').innerHTML = title.value;
-        document.getElementById('story_content').style.display = 'block';
-        clear();
-    };
     document.getElementById('comment_but_t').onclick = function() {
         comment_t.style.display = 'inline-block';
         comment_t.focus();
@@ -297,4 +349,140 @@ window.onload = function() {
         treasure_t.focus();
     };
 };
+
+
+function delete_img(id) {
+    if(id) {
+        var div = document.getElementById(id);
+        div.parentNode.removeChild(div);
+    }
+}
+
+//Volodya
+var geocoder;
+var markersArray = [];
+function initialize() {
+    geocoder = new google.maps.Geocoder();
+    var mapOptions = {
+    zoom: 14
+};
+    map = new google.maps.Map(document.getElementById('map-canvas'),
+							  mapOptions);
+    google.maps.event.addListener(map, 'click', function(event) {
+    	placeMarker(event.latLng);
+});
+
+    if(navigator.geolocation) {
+    	navigator.geolocation.getCurrentPosition(function(position) {
+        	var pos = new google.maps.LatLng(position.coords.latitude,
+                                            position.coords.longitude);
+
+    var infowindow = new google.maps.InfoWindow({
+        map: map,
+        position: pos,
+        content: "I'm here"
+    });
+
+    map.setCenter(pos);
+    }, function() {
+      handleNoGeolocation(true);
+    });
+  } else {
+    // browser doesn't support geolocation
+    heNoGeolocation(false);
+  }
+  var drawingManager = new google.maps.drawing.DrawingManager({
+    drawingControlOptions: {
+      drawingModes: [
+        google.maps.drawing.OverlayType.POLYLINE
+      ]
+    },
+
+  });
+  drawingManager.setMap(map);
+}
+$ = jQuery;
+function handleNoGeolocation(errorFlag) {
+  if (errorFlag) {
+    var content = 'Error: The Geolocation service failed.';
+  } else {
+    var content = 'Error: Your browser doesn\'t support geolocation.';
+  }
+
+  var options = {
+    map: map,
+    position: new google.maps.LatLng(49.839754, 24.029846),
+    content: content
+  };
+  var infowindow = new google.maps.InfoWindow(options);
+  map.setCenter(options.position);
+}
+
+// Add a marker to the map and push to the array.
+function placeMarker(location, bar_id) {
+    var marker = new google.maps.Marker({
+        position: location,
+        map: map
+    });
+    //Get last added textarea id
+    var textboxes;
+    textboxes = document.getElementsByClassName('key_panel');
+    last_element = textboxes[textboxes.length-1]
+    bar_id='#'+last_element.id;
+    //add marker in markers array
+
+    markersArray.push(marker);
+    i = markersArray.length - 1;
+    jQuery(bar_id).append('<button onclick="centerMap(' + i + '); return false;">Marker</button>');
+
+    //var markerButton = document.createElement("button");
+    //	markerButton.setAttribute('onClick', "centerMap(' + i + '); return false;");
+    //	markerButton.id = "buu";
+    //	document.getElementById("#keybar_"+number).append(markerButton);
+    //var markerButton = document.getElementsByClassName("key_panel");
+    //<button onclick="centerMap(' + i + '); return false;">Marker</button>
+    //var keybar = document.createElement("div");
+	//keybar.id="keybar_"+number;
+	//keybar.className="key_panel"
+
+}
+
+// Sets the map on all markers in the array.
+function setAllMap(map) {
+  for (var i = 0; i < markersArray.length; i++) {
+    markersArray[i].setMap(map);
+  }
+}
+
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers() {
+  setAllMap(null);
+}
+
+// Shows any markers currently in the array.
+function showMarkers() {
+  setAllMap(map);
+}
+
+// Deletes all markers in the array by removing references to them.
+function deleteMarkers() {
+  clearMarkers();
+  markersArray = [];
+}
+
+function codeAddress() {
+  var address = document.getElementById('address').value;
+  geocoder.geocode( { 'address': address}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+        map.setCenter(results[0].geometry.location);
+      } else {
+      alert('Geocode was not successful for the following reason: ' + status);
+    }
+  });
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+	function centerMap(i) {
+        map.setCenter(markersArray[i].getPosition());
+	}
 

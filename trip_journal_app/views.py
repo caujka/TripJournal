@@ -21,10 +21,10 @@ def home(request):
     for story in Story.objects.all():
         story_blocks = story.get_text_with_pic_urls(300)
         first_text = next(
-            block for block in story_blocks if block['type'] == 'text'
+            (block for block in story_blocks if block['type'] == 'text'), None
         )
         first_img = next(
-            block for block in story_blocks if block['type'] == 'img'
+            (block for block in story_blocks if block['type'] == 'img'), None
         )
         stories.append(
             {'story': story,

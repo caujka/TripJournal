@@ -2,7 +2,8 @@ from django.db import models
 import json
 import os
 from PIL import Image
-from TripJournal.settings import BASE_DIR
+from TripJournal.settings import (IMAGE_SIZES, STORED_IMG_DOMAIN,
+                                  IMG_STORAGE, TEMP_DIR)
 from trip_journal_app.utils.resize_img import resize, save_pic
 from django.contrib.auth.models import User
 
@@ -65,7 +66,7 @@ class Picture(models.Model):
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     story = models.ForeignKey(Story)
-    SIZES = [400, 700, 900, 1500]
+    SIZES = IMAGE_SIZES
 
     def __unicode__(self):
         return self.name
@@ -93,7 +94,7 @@ class Picture(models.Model):
             os.makedirs(Stored_picture.SAVE_PATH)
         img_name = image.name
         img_extension = img_name.split('.')[1]
-        file_name = os.path.join('/var/tmp', img_name)
+        file_name = os.path.join(TEMP_DIR, img_name)
         with open(file_name, 'w') as img_file:
             for chunk in image.chunks():
                 img_file.write(chunk)
@@ -118,8 +119,8 @@ class Stored_picture(models.Model):
     picture = models.ForeignKey(Picture)
     size = models.IntegerField()
     url = models.CharField(max_length=2000)
-    SAVE_PATH = os.path.join(os.path.dirname(BASE_DIR), 'Pictures')
-    URL_PREFIX = 'http://localhost:4000/'
+    SAVE_PATH = IMG_STORAGE
+    URL_PREFIX = STORED_IMG_DOMAIN
 
     def __unicode__(self):
         return self.url

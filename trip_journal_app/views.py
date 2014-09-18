@@ -17,9 +17,23 @@ def home(request):
     """
     Home page view.
     """
+    stories = []
+    for story in Story.objects.all():
+        story_blocks = story.get_text_with_pic_urls(300)
+        first_text = next(
+            block for block in story_blocks if block['type'] == 'text'
+        )
+        first_img = next(
+            block for block in story_blocks if block['type'] == 'img'
+        )
+        stories.append(
+            {'story': story,
+             'text': first_text,
+             'img': first_img}
+        )
     return render(
         request, 'index.html',
-        {'stories': Story.objects.all(), 'user': auth.get_user(request)}
+        {'stories': stories, 'user': auth.get_user(request)}
     )
 
 

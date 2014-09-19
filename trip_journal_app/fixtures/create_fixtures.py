@@ -91,42 +91,21 @@ def update_story_text(story_id, pic_ids):
 
 def create_stored_pictures(pic1, pic2, pic3):
     pics = [
-        (pic1, 240,
-         'https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/1_240.JPG'
-         ),
-        (pic1, 480,
-         'https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/1_480.JPG'
-         ),
-        (pic1, 960,
-         'https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/1_960.JPG'
-         ),
-        (pic1, 2304,
-         'https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/1_orig.JPG'
-         ),
-        (pic2, 320,
-         'https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/2_320.JPG'
-         ),
-        (pic2, 640,
-         'https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/2_640.JPG'
-         ),
-        (pic2, 1024,
-         'https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/2_1024.JPG'
-         ),
-        (pic2, 3072,
-         'https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/2_orig.JPG'
-         ),
-        (pic3, 320,
-         'https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/3_320.JPG'
-         ),
-        (pic3, 640,
-         'https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/3_640.JPG'
-         ),
-        (pic3, 1024,
-         'https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/3_1024.JPG'
-         ),
-        (pic3, 3072,
-         'https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/3_orig.JPG'
-         )
+        (pic1, 400, '1_400.jpg'),
+        (pic1, 700, '1_700.jpg'),
+        (pic1, 900, '1_900.jpg'),
+        (pic1, 1500, '1_1500.jpg'),
+        (pic1, 2304, '1_2304.jpg'),
+        (pic2, 400, '2_400.jpg'),
+        (pic2, 700, '2_700.jpg'),
+        (pic2, 900, '2_900.jpg'),
+        (pic2, 1500, '2_1500.jpg'),
+        (pic2, 3072, '2_3072.jpg'),
+        (pic3, 400, '3_400.jpg'),
+        (pic3, 700, '3_700.jpg'),
+        (pic3, 900, '3_900.jpg'),
+        (pic3, 1500, '3_1500.jpg'),
+        (pic3, 3072, '3_3072.JPG')
     ]
     [Stored_picture.objects.create(
         picture=Picture.objects.get(pk=pic[0]),

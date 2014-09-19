@@ -109,7 +109,7 @@ class Picture(models.Model):
                 resized_img, str(self.id) + '.' + img_extension,
                 size, stored_pic.SAVE_PATH
                 )
-            stored_pic.url = stored_pic.URL_PREFIX + new_name
+            stored_pic.url = new_name
             stored_pic.save()
         # delete temp file
         os.remove(file_name)
@@ -118,9 +118,17 @@ class Picture(models.Model):
 class Stored_picture(models.Model):
     picture = models.ForeignKey(Picture)
     size = models.IntegerField()
-    url = models.CharField(max_length=2000)
+    _url = models.CharField(max_length=2000)
     SAVE_PATH = IMG_STORAGE
     URL_PREFIX = STORED_IMG_DOMAIN
+
+    @property
+    def url(self):
+        return self.URL_PREFIX + self._url
+
+    @url.setter
+    def url(self, value):
+        self._url = value
 
     def __unicode__(self):
         return self.url

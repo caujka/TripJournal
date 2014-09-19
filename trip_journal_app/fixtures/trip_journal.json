@@ -331,15 +331,15 @@
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
-        "last_login": "2014-09-12T13:28:11Z",
+        "last_login": "2014-09-19T19:02:40Z",
         "groups": [],
         "user_permissions": [],
-        "password": "pbkdf2_sha256$12000$nW49HrU9Iehb$AD6keGH62+Z2qClLjY7kj3QmJ3qq9GgULhXvcXQRvyI=",
+        "password": "pbkdf2_sha256$12000$79uyjvNao7TM$5UATrmqbgRjAhh/o2E+SwpJJJsbbbv6JdHXPXOsoDLo=",
         "email": "sasha@gmail.com",
-        "date_joined": "2014-09-12T13:28:11Z"
+        "date_joined": "2014-09-19T19:02:40Z"
     },
     "model": "auth.user",
-    "pk": 4
+    "pk": 1
 },
 {
     "fields": {
@@ -349,15 +349,15 @@
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
-        "last_login": "2014-09-12T13:28:11Z",
+        "last_login": "2014-09-19T19:02:40Z",
         "groups": [],
         "user_permissions": [],
-        "password": "pbkdf2_sha256$12000$hBZ3uzNp4MKB$j+j/dbyZYDnlYUFtIIb2rz4baaiL/7kCwQRSTgDRiuI=",
+        "password": "pbkdf2_sha256$12000$nTaBheTllRc6$BhbZ18EGXctEgsbQvKAzPs7tzmMVaZOtWrxy1Q13pfM=",
         "email": "olesia.hr@gmail.com",
-        "date_joined": "2014-09-12T13:28:11Z"
+        "date_joined": "2014-09-19T19:02:40Z"
     },
     "model": "auth.user",
-    "pk": 5
+    "pk": 2
 },
 {
     "fields": {
@@ -377,11 +377,11 @@
     "fields": {
         "rating": 3.0,
         "title": "\u0421\u0438\u0432\u0443\u043b\u044f",
-        "date_publish": "2014-09-12T13:28:11Z",
+        "date_publish": "2014-09-19T19:02:40Z",
         "text": "[    { \"type\": \"text\",      \"content\": \"\u041e\u0434\u043d\u043e\u0433\u043e \u0440\u0430\u0437\u0443 \u043c\u0438 \u043f\u043e\u0457\u0445\u0430\u043b\u0438 \u043d\u0430 \u0421\u0438\u0432\u0443\u043b\u044e. \u041f\u043e \u0434\u043e\u0440\u043e\u0437\u0456 \u043c\u0438 \u043f\u043e\u0431\u0430\u0447\u0438\u043b\u0438 \u0440\u0456\u0447\u0435\u0447\u043a\u0443\"},    { \"type\": \"img\",      \"id\": 1},    { \"type\": \"text\",      \"content\": \"\u0406 \u0431\u0430\u0433\u0430\u0442\u043e \u043a\u0430\u043c\u0435\u043d\u044f\u0447\u043e\u043a.\"},    { \"type\": \"img\",      \"id\": 2},    { \"type\": \"text\",      \"content\": \"\u0406 \u0432\u043e\u0434\u043e\u0441\u043f\u0430\u0434\u0438\u043a.\"},    { \"type\": \"img\",      \"id\": 3}    ]",
         "tags": [],
         "track": null,
-        "user": 4,
+        "user": 1,
         "published": true,
         "date_travel": "2014-07-10"
     },
@@ -392,13 +392,13 @@
     "fields": {
         "rating": 5.0,
         "title": "\u041f\u043e\u0440\u043e\u0436\u043d\u044f \u0456\u0441\u0442\u043e\u0440\u0456\u044f",
-        "date_publish": "2014-09-12T13:28:11Z",
+        "date_publish": "2014-09-19T19:02:41Z",
         "text": "",
         "tags": [
             1
         ],
         "track": null,
-        "user": 5,
+        "user": 2,
         "published": true,
         "date_travel": "2010-02-02"
     },
@@ -409,14 +409,14 @@
     "fields": {
         "rating": 2.0,
         "title": "\u0414\u0430\u0432\u043d\u044f \u0456\u0441\u0442\u043e\u0440\u0456\u044f",
-        "date_publish": "2014-09-12T13:28:11Z",
+        "date_publish": "2014-09-19T19:02:41Z",
         "text": "",
         "tags": [
             1,
             2
         ],
         "track": null,
-        "user": 5,
+        "user": 2,
         "published": true,
         "date_travel": "2009-03-02"
     },
@@ -452,118 +452,145 @@
 },
 {
     "fields": {
-        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/1_240.JPG",
         "picture": 1,
-        "size": 240
+        "_url": "1_400.jpg",
+        "size": 400
     },
     "model": "trip_journal_app.stored_picture",
     "pk": 1
 },
 {
     "fields": {
-        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/1_480.JPG",
         "picture": 1,
-        "size": 480
+        "_url": "1_700.jpg",
+        "size": 700
     },
     "model": "trip_journal_app.stored_picture",
     "pk": 2
 },
 {
     "fields": {
-        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/1_960.JPG",
         "picture": 1,
-        "size": 960
+        "_url": "1_900.jpg",
+        "size": 900
     },
     "model": "trip_journal_app.stored_picture",
     "pk": 3
 },
 {
     "fields": {
-        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/1_orig.JPG",
         "picture": 1,
-        "size": 2304
+        "_url": "1_1500.jpg",
+        "size": 1500
     },
     "model": "trip_journal_app.stored_picture",
     "pk": 4
 },
 {
     "fields": {
-        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/2_320.JPG",
-        "picture": 2,
-        "size": 320
+        "picture": 1,
+        "_url": "1_2304.jpg",
+        "size": 2304
     },
     "model": "trip_journal_app.stored_picture",
     "pk": 5
 },
 {
     "fields": {
-        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/2_640.JPG",
         "picture": 2,
-        "size": 640
+        "_url": "2_400.jpg",
+        "size": 400
     },
     "model": "trip_journal_app.stored_picture",
     "pk": 6
 },
 {
     "fields": {
-        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/2_1024.JPG",
         "picture": 2,
-        "size": 1024
+        "_url": "2_700.jpg",
+        "size": 700
     },
     "model": "trip_journal_app.stored_picture",
     "pk": 7
 },
 {
     "fields": {
-        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/2_orig.JPG",
         "picture": 2,
-        "size": 3072
+        "_url": "2_900.jpg",
+        "size": 900
     },
     "model": "trip_journal_app.stored_picture",
     "pk": 8
 },
 {
     "fields": {
-        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/3_320.JPG",
-        "picture": 3,
-        "size": 320
+        "picture": 2,
+        "_url": "2_1500.jpg",
+        "size": 1500
     },
     "model": "trip_journal_app.stored_picture",
     "pk": 9
 },
 {
     "fields": {
-        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/3_640.JPG",
-        "picture": 3,
-        "size": 640
+        "picture": 2,
+        "_url": "2_3072.jpg",
+        "size": 3072
     },
     "model": "trip_journal_app.stored_picture",
     "pk": 10
 },
 {
     "fields": {
-        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/3_1024.JPG",
         "picture": 3,
-        "size": 1024
+        "_url": "3_400.jpg",
+        "size": 400
     },
     "model": "trip_journal_app.stored_picture",
     "pk": 11
 },
 {
     "fields": {
-        "url": "https://googledrive.com/host/0BzRzJOY4oY_BQ2RTTWEyX1JqNHc/3_orig.JPG",
         "picture": 3,
-        "size": 3072
+        "_url": "3_700.jpg",
+        "size": 700
     },
     "model": "trip_journal_app.stored_picture",
     "pk": 12
 },
 {
     "fields": {
+        "picture": 3,
+        "_url": "3_900.jpg",
+        "size": 900
+    },
+    "model": "trip_journal_app.stored_picture",
+    "pk": 13
+},
+{
+    "fields": {
+        "picture": 3,
+        "_url": "3_1500.jpg",
+        "size": 1500
+    },
+    "model": "trip_journal_app.stored_picture",
+    "pk": 14
+},
+{
+    "fields": {
+        "picture": 3,
+        "_url": "3_3072.JPG",
+        "size": 3072
+    },
+    "model": "trip_journal_app.stored_picture",
+    "pk": 15
+},
+{
+    "fields": {
         "text": "\u042f \u0442\u0435\u0436 \u0442\u0430\u043c \u0431\u0443\u043b\u0430!",
         "story": 1,
-        "user": 5,
-        "time": "2014-09-12T13:28:12Z"
+        "user": 2,
+        "time": "2014-09-19T19:02:42Z"
     },
     "model": "trip_journal_app.comment",
     "pk": 1
@@ -572,8 +599,8 @@
     "fields": {
         "text": "\u041d\u0430\u043f\u0438\u0448\u0438 \u0449\u043e\u0441\u044c.",
         "story": 2,
-        "user": 4,
-        "time": "2014-09-12T13:28:12Z"
+        "user": 1,
+        "time": "2014-09-19T19:02:42Z"
     },
     "model": "trip_journal_app.comment",
     "pk": 2

@@ -13,8 +13,7 @@
 	<script src="{% static "javascript/ajax_requests.js" %}"></script>
     {% endblock %}
     {% block content %}
-    <main>
-        <div id="map-canvas"></div>
+    <div id="map-canvas-wrapper">
         <div id="panel">
             <input id="address" type="textbox" value="">
             <input type="button" value="Знайти" onclick="codeAddress()">
@@ -22,7 +21,10 @@
             <input onclick="showMarkers();" type=button value="Show All Markers">
             <input onclick="deleteMarkers();" type=button value="Delete Markers">
         </div>
+        <div id="map-canvas"></div>
+    </div>
 
+    <main>
         <div id="story_content" class="block">
             {% if not story.title %}
             <div id="title_panel" class="block hide">

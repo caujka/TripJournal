@@ -67,10 +67,12 @@ function post_images(story_id){
 }
 
 function post_data(){
-   var xhr = new XMLHttpRequest(),
+    var xhr = new XMLHttpRequest(),
        curr_url = document.URL.split(['/']),
        story_id = curr_url[curr_url.length - 1];
-       request_body = JSON.stringify(jsonForming());
+
+    post_images(story_id);
+    request_body = JSON.stringify(jsonForming());
 
     function change_url() {
         // This function appends story id to page url
@@ -94,7 +96,5 @@ function post_data(){
     xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     xhr.send(request_body);
-
-    post_images(story_id);
 }
 

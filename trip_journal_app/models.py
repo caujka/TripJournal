@@ -1,10 +1,9 @@
 from django.db import models
 import json
 import os
-from PIL import Image
 from TripJournal.settings import (IMAGE_SIZES, STORED_IMG_DOMAIN,
                                   IMG_STORAGE, TEMP_DIR)
-from trip_journal_app.utils.resize_img_multiprocess_pool import resize_and_save_pics
+from trip_journal_app.utils.resize_image import resize_and_save_pics
 from django.contrib.auth.models import User
 
 

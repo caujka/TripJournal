@@ -95,7 +95,6 @@ class Picture(models.Model):
 
         # temporary storing file
         img_name = image.name
-        img_extension = img_name.split('.')[1]
         file_name = os.path.join(TEMP_DIR, img_name)
         with open(file_name, 'w') as img_file:
             for chunk in image.chunks():

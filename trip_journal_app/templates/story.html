@@ -10,7 +10,6 @@
 </script>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
         <script src="{% static "javascript/view.js" %}"></script>
-	    <script src="{% static "javascript/ajax_requests.js" %}"></script>
     {% endblock %}
     {% block content %}
     <main>
@@ -27,8 +26,7 @@
 		    </div>
                 {% elif story_block.type = 'img' %}
 	            <div class="saved_img">
-		        <p>{{ story_block.url }}</p>
-                        <p style="display:none;">{{story_block.id}}</p>
+                    <img src="{{ story_block.url }}">
 		    </div>
 	        {% endif %}
 	    {% endfor %}

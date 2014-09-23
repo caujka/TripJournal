@@ -3,10 +3,18 @@ body{
     margin: 0;
     padding: 0;
 }
+
+#content {
+    width: 1200px;
+    margin: auto;
+}
+
 main{
-    margin: 0 auto;
+    padding: 0;
     width: 800px;
     text-align: center;
+    position: relative;
+    top: 5px;
 }
 .add_block{
     width: 100px;
@@ -25,7 +33,7 @@ main{
     background: url("../images/plus-sign.png") 35px 35px no-repeat #8ed41f;
 }
 .key_panel{
-    width: 150px;
+    width: 200px;
     height: 25px;
     border: 1px solid #aaa;
     border-radius: 5px;
@@ -193,6 +201,10 @@ main{
     margin-right:10px;
     border: none;
 }
+#content_panel{
+    position: absolute;
+    top: 0;
+}
 #bottom{
     background:  url("../images/arrow-down.png") no-repeat;
 }
@@ -209,6 +221,23 @@ main{
     bottom: 0px;
     background:  url("../images/delete.png") no-repeat;
 }
-#story_content{
-    display: none;
+
+#map-canvas-wrapper {
+    position: fixed;
+    top: 70px;
+    height: 400px;
+    width: 390px;
+    margin-left: 805px;
+}
+
+#map-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+#panel {
+    width: 100%;
+    padding: 4px;
+    border: 1px solid #999;
+    text-align: left;
 }

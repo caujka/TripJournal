@@ -17,9 +17,26 @@ def home(request):
     """
     Home page view.
     """
+    stories = []
+    for story in Story.objects.all():
+        if story.text:
+            story_blocks = story.get_text_with_pic_urls(300)
+            first_text = next(
+                (block for block in story_blocks if block['type'] == 'text'),
+                None
+            )
+            first_img = next(
+                (block for block in story_blocks if block['type'] == 'img'),
+                None
+            )
+            stories.append(
+                {'story': story,
+                 'text': first_text,
+                 'img': first_img}
+            )
     return render(
         request, 'index.html',
-        {'stories': Story.objects.all(), 'user': auth.get_user(request)}
+        {'stories': stories, 'user': auth.get_user(request)}
     )
 
 
@@ -66,27 +83,14 @@ def upload_img(request, story_id):
 
 
 def story(request, story_id):
-    return HttpResponse('You are reading story %s' % story_id)
-
-
-@login_required
-@ensure_csrf_cookie
-def edit(request, story_id):
-    '''
-    Edit page view.
-    '''
     # if story_id is empty rednders template without added text
-    if not story_id:
-        story_blocks = ''
-    # if story_id exists renders its content to edit.html page
-    else:
+    story_blocks = {}
+    story = Story()
+    # if story_id exists renders its content to story.html page
+    if story_id:
         try:
             user = auth.get_user(request)
             story = Story.objects.get(pk=int(story_id))
-            if user != story.user:
-                messages.info(request, 'Edit your own stories!')
-                return redirect('/my_stories/')
-            story_blocks = {}
             if story.text:
                 hardcoded_img_size = 900
                 story_blocks = (
@@ -97,7 +101,45 @@ def edit(request, story_id):
             msg = ("Such a story doesn't exist. But you can create a new one.")
             messages.info(request, msg)
             return redirect('/my_stories/')
-    context = {'story_blocks': story_blocks}
+    context = {
+        'story_blocks': story_blocks,
+        'story': story
+    }
+    return render(request, 'story.html', context)
+
+
+
+@login_required
+@ensure_csrf_cookie
+def edit(request, story_id):
+    '''
+    Edit page view.
+    '''
+    # if story_id is empty rednders template without added text
+    story_blocks = {}
+    story = Story()
+    # if story_id exists renders its content to edit.html page
+    if story_id:
+        try:
+            user = auth.get_user(request)
+            story = Story.objects.get(pk=int(story_id))
+            if user != story.user:
+                messages.info(request, 'Edit your own stories!')
+                return redirect('/my_stories/')
+            if story.text:
+                hardcoded_img_size = 900
+                story_blocks = (
+                    story.get_text_with_pic_urls(hardcoded_img_size)
+                )
+        # if story_id doesn't exist redirects user to list of his/her stoires
+        except Story.DoesNotExist:
+            msg = ("Such a story doesn't exist. But you can create a new one.")
+            messages.info(request, msg)
+            return redirect('/my_stories/')
+    context = {
+        'story_blocks': story_blocks,
+        'story': story,
+    }
     return render(request, 'edit.html', context)
 
 

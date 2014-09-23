@@ -95,3 +95,14 @@ STATIC_URL = '/static/'
 # login url is main page for now
 LOGIN_URL = '/'
 
+# sizes in which to store pictures
+IMAGE_SIZES = [400, 700, 900, 1500]
+
+# domain where pictures are stored
+STORED_IMG_DOMAIN = 'http://localhost:4000/'
+
+# place where images are stored locally
+IMG_STORAGE = os.path.join(os.path.dirname(BASE_DIR), 'Pictures')
+
+# place to temporary write image
+TEMP_DIR = '/var/tmp'

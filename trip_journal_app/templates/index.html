@@ -1,52 +1,49 @@
-                 
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% block title %}Trip Journal{% endblock %}
 {% block css %}
-    <link rel="stylesheet" href="{% static "css/base.css"%}">
-    <link rel="stylesheet" href="{% static "css/index.css" %}">
+<link rel="stylesheet" href="{% static "css/base.css"%}">
+<link rel="stylesheet" href="{% static "css/index.css" %}">
 {% endblock %}
 {% block header %}
-    <div class="login_form">
-        {% if user.id %}
-            <a href="/logout/">Logout ({{ user.username }})</a>
-        {% else %}
-            <form action="/login/" method="post">
-                {% csrf_token %}
-                <input type="text" name="username" id="username">
-                <input type="password" name="password" id="password">
-		{% if request.GET.next %}
-		    <input type="hidden" name="next" value="{{ request.GET.next }}">
-		{% endif %}
-                <input type="submit" value="Login">
-            </form>
+<p id='cite_name'>Trip Journal</p>
+<div class="login_form">
+    {% if not user.id %}
+    <form action="/login/" method="post">
+        {% csrf_token %}
+        <input type="text" name="username" id="username">
+        <input type="password" name="password" id="password">
+        {% if request.GET.next %}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
         {% endif %}
-    </div>
-    <h1>Trip Journal</h1>
+        <input type="submit" value="Login">
+    </form>
+    {% endif %}
+</div>
 {% endblock %}
 {% block content %}
-<!--    <div id="content_type_box">
-        <div class="content_type">
-            <button>My stories</button>
-        </div>
-        <div class="content_type">
-            <button>New stories</button>
-        </div>
-        <div class="content_type">
-            <button>Popular stories</button>
-        </div>
-        <div class="content_type">
-            <button>New popular stories</button>
-        </div>
-        <div class="content_type">
-            <button>Most popular stories</button>
-        </div>
-    </div> -->
-    {% for story in stories %}
+    <div id="welcome">
+        <h2>Wellcome to TripJournal</h2>
+        <p>Take first step to your journey of a thousand miles</p>
+        <p>. . .</p>
+    </div>
+    <div id="stories">
+        {% for story in stories %}
         <div class="story_list_container">
-	    <div class="story_name_container"><a href="{% url "story" story.id %}">{{ story.title }}</a></div>
-            <div class="story_username_container">{{ story.user }}</div>
-            <div class="story_datepublish_container">{{ story.date_publish }}</div>
+            {% if story.img %}
+            <div class="story_img_container">
+                <img src="{{story.img.url}}">
+            </div>
+            {% endif %}
+            <div class="story_name_container">
+                <a href="{% url "story" story.story.id %}">{{ story.story.title }}</a>
+            </div>
+            <div class="story_text_container">
+                <p>{{story.text.content}}</p>
+            </div>
+            <div class="story_username_container">{{ story.story.user }}</div>
+            <div class="story_datepublish_container">{{ story.story.date_publish|date }}</div>
         </div>
-    {% endfor %}
-{% endblock %}
+        {% endfor %}
+    </div>
+    {% endblock %}

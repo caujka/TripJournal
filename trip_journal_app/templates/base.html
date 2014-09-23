@@ -4,35 +4,38 @@
         {% load staticfiles %}
         <meta charset="UTF-8">
         <title>{% block title %}{% endblock %}</title>
-	{% block css %}<link rel="stylesheet" href="{% static "css/base.css"%}">{% endblock %}
+        {% block css %}
+        <link rel="stylesheet" href="{% static "css/base.css"%}">{% endblock %}
+        <link href='http://fonts.googleapis.com/css?family=Ubuntu:400,300,500,400italic&subset=latin,cyrillic-ext' rel='stylesheet' type='text/css'>
         {% block scripts %}{% endblock %}
     </head>
     <body>
         <div id="header">
-        {% block header %}
-	    	<p>Trip Journal</p>
-	{% endblock %}
+            {% block header %}
+            <p id='cite_name'>Trip Journal</p>
+            {% endblock %}
         </div>
-	<div id="menu">
-	{% block menu %}
-	    <div><a href={% url 'home' %}>Main page</a></div>
+        <div id="menu">
+            {% block menu %}
+            <div><a href={% url 'home' %}>Main page</a></div>
             {% if user.id %}
             {% block usermenu %}
-                <div><a href="{% url 'user_stories' %}">My stories</a></div>
+            <div><a href="{% url 'user_stories' %}">My stories</a></div>
+            <div><a href="/logout/">Logout ({{ user.username }})</a></div>
             {% endblock %}
-        {% endif %}
-        {% endblock %}
+            {% endif %}
+            {% endblock %}
 
-	</div>
-	<div id="messages">
-	    {% block messages %}
-		{% for message in messages %}
-		    <div {% if message.tags %} class="{{ message.tags }} {% endif %}">
-		    {{ message }}
-		    </div>
-		{% endfor %}
-	    {% endblock %}
-	</div>
+        </div>
+        <div id="messages">
+            {% block messages %}
+            {% for message in messages %}
+            <div {% if message.tags %} class="{{ message.tags }} {% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endblock %}
+        </div>
         <div id="content">
             {% block content %}{% endblock %}
         </div>

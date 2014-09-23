@@ -79,11 +79,11 @@ class PictureModelTest(TestCase):
         pic = Picture.objects.all()[0]
         self.assertEqual(
             pic.get_stored_pic_by_size(503),
-            Stored_picture.objects.filter(picture=pic).get(size=480)
+            Stored_picture.objects.filter(picture=pic).get(size=400)
         )
         self.assertEqual(
             pic.get_stored_pic_by_size(230),
-            Stored_picture.objects.filter(picture=pic).get(size=240)
+            Stored_picture.objects.filter(picture=pic).get(size=400)
         )
         self.assertEqual(
             pic.get_stored_pic_by_size(2900),
@@ -96,9 +96,9 @@ class StoredPictureModelTest(TestCase):
 
     def test_saving_and_retriving_stored_picture(self):
         stored_pictures = Stored_picture.objects.all()
-        self.assertEqual(stored_pictures.count(), 12)
+        self.assertEqual(stored_pictures.count(), 15)
 
-        last_pic = stored_pictures[11]
+        last_pic = stored_pictures[14]
         self.assertEqual(last_pic.picture, Picture.objects.all()[2])
         self.assertEqual(
             last_pic.size,

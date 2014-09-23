@@ -8,6 +8,11 @@ function getCookie(name) {
   if (parts.length == 2) return parts.pop().split(';').shift();
 }
 
+function story_id_from_url() {
+    var curr_url = document.URL.split(['/']);
+    return curr_url[curr_url.length - 1];
+}
+
 function jsonForming() {
     var i, type, block, body, block_content, block_text,
         title = document.getElementById('story_title').innerHTML,
@@ -18,12 +23,12 @@ function jsonForming() {
         html_block = document.getElementById('contentarea_' + (Blocks[i]));
         block = {
             "type": type
-        }
+        };
         if (type === "text") {
-            block["content"] = html_block.children[0].innerHTML;
+            block.content = html_block.children[0].innerHTML;
         }
         if (type === "img") {
-            block["id"] = parseInt(html_block.children[1].innerHTML);  
+            block.id = parseInt(html_block.children[1].innerHTML);
         }
         blocks.push(block);
     }
@@ -35,34 +40,42 @@ function jsonForming() {
 }
 
 function post_images(story_id){
-    var i, formData, xhr;
+    var i, formData, xhr, img_block_index, img,
+        number_of_img = Images.length,
+        curr_url = document.URL.split(['/']),
+        story_id = curr_url[curr_url.length - 1];
 
-    function add_image_id_from_db() {
+    function add_image_id_from_db(block_num) {
         // This function sets hidden element with
         // picture id from database when picture is saved.
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
+                var block_container = document.getElementById(
+                    'contentarea_' + block_num.toString()
+                );
                 pic_id_in_db = parseInt(xhr.responseText);
-                alert(pic_id_in_db);
-                // '<p style="display:none;">{{story_block.id}}</p>'
+                block_container.children[1].innerHTML = pic_id_in_db;
+                post_data(true);
             }
         } 
     }
-    for (i=0; i < Images.length; ++i){	
+    for (i=0; i < number_of_img; ++i){
         formData = new FormData();
-        formData.append('file', Images[i].image);
+        img = Images.shift();
+        formData.append('file', img.image);
         xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = add_image_id_from_db;
-        xhr.open('POST', '/upload/' + story_id);
+        img_block_index = img.block;
+        xhr.onreadystatechange = function() {
+            add_image_id_from_db(img_block_index);
+        };
+        xhr.open('POST', '/upload/' + story_id_from_url());
         xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
         xhr.send(formData);
     }
 }
 
-function post_data(){
+function post_data(async){
    var xhr = new XMLHttpRequest(),
-       curr_url = document.URL.split(['/']),
-       story_id = curr_url[curr_url.length - 1];
        request_body = JSON.stringify(jsonForming());
 
     function change_url() {
@@ -83,11 +96,17 @@ function post_data(){
     }
 
     xhr.onreadystatechange = change_url;
-    xhr.open('POST', '/save/' + story_id);
+    xhr.open('POST', '/save/' + story_id_from_url(), async);
     xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     xhr.send(request_body);
-
-    post_images(story_id);
 }
 
+function publish() {
+    if (story_id_from_url().length === 0) post_data(false);
+    if (Images.length > 0) {
+        post_images();
+    } else {
+        post_data(true);
+    }
+}

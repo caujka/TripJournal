@@ -1,5 +1,6 @@
 import json
 import datetime
+import math
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.context_processors import csrf
@@ -9,8 +10,9 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
 
-from trip_journal_app.models import Story, Picture
+from trip_journal_app.models import Story, Picture, Map_artifact
 from trip_journal_app.forms import UploadFileForm
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def home(request):
@@ -135,3 +137,35 @@ def logout(request):
     auth.logout(request)
     return redirect("/")
 
+def show_story_near_by_page(request):
+    """
+    Search stories near by page 
+    """
+    return render(
+        request, 'stories_near_by.html')
+
+def search_story_near_by(request):
+    stor = csrf(request)
+    list_of_stories = []
+    if request.method == 'GET':
+        x = float(request.GET.get('latitude', ''))
+        y = float(request.GET.get('longitude', ''))
+        stories = Story.objects.all()
+        for st in stories:
+            coordinates = []
+            distance = []
+            pictures = Picture.objects.filter(story_id=st.id)
+            artifacts = Map_artifact.objects.filter(story_id=st.id)
+            for picture in pictures:
+                if picture.latitude and picture.longitude:
+                    coordinates.append([float(picture.latitude), float(picture.longitude)])
+            for artifact in artifacts:
+                if artifact.latitude and artifact.longitude:
+                    coordinates.append([float(artifact.latitude), float(artifact.longitude)])
+            for coordinate in coordinates:
+                dist = math.sqrt((x - coordinate[0])**2 + (y - coordinate[1])**2)
+                distance.append(dist)
+            list_of_stories.append({'story': st, 'distance': min(distance)})
+        list_of_stories.sort(key = lambda k: k['distance'])
+        current_page = Paginator(list_of_stories['story'], 25)
+        return render('/', current_page.page(), stor)

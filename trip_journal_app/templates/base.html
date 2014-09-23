@@ -11,11 +11,12 @@
         <div id="header">
         {% block header %}
 	    	<p>Trip Journal</p>
-	{% endblock %}
+	    {% endblock %}
         </div>
-	<div id="menu">
-	{% block menu %}
-	    <div><a href={% url 'home' %}>Main page</a></div>
+	    <div id="menu">
+	    {% block menu %}
+	        <div><a href={% url 'home' %}>Main page</a></div>
+            <div><a href="{% url 'stories_near_by' %}">Stories near by</a></div>
             {% if user.id %}
             {% block usermenu %}
                 <div><a href="{% url 'user_stories' %}">My stories</a></div>

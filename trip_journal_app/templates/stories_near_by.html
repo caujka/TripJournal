@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Stories near the place{% endblock %}
+{% block content %}
+    <h3>Her you can search stories near the place</h3>
+<!--    <table>
+    {% for story in stories %}
+        <tr>
+            <td>{{ story.title }}</td>
+            <td><a href="{% url "story" story.id %}">View</a></td>
+            <td><a href="{% url "edit" story.id %}">Edit</a></td>
+        </tr>
+    {% endfor %}
+    </table>
+    <a href="{% url "edit" '' %}">Create new story</a> -->
+    <form action="/search_stories_near_by/" method="get">
+        {% csrf_token %}
+        Enter Latitude: <br>
+        <input type="text" name="latitude" id="latitude" required><br>
+        Enter Longitude:<br>
+        <input type="text" name="longitude" id="longitude" required>
+        <input type="submit" value="Search">
+    </form>
+    <div>
+        {% if search_story_near_by.has_previous %}
+            <a href="/page/{{ search_story_near_by.previous_page_number }}/">Prev</a>
+        {% endif %}
+
+
+
+        {% if search_story_near_by.has_next %}
+            <a href="/page/{{ search_story_near_by.next_page_number }}/">Next</a>
+        {% endif %}
+
+    </div>
+
+
+{% endblock %}

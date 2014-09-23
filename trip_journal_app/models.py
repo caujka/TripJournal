@@ -59,7 +59,18 @@ class Story(models.Model):
             if block[u'type'] == u'img':
                 block[u'url'] = pics[block[u'id']]
         return text
-
+'''
+    def get_story_coordinates(self):
+        stories = self.objects.all()
+            for st in stories:
+            coordinate = []
+            pictures = Picture.objects.filter(story=st.id)
+            artifacts = Map_artifact.objects.filter(story=st.id)
+            for picture in pictures:
+                coordinate.append([picture.latitude, picture.longitude])
+            for artifact in artifacts:
+                coordinate.append([artifact.latitude, artifact.longitude])
+'''
 
 class Picture(models.Model):
     latitude = models.FloatField(blank=True, null=True)

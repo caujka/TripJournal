@@ -11,6 +11,7 @@ from django.views.decorators.http import require_POST
 
 from trip_journal_app.models import Story, Picture
 from trip_journal_app.forms import UploadFileForm
+from trip_journal_app.utils.story_utils import story_contents
 
 
 def home(request):
@@ -83,30 +84,7 @@ def upload_img(request, story_id):
 
 
 def story(request, story_id):
-    # if story_id is empty rednders template without added text
-    story_blocks = {}
-    story = Story()
-    # if story_id exists renders its content to story.html page
-    if story_id:
-        try:
-            user = auth.get_user(request)
-            story = Story.objects.get(pk=int(story_id))
-            if story.text:
-                hardcoded_img_size = 900
-                story_blocks = (
-                    story.get_text_with_pic_urls(hardcoded_img_size)
-                )
-        # if story_id doesn't exist redirects user to list of his/her stoires
-        except Story.DoesNotExist:
-            msg = ("Such a story doesn't exist. But you can create a new one.")
-            messages.info(request, msg)
-            return redirect('/my_stories/')
-    context = {
-        'story_blocks': story_blocks,
-        'story': story
-    }
-    return render(request, 'story.html', context)
-
+    return story_contents(request, story_id, 'story.html')
 
 
 @login_required
@@ -115,32 +93,7 @@ def edit(request, story_id):
     '''
     Edit page view.
     '''
-    # if story_id is empty rednders template without added text
-    story_blocks = {}
-    story = Story()
-    # if story_id exists renders its content to edit.html page
-    if story_id:
-        try:
-            user = auth.get_user(request)
-            story = Story.objects.get(pk=int(story_id))
-            if user != story.user:
-                messages.info(request, 'Edit your own stories!')
-                return redirect('/my_stories/')
-            if story.text:
-                hardcoded_img_size = 900
-                story_blocks = (
-                    story.get_text_with_pic_urls(hardcoded_img_size)
-                )
-        # if story_id doesn't exist redirects user to list of his/her stoires
-        except Story.DoesNotExist:
-            msg = ("Such a story doesn't exist. But you can create a new one.")
-            messages.info(request, msg)
-            return redirect('/my_stories/')
-    context = {
-        'story_blocks': story_blocks,
-        'story': story,
-    }
-    return render(request, 'edit.html', context)
+    return story_contents(request, story_id, 'edit.html', check_user=True)
 
 
 @login_required

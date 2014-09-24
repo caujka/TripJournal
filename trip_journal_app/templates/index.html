@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load trip_journal_extras %}
 {% block title %}Trip Journal{% endblock %}
 {% block css %}
 <link rel="stylesheet" href="{% static "css/base.css"%}">
@@ -32,7 +33,7 @@
         <div class="story_list_container">
             {% if story.img %}
             <div class="story_img_container">
-                <img src="{{story.img.url}}">
+                <img src="{{story.img.pic|get_stored_pic_by_size:400}}">
             </div>
             {% endif %}
             <div class="story_name_container">

@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
     {% load staticfiles %}
+    {% load trip_journal_extras %}
     {% block title %}Edit story{% endblock %}
     {% block css %}
         <link rel="stylesheet" href="{% static "css/base.css"%}">
@@ -42,7 +43,7 @@
 		    </div>
                 {% elif story_block.type = 'img' %}
 	            <div class="saved img">
-		        <p>{{ story_block.url }}</p>
+		        <p>{{ story_block.pic|get_stored_pic_by_size:800 }}</p>
                 <p style="display:none;">{{story_block.id}}</p>
 		    </div>
 	        {% endif %}

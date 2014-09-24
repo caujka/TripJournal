@@ -21,7 +21,7 @@ def home(request):
     stories = []
     for story in Story.objects.all():
         if story.text:
-            story_blocks = story.get_text_with_pic_urls(300)
+            story_blocks = story.get_text_with_pic_objects()
             first_text = next(
                 (block for block in story_blocks if block['type'] == 'text'),
                 None

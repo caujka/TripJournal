@@ -18,9 +18,8 @@ def story_contents(request, story_id, template, check_user=False):
                     messages.info(request, 'Edit your own stories!')
                     return redirect('/my_stories/')
             if story.text:
-                hardcoded_img_size = 900
                 story_blocks = (
-                    story.get_text_with_pic_urls(hardcoded_img_size)
+                    story.get_text_with_pic_objects()
                 )
         # if story_id doesn't exist redirects user to list of his/her stoires
         except Story.DoesNotExist:

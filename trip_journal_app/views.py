@@ -1,6 +1,5 @@
 import json
 import datetime
-import math
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.context_processors import csrf
@@ -19,9 +18,26 @@ def home(request):
     """
     Home page view.
     """
+    stories = []
+    for story in Story.objects.all():
+        if story.text:
+            story_blocks = story.get_text_with_pic_urls(300)
+            first_text = next(
+                (block for block in story_blocks if block['type'] == 'text'),
+                None
+            )
+            first_img = next(
+                (block for block in story_blocks if block['type'] == 'img'),
+                None
+            )
+            stories.append(
+                {'story': story,
+                 'text': first_text,
+                 'img': first_img}
+            )
     return render(
         request, 'index.html',
-        {'stories': Story.objects.all(), 'user': auth.get_user(request)}
+        {'stories': stories, 'user': auth.get_user(request)}
     )
 
 
@@ -68,7 +84,30 @@ def upload_img(request, story_id):
 
 
 def story(request, story_id):
-    return HttpResponse('You are reading story %s' % story_id)
+    # if story_id is empty rednders template without added text
+    story_blocks = {}
+    story = Story()
+    # if story_id exists renders its content to story.html page
+    if story_id:
+        try:
+            user = auth.get_user(request)
+            story = Story.objects.get(pk=int(story_id))
+            if story.text:
+                hardcoded_img_size = 900
+                story_blocks = (
+                    story.get_text_with_pic_urls(hardcoded_img_size)
+                )
+        # if story_id doesn't exist redirects user to list of his/her stoires
+        except Story.DoesNotExist:
+            msg = ("Such a story doesn't exist. But you can create a new one.")
+            messages.info(request, msg)
+            return redirect('/my_stories/')
+    context = {
+        'story_blocks': story_blocks,
+        'story': story
+    }
+    return render(request, 'story.html', context)
+
 
 
 @login_required
@@ -146,26 +185,20 @@ def show_story_near_by_page(request):
 
 def search_story_near_by(request):
     stor = csrf(request)
-    list_of_stories = []
     if request.method == 'GET':
         x = float(request.GET.get('latitude', ''))
         y = float(request.GET.get('longitude', ''))
-        stories = Story.objects.all()
-        for st in stories:
-            coordinates = []
-            distance = []
-            pictures = Picture.objects.filter(story_id=st.id)
-            artifacts = Map_artifact.objects.filter(story_id=st.id)
-            for picture in pictures:
-                if picture.latitude and picture.longitude:
-                    coordinates.append([float(picture.latitude), float(picture.longitude)])
-            for artifact in artifacts:
-                if artifact.latitude and artifact.longitude:
-                    coordinates.append([float(artifact.latitude), float(artifact.longitude)])
-            for coordinate in coordinates:
-                dist = math.sqrt((x - coordinate[0])**2 + (y - coordinate[1])**2)
-                distance.append(dist)
-            list_of_stories.append({'story': st, 'distance': min(distance)})
-        list_of_stories.sort(key = lambda k: k['distance'])
-        current_page = Paginator(list_of_stories['story'], 25)
-        return render('/', current_page.page(), stor)
+        list_of_stories = Story.get_sorted_story_list(x, y)
+        paginator = Paginator(list_of_stories, 3)
+        page = request.GET.get('page')
+        try:
+            stories = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            stories = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            stories = paginator.page(paginator.num_pages)
+        print list_of_stories
+        return render(request, 'stories_near_by.html', {'stories_list': stories})
+

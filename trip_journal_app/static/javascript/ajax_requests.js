@@ -8,6 +8,11 @@ function getCookie(name) {
   if (parts.length == 2) return parts.pop().split(';').shift();
 }
 
+function story_id_from_url() {
+    var curr_url = document.URL.split(['/']);
+    return curr_url[curr_url.length - 1];
+}
+
 function jsonForming() {
     var i, type, block, body, block_content, block_text,
         title = document.getElementById('story_title').innerHTML,
@@ -36,7 +41,9 @@ function jsonForming() {
 
 function post_images(story_id){
     var i, formData, xhr, img_block_index, img,
-        number_of_img = Images.length;
+        number_of_img = Images.length,
+        curr_url = document.URL.split(['/']),
+        story_id = curr_url[curr_url.length - 1];
 
     function add_image_id_from_db(block_num) {
         // This function sets hidden element with
@@ -48,6 +55,7 @@ function post_images(story_id){
                 );
                 pic_id_in_db = parseInt(xhr.responseText);
                 block_container.children[1].innerHTML = pic_id_in_db;
+                post_data(true);
             }
         } 
     }
@@ -60,16 +68,14 @@ function post_images(story_id){
         xhr.onreadystatechange = function() {
             add_image_id_from_db(img_block_index);
         };
-        xhr.open('POST', '/upload/' + story_id);
+        xhr.open('POST', '/upload/' + story_id_from_url());
         xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
         xhr.send(formData);
     }
 }
 
-function post_data(){
+function post_data(async){
    var xhr = new XMLHttpRequest(),
-       curr_url = document.URL.split(['/']),
-       story_id = curr_url[curr_url.length - 1];
        request_body = JSON.stringify(jsonForming());
 
     function change_url() {
@@ -90,11 +96,17 @@ function post_data(){
     }
 
     xhr.onreadystatechange = change_url;
-    xhr.open('POST', '/save/' + story_id);
+    xhr.open('POST', '/save/' + story_id_from_url(), async);
     xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     xhr.send(request_body);
-
-    post_images(story_id);
 }
 
+function publish() {
+    if (story_id_from_url().length === 0) post_data(false);
+    if (Images.length > 0) {
+        post_images();
+    } else {
+        post_data(true);
+    }
+}

@@ -1,7 +1,7 @@
 import json
 import datetime
 
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.core.context_processors import csrf
 from django.http import HttpResponse
 from django.contrib import messages, auth
@@ -159,17 +159,16 @@ def user_stories(request):
 @require_POST
 def login(request):
     args = csrf(request)
-    if request.method == 'POST':
-        username = request.POST.get('username', '')
-        password = request.POST.get('password', '')
-        user = auth.authenticate(username=username, password=password)
-        if user is not None:
-            auth.login(request, user)
-        else:
-            messages.info(request, "User doesn't exist")
-        # next page user goes to
-        next_url = request.POST.get('next', '/')
-        return redirect(next_url, args)
+    username = request.POST.get('username', '')
+    password = request.POST.get('password', '')
+    user = auth.authenticate(username=username, password=password)
+    if user is not None:
+        auth.login(request, user)
+    else:
+        messages.info(request, "User doesn't exist")
+    # next page user goes to
+    next_url = request.POST.get('next', '/')
+    return redirect(next_url, args)
 
 
 def logout(request):

@@ -95,3 +95,11 @@ html {
     border: 0;
     height: 30px;
 }
+
+.login_form {
+    float: right;
+}
+
+.login_form input {
+    display: inline-block;
+} 

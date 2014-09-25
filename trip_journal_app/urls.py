@@ -22,6 +22,5 @@ urlpatterns = [
     url(r'^login/', views.login, name='login'),
     # loging out user
     url(r'^logout/', views.logout, name='logout'),
-    #url(r'^page/(\d+)/$',  views.search_story_near_by, name='search_stories_near_by'),
     url(r'^$', views.home, name='home'),
 ]

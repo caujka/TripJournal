@@ -17,7 +17,6 @@
         </div>
         <div id="menu">
             {% block menu %}
-            <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}">Login with Google</a>
             <div><a href={% url 'home' %}>Main page</a></div>
             <div><a href="{% url 'stories_near_by' %}">Stories near by</a></div>
             {% if user and not user.is_anonymous %}

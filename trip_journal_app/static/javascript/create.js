@@ -3,17 +3,17 @@ var number = 1,
     BlockTypes = [],
     Images = [];
 
-function deleteImagesFromBlock(blockNumber){
-    for (var i=0; i < Images.length; ++i){
-        if (Images[i].block === blockNumber){
+function deleteImagesFromBlock(blockNumber) {
+    for (var i=0; i < Images.length; ++i) {
+        if (Images[i].block === blockNumber) {
             Images.splice(i, 1);
         }
     }
 }
 
-function swapImagesFromBlock(blockNumber1, blockNumber2){
-    for (var i=0;i<Images.length; ++i){
-        if(Images[i].block === blockNumber1) {
+function swapImagesFromBlock(blockNumber1, blockNumber2) {
+    for (var i=0; i<Images.length; ++i) {
+        if (Images[i].block === blockNumber1) {
             Images[i].block = blockNumber2;
         }
         else if (Images[i].block === blockNumber2) {
@@ -22,9 +22,9 @@ function swapImagesFromBlock(blockNumber1, blockNumber2){
     }
 }
 
-function addImagesFromTemp(){
+function addImagesFromTemp() {
     var i;
-    for(i=0; i < Images.length; ++i){
+    for(i=0; i < Images.length; ++i) {
         if (Images[i].state === 'temp') {
             Images[i].state = 'loaded';
             Images[i].block = number;
@@ -32,9 +32,9 @@ function addImagesFromTemp(){
     }
 }
 
-function appendBlock(story, blockContent, block_type) {
-    var container = document.createElement("div"),
-        keybar = document.createElement("div"),
+function appendBlock(story, blockContent, block_type, saved) {
+    var container = document.createElement('div'),
+        keybar = document.createElement('div'),
         buttons = [
             ['top', 'moveup'],
             ['bottom', 'movedown'],
@@ -45,7 +45,7 @@ function appendBlock(story, blockContent, block_type) {
     function create_button(button_name_and_func) {
         var button_name = button_name_and_func[0],
             button_func = button_name_and_func[1],
-            button = document.createElement("button");
+            button = document.createElement('button');
         button.setAttribute('onClick', button_func + "('" + number + "')");
         button.id = button_name;
         keybar.appendChild(button);
@@ -81,6 +81,9 @@ function appendBlock(story, blockContent, block_type) {
         addImagesFromTemp(number);
     }
     number++;
+    if (!saved) {
+        savePage();
+    }
 }
 
 function deleteBlock(itemstr) {
@@ -91,6 +94,7 @@ function deleteBlock(itemstr) {
     Blocks.splice(poss, 1);
     BlockTypes.splice(poss, 1);
     deleteImagesFromBlock(item);
+    savePage();
 }
 
 
@@ -109,6 +113,7 @@ function move_block(itemstr, direction) {
         BlockTypes[poss + direction] = block_type;
         swapImagesFromBlock(Blocks[poss + direction], Blocks[poss]);
     }
+    savePage();
 }
 
 function moveup(itemstr) {
@@ -166,7 +171,7 @@ function add_saved_blocks() {
             );
         }
         block.parentNode.removeChild(block);
-        appendBlock(story_content, block_text, block_type);
+        appendBlock(story_content, block_text, block_type, saved=true);
     }
 }
 
@@ -358,6 +363,7 @@ function delete_img(id) {
     }
 }
 
+
 //Volodya
 var geocoder;
 var markersArray = [];
@@ -449,25 +455,25 @@ function placeMarker(location, bar_id) {
 
 // Sets the map on all markers in the array.
 function setAllMap(map) {
-  for (var i = 0; i < markersArray.length; i++) {
-    markersArray[i].setMap(map);
-  }
+    for (var i = 0; i < markersArray.length; i++) {
+        markersArray[i].setMap(map);
+    }
 }
 
 // Removes the markers from the map, but keeps them in the array.
 function clearMarkers() {
-  setAllMap(null);
+    setAllMap(null);
 }
 
 // Shows any markers currently in the array.
 function showMarkers() {
-  setAllMap(map);
+    setAllMap(map);
 }
 
 // Deletes all markers in the array by removing references to them.
 function deleteMarkers() {
-  clearMarkers();
-  markersArray = [];
+    clearMarkers();
+    markersArray = [];
 }
 
 function codeAddress() {

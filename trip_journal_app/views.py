@@ -19,7 +19,7 @@ def home(request):
     Home page view.
     """
     stories = []
-    for story in Story.objects.all():
+    for story in Story.objects.filter(published=True):
         if story.text:
             story_blocks = story.get_text_with_pic_objects()
             first_text = next(
@@ -47,21 +47,22 @@ def save(request, story_id):
     """
     View for saving story contents. Responds only to ajax POST requests.
     """
-    user = auth.get_user(request)
-    if story_id:
-        story = get_object_or_404(Story, pk=int(story_id))
-        if user != story.user:
-            return HttpResponse('Unauthorized', status=401)
-    else:
-        story = Story()
-        story.user = auth.get_user(request)
-        story.date_travel = datetime.datetime.now().date()
-    request_body = json.loads(request.body)
-    story.title = request_body['title']
-    story.text = json.dumps(request_body['blocks'], ensure_ascii=False)
-    story.date_publish = datetime.datetime.now()
-    story.save()
-    return HttpResponse(story.id)
+    if request.is_ajax():
+        user = auth.get_user(request)
+        if story_id:
+            story = get_object_or_404(Story, pk=int(story_id))
+            if user != story.user:
+                return HttpResponse('Unauthorized', status=401)
+        else:
+            story = Story()
+            story.user = auth.get_user(request)
+            story.date_travel = datetime.datetime.now().date()
+        request_body = json.loads(request.body)
+        story.title = request_body['title']
+        story.text = json.dumps(request_body['blocks'], ensure_ascii=False)
+        story.date_publish = datetime.datetime.now()
+        story.save()
+        return HttpResponse(story.id)
 
 
 @login_required
@@ -127,4 +128,5 @@ def login(request):
 def logout(request):
     auth.logout(request)
     return redirect("/")
+
 

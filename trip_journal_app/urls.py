@@ -14,6 +14,10 @@ urlpatterns = [
     url(r'^story/(?P<story_id>\d+)$', views.story, name='story'),
     # list of user stories
     url(r'^my_stories/$', views.user_stories, name='user_stories'),
+    # list of near by stories
+    url(r'^stories_near_by/$', views.show_story_near_by_page, name='stories_near_by'),
+    # loging in user
+    url(r'^search_stories_near_by/', views.search_story_near_by, name='search_stories_near_by'),
     # loging in user
     url(r'^login/', views.login, name='login'),
     # loging out user

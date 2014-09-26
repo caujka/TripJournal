@@ -396,12 +396,12 @@ function initialize() {
       drawingModes: [
         google.maps.drawing.OverlayType.POLYLINE
       ]
-    },
+    }
 
   });
   drawingManager.setMap(map);
 }
-$ = jQuery;
+
 function handleNoGeolocation(errorFlag) {
   if (errorFlag) {
     var content = 'Error: The Geolocation service failed.';
@@ -438,30 +438,10 @@ function placeMarker(location) {
     //add marker in markers array
     markersArray.push(marker);
     i = markersArray.length - 1;
+    //document.getElementById(bar_id).innerHTML = ('<button onclick="centerMap(' + i + '); return false;">Marker</button>');
     jQuery(bar_id).append('<button onclick="centerMap(' + i + '); return false;">Marker</button>');
-    jQuery(bar_id).append('<button onclick="delMarkCompl(' + i + '); return false;">Remove</button>');
-    //jQuery(bar_id).append('<button onclick="delMarkCompl('i'); return false;">Remove</button>');
+
     }
-    //var markerButton = document.createElement("button");
-    //	markerButton.setAttribute('onClick', "centerMap(' + i + '); return false;");
-    //	markerButton.id = "buu";
-    //	document.getElementById("#keybar_"+number).append(markerButton);
-    //var markerButton = document.getElementsByClassName("key_panel");
-    //<button onclick="centerMap(' + i + '); return false;">Marker</button>
-    //var keybar = document.createElement("div");
-	//keybar.id="keybar_"+number;
-	//keybar.className="key_panel"
-
-}
-
-// Add a marker to the map and push to the array.
-function delMarkCompl(element, i) {
-    //find marker
-
-    //delete marker
-    //removeMark(i);
-    //delete buttons
-
 }
 
 // Sets the map on all markers in the array.
@@ -469,22 +449,6 @@ function setAllMap(map) {
   for (var i = 0; i < markersArray.length; i++) {
     markersArray[i].setMap(map);
   }
-}
-
-// Removes the markers from the map, but keeps them in the array.
-function clearMarkers() {
-  setAllMap(null);
-}
-
-// Shows any markers currently in the array.
-function showMarkers() {
-  setAllMap(map);
-}
-
-// Deletes all markers in the array by removing references to them.
-function deleteMarkers() {
-  clearMarkers();
-  markersArray = [];
 }
 
 function codeAddress() {

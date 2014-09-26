@@ -402,12 +402,12 @@ function initialize() {
       drawingModes: [
         google.maps.drawing.OverlayType.POLYLINE
       ]
-    },
+    }
 
   });
   drawingManager.setMap(map);
 }
-$ = jQuery;
+
 function handleNoGeolocation(errorFlag) {
   if (errorFlag) {
     var content = 'Error: The Geolocation service failed.';
@@ -425,32 +425,29 @@ function handleNoGeolocation(errorFlag) {
 }
 
 // Add a marker to the map and push to the array.
-function placeMarker(location, bar_id) {
-    var marker = new google.maps.Marker({
-        position: location,
-        map: map
-    });
+function placeMarker(location) {
+
     //Get last added textarea id
     var textboxes;
     textboxes = document.getElementsByClassName('key_panel');
     last_element = textboxes[textboxes.length-1]
-    bar_id='#'+last_element.id;
-    //add marker in markers array
+    var bar_id='#'+last_element.id;
 
+    //check if there is already any button assigned to textarea div block
+    if (last_element.innerHTML.search('Marker') !== -1) {
+        alert('Only one marker rep one textarea')
+    } else {
+    var marker = new google.maps.Marker({
+        position: location,
+        map: map
+    });
+    //add marker in markers array
     markersArray.push(marker);
     i = markersArray.length - 1;
+    //document.getElementById(bar_id).innerHTML = ('<button onclick="centerMap(' + i + '); return false;">Marker</button>');
     jQuery(bar_id).append('<button onclick="centerMap(' + i + '); return false;">Marker</button>');
 
-    //var markerButton = document.createElement("button");
-    //	markerButton.setAttribute('onClick', "centerMap(' + i + '); return false;");
-    //	markerButton.id = "buu";
-    //	document.getElementById("#keybar_"+number).append(markerButton);
-    //var markerButton = document.getElementsByClassName("key_panel");
-    //<button onclick="centerMap(' + i + '); return false;">Marker</button>
-    //var keybar = document.createElement("div");
-	//keybar.id="keybar_"+number;
-	//keybar.className="key_panel"
-
+    }
 }
 
 // Sets the map on all markers in the array.
@@ -458,22 +455,6 @@ function setAllMap(map) {
     for (var i = 0; i < markersArray.length; i++) {
         markersArray[i].setMap(map);
     }
-}
-
-// Removes the markers from the map, but keeps them in the array.
-function clearMarkers() {
-    setAllMap(null);
-}
-
-// Shows any markers currently in the array.
-function showMarkers() {
-    setAllMap(map);
-}
-
-// Deletes all markers in the array by removing references to them.
-function deleteMarkers() {
-    clearMarkers();
-    markersArray = [];
 }
 
 function codeAddress() {
@@ -492,3 +473,10 @@ google.maps.event.addDomListener(window, 'load', initialize);
         map.setCenter(markersArray[i].getPosition());
 	}
 
+google.maps.event.addDomListener(window, 'load', initialize);
+    function removeMark(i) {
+        markersArray[i].setMap(null);
+        markersArray.splice(i, 1);
+         // Func to delete one marker from map
+         //alert('remove mark func')       
+    }

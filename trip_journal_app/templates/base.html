@@ -19,11 +19,16 @@
             {% block menu %}
             <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}">Login with Google</a>
             <div><a href={% url 'home' %}>Main page</a></div>
-            {% if user.id %}
-            {% block usermenu %}
-            <div><a href="{% url 'user_stories' %}">My stories</a></div>
-            <div><a href="/logout/">Logout ({{ user.username }})</a></div>
-            {% endblock %}
+            <div><a href="{% url 'stories_near_by' %}">Stories near by</a></div>
+            {% if user and not user.is_anonymous %}
+                <div><a href="{% url 'user_stories' %}">My stories</a></div>
+                <div>
+                    <a href="{% url 'auth:logout' %}?next={{ request.path }}">Logout {{ user.username }}</a>
+                </div>
+            {% else %}
+                <div>
+                    <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}">Login with Google</a>
+                </div>
             {% endif %}
             {% endblock %}
 

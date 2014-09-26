@@ -1,6 +1,7 @@
 from django.db import models
 import json
 import os
+import math
 from TripJournal.settings import (IMAGE_SIZES, STORED_IMG_DOMAIN,
                                   IMG_STORAGE, TEMP_DIR)
 from trip_journal_app.utils.resize_image import resize_and_save_pics
@@ -67,6 +68,29 @@ class Story(models.Model):
             if block[u'type'] == u'img':
                 block[u'pic'] = Picture.objects.get(pk=int(block[u'id']))
         return text
+
+    @classmethod
+    def get_sorted_story_list(cls, latitude, longitude):
+        stories = cls.objects.all()
+        list_of_stories = []
+        for st in stories:
+            coordinates = []
+            distance = []
+            pictures = Picture.objects.filter(story_id=st.id)
+            artifacts = Map_artifact.objects.filter(story_id=st.id)
+            for picture in pictures:
+                if picture.latitude and picture.longitude:
+                    coordinates.append([float(picture.latitude), float(picture.longitude)])
+            for artifact in artifacts:
+                if artifact.latitude and artifact.longitude:
+                    coordinates.append([float(artifact.latitude), float(artifact.longitude)])
+            if coordinates:
+                for coordinate in coordinates:
+                    dist = math.sqrt((latitude - coordinate[0])**2 + (longitude - coordinate[1])**2)
+                    distance.append(dist)
+                list_of_stories.append({'story': st, 'distance': min(distance)})
+        list_of_stories.sort(key = lambda k: k['distance'])
+        return list_of_stories
 
 
 class Picture(models.Model):

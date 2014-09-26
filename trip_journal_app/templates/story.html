@@ -14,9 +14,11 @@
     {% endblock %}
     {% block content %}
     <main>
-        <div id="map-canvas"></div>
-
+        <div id="map-canvas-wrapper">
+            <div id="map-canvas"></div>
+        </div>
         <div id="story_content" class="block">
+            <div class="brd">
             <div id="story_title" class="title"><h2>{{story.title}}</h2></div>
 	    <p class="author">Author: {{story.user}}</p>
 	    <p class="published">Published: {{story.date_publish}}</p>
@@ -25,12 +27,13 @@
                     <div class="saved_text">
 		        <p>{{ story_block.content|safe }}</p>
 		    </div>
-                {% elif story_block.type = 'img' %}
+                {% elif story_block.type == 'img' %}
 	            <div class="saved_img">
                     <img src="{{ story_block.pic|get_stored_pic_by_size:800 }}">
 		    </div>
 	        {% endif %}
 	    {% endfor %}
+            </div>
         </div>
 
       

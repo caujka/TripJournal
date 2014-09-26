@@ -1,18 +1,30 @@
 .title{
 
-    margin-left: 550px;
+    margin-left: 300px;
    
 }
 .author{
-    margin-left: 800px;
+    margin-left: 50px;
     margin-top: 50px;
 }
 
 .published{
-    margin-left:800px;
+    margin-left:50px;
 }
 
 .saved_text{
-    margin-left:300px;
+    margin-left:30px;
     margin-top:50px;
+}
+#map-canvas-wrapper {
+    position: fixed;
+    top: 70px;
+    height: 400px;
+    width: 390px;
+    margin-left: 805px;
+}
+
+#map-canvas {
+    width: 100%;
+    height: 100%;
 }

@@ -1,7 +1,7 @@
 import json
 import datetime
 
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.core.context_processors import csrf
 from django.http import HttpResponse
 from django.contrib import messages, auth
@@ -9,15 +9,21 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
 
-from trip_journal_app.models import Story, Picture
+from trip_journal_app.models import Story, Picture, Map_artifact
 from trip_journal_app.forms import UploadFileForm
 from trip_journal_app.utils.story_utils import story_contents
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+from django.shortcuts import render_to_response
+from django.template.context import RequestContext
 
 def home(request):
     """
     Home page view.
     """
+    context = RequestContext(request,
+                           {'request': request,
+                            'user': request.user})
     stories = []
     for story in Story.objects.filter(published=True):
         if story.text:
@@ -37,7 +43,7 @@ def home(request):
             )
     return render(
         request, 'index.html',
-        {'stories': stories, 'user': auth.get_user(request)}
+        {'stories': stories, 'user': auth.get_user(request)}, context_instance=context
     )
 
 
@@ -109,24 +115,31 @@ def user_stories(request):
         return render(request, 'my_stories.html', context)
 
 
-@require_POST
-def login(request):
-    args = csrf(request)
-    if request.method == 'POST':
-        username = request.POST.get('username', '')
-        password = request.POST.get('password', '')
-        user = auth.authenticate(username=username, password=password)
-        if user is not None:
-            auth.login(request, user)
-        else:
-            messages.info(request, "User doesn't exist")
-        # next page user goes to
-        next_url = request.POST.get('next', '/')
-        return redirect(next_url, args)
+def show_story_near_by_page(request):
+    """
+    Search stories near by page
+    """
+    return render(
+        request, 'stories_near_by.html')
 
 
-def logout(request):
-    auth.logout(request)
-    return redirect("/")
+def search_story_near_by(request):
+    stor = csrf(request)
+    if request.method == 'GET':
+        x = float(request.GET.get('latitude', ''))
+        y = float(request.GET.get('longitude', ''))
+        list_of_stories = Story.get_sorted_story_list(x, y)
+        paginator = Paginator(list_of_stories, 3)
+        page = request.GET.get('page')
+        try:
+            stories = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            stories = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            stories = paginator.page(paginator.num_pages)
+        print list_of_stories
+        return render(request, 'stories_near_by.html', {'stories_list': stories})
 
 

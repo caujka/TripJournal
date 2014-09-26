@@ -425,27 +425,27 @@
 },
 {
     "fields": {
-        "latitude": null,
+        "latitude": 32904,
         "story": 1,
-        "longitude": null
+        "longitude": 475483
     },
     "model": "trip_journal_app.picture",
     "pk": 1
 },
 {
     "fields": {
-        "latitude": null,
+        "latitude": 43930,
         "story": 1,
-        "longitude": null
+        "longitude": 47659
     },
     "model": "trip_journal_app.picture",
     "pk": 2
 },
 {
     "fields": {
-        "latitude": null,
+        "latitude": 36382,
         "story": 1,
-        "longitude": null
+        "longitude": 3748
     },
     "model": "trip_journal_app.picture",
     "pk": 3

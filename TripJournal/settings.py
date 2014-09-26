@@ -7,6 +7,7 @@ https://docs.djangoproject.com/en/1.6/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
+import json
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -28,7 +29,9 @@ DEBUG = True
 TEMPLATE_DEBUG = True
 
 TEMPLATE_CONTEXT_PROCESSORS += (
-    "django.core.context_processors.request",
+    'django.core.context_processors.request',
+    'social.apps.django_app.context_processors.backends',
+    'social.apps.django_app.context_processors.login_redirect',
 )
 
 ALLOWED_HOSTS = []
@@ -45,6 +48,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'debug_toolbar',
     'trip_journal_app',
+    'social.apps.django_app.default',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -54,6 +58,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
 )
 
 ROOT_URLCONF = 'TripJournal.urls'
@@ -94,6 +99,7 @@ STATIC_URL = '/static/'
 
 # login url is main page for now
 LOGIN_URL = '/'
+LOGIN_REDIRECT_URL = '/'
 
 # sizes in which to store pictures
 IMAGE_SIZES = [400, 700, 900, 1500]
@@ -106,3 +112,13 @@ IMG_STORAGE = os.path.join(os.path.dirname(BASE_DIR), 'Pictures')
 
 # place to temporary write image
 TEMP_DIR = '/var/tmp'
+
+AUTHENTICATION_BACKENDS = (
+    'social.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+google_secrets = json.load(open('google_client_secrets.json'))
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = google_secrets[u'web'][u'client_id']
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = google_secrets[u'web'][u'client_secret']
+

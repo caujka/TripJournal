@@ -2,8 +2,6 @@
 import os
 import sys
 
-print(sys.path)
-
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "TripJournal.settings")
 

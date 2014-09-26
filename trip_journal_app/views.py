@@ -13,11 +13,16 @@ from trip_journal_app.models import Story, Picture, Map_artifact
 from trip_journal_app.forms import UploadFileForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+from django.shortcuts import render_to_response
+from django.template.context import RequestContext
 
 def home(request):
     """
     Home page view.
     """
+    context = RequestContext(request,
+                           {'request': request,
+                            'user': request.user})
     stories = []
     for story in Story.objects.all():
         if story.text:
@@ -37,7 +42,7 @@ def home(request):
             )
     return render(
         request, 'index.html',
-        {'stories': stories, 'user': auth.get_user(request)}
+        {'stories': stories, 'user': auth.get_user(request)}, context_instance=context
     )
 
 
@@ -156,31 +161,13 @@ def user_stories(request):
         return render(request, 'my_stories.html', context)
 
 
-@require_POST
-def login(request):
-    args = csrf(request)
-    username = request.POST.get('username', '')
-    password = request.POST.get('password', '')
-    user = auth.authenticate(username=username, password=password)
-    if user is not None:
-        auth.login(request, user)
-    else:
-        messages.info(request, "User doesn't exist")
-    # next page user goes to
-    next_url = request.POST.get('next', '/')
-    return redirect(next_url, args)
-
-
-def logout(request):
-    auth.logout(request)
-    return redirect("/")
-
 def show_story_near_by_page(request):
     """
     Search stories near by page 
     """
     return render(
         request, 'stories_near_by.html')
+    
 
 def search_story_near_by(request):
     stor = csrf(request)

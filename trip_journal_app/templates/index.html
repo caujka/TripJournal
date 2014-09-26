@@ -8,19 +8,6 @@
 {% endblock %}
 {% block header %}
 <p id='cite_name'>Trip Journal</p>
-<div class="login_form">
-    {% if not user.id %}
-    <form action="/login/" method="post">
-        {% csrf_token %}
-        <input type="text" name="username" id="username">
-        <input type="password" name="password" id="password">
-        {% if request.GET.next %}
-        <input type="hidden" name="next" value="{{ request.GET.next }}">
-        {% endif %}
-        <input type="submit" value="Login">
-    </form>
-    {% endif %}
-</div>
 {% endblock %}
 {% block content %}
     <div id="welcome">

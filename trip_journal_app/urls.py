@@ -19,8 +19,8 @@ urlpatterns = [
     # loging in user
     url(r'^search_stories_near_by/', views.search_story_near_by, name='search_stories_near_by'),
     # loging in user
-    url(r'^login/', views.login, name='login'),
+    #url(r'^login/', views.login, name='login'),
     # loging out user
-    url(r'^logout/', views.logout, name='logout'),
+    #url(r'^logout/', views.logout, name='logout'),
     url(r'^$', views.home, name='home'),
 ]

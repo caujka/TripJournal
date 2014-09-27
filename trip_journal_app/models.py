@@ -21,7 +21,7 @@ class Story(models.Model):
     date_publish = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
     track = models.TextField(blank=True, null=True)
-    rating = models.FloatField(blank=True, null=True)
+    rating = models.IntegerField(default=0)
     published = models.BooleanField(default=False)
     user = models.ForeignKey(User)
     tags = models.ManyToManyField(Tag)

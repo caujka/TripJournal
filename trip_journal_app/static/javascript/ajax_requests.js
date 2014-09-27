@@ -1,6 +1,13 @@
-/*
-Module for sending ajax POST request with block contents from edit page. 
-*/
+/**
+ * Module for sending ajax POST request with block contents from edit page. 
+ */
+
+// for browser that don't support endsWith method for strings
+if (typeof String.prototype.endsWith !== 'function') {
+    String.prototype.endsWith = function(suffix) {
+        return this.indexOf(suffix, this.length - suffix.length) !== -1;
+    };
+}
 
 function getCookie(name) {
     var value = '; ' + document.cookie;
@@ -17,8 +24,8 @@ function storyIdFromUrl() {
     return currUrl[currUrl.length - 1];
 }
 
-function jsonForming() {
-    var i, type, block, body, blockContent, blockText,
+function storyBlocksJson() {
+    var i, type, block, blockContent, blockText,
         title = document.getElementById('story_title').innerHTML,
         blocks = [];
 
@@ -26,41 +33,38 @@ function jsonForming() {
         type = BlockTypes[i];
         htmlBlock = document.getElementById('contentarea_' + (Blocks[i]));
         block = {
-            "type": type
+            'type': type
         };
-        if (type === "text") {
+        if (type === 'text') {
             block.content = htmlBlock.children[0].innerHTML;
         }
-        if (type === "img") {
+        if (type === 'img') {
             block.id = parseInt(htmlBlock.children[1].innerHTML);
         }
         blocks.push(block);
     }
-    body = {
-        "title": title,
-        "blocks": blocks,
+    return {
+        'title': title,
+        'blocks': blocks,
     };
-    return body;
 }
 
 function postImages(storyId){
     var i, formData, xhr, imgBlockIndex, img,
-        numberOfImg = Images.length,
-        currUrl = document.URL.split(['/']),
-        storyId = currUrl[currUrl.length - 1];
+        numberOfImg = Images.length;
 
-    function add_image_id_from_db(block_num) {
-        // This function sets hidden element with
-        // picture id from database when picture is saved.
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                var block_container = document.getElementById(
-                    'contentarea_' + block_num.toString()
-                );
-                pic_id_in_db = parseInt(xhr.responseText);
-                block_container.children[1].innerHTML = pic_id_in_db;
-                postData(true);
-            }
+    /**
+     * Sets hidden element with
+     * picture id from database when picture is saved.
+     */
+    function addImageIdFromDB(blockNum) {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var blockContainer = document.getElementById(
+                'contentarea_' + blockNum.toString()
+            );
+            picIdInDB = parseInt(xhr.responseText);
+            blockContainer.children[1].innerHTML = picIdInDB;
+            postData(true);
         } 
     }
     for (i=0; i < numberOfImg; ++i){
@@ -70,40 +74,37 @@ function postImages(storyId){
         xhr = new XMLHttpRequest();
         imgBlockIndex = img.block;
         xhr.onreadystatechange = function() {
-            add_image_id_from_db(imgBlockIndex);
+            addImageIdFromDB(imgBlockIndex);
         };
         xhr.open('POST', '/upload/' + storyIdFromUrl());
         xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-        xhr.setRequestHeader("X_REQUESTED_WITH",'XMLHttpRequest');
+        xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');
         xhr.send(formData);
     }
 }
 
 function postData(async){
     var xhr = new XMLHttpRequest(),
-       requestBody = JSON.stringify(jsonForming());
+        requestBody = JSON.stringify(storyBlocksJson());
 
-    function change_url() {
-        // This function appends story id to page url
-        // if request was sent from /edit/ page.
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                new_id = xhr.responseText;
-                if (!document.URL.endsWith(new_id)) {
-                    window.history.pushState(
-                        'new_id', 'Title', '/edit/' + new_id
-                    );
-                }
-            } else {
-                alert('There was a problem with the request.');
+    /**
+     * Appends story id to page url 
+     * if request was sent from /edit/ page.
+     */
+    function addStoryIdToUrl() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var newId = xhr.responseText;
+            if (!document.URL.endsWith(newId)) {
+                window.history.pushState(
+                    'new_id', 'Title', '/edit/' + newId
+                );
             }
         }
     }
-
-    xhr.onreadystatechange = change_url;
+    xhr.onreadystatechange = addStoryIdToUrl;
     xhr.open('POST', '/save/' + storyIdFromUrl(), async);
     xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-    xhr.setRequestHeader("X_REQUESTED_WITH",'XMLHttpRequest');
+    xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     xhr.send(requestBody);
 }

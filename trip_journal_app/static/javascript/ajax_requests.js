@@ -109,6 +109,22 @@ function postData(async){
     xhr.send(requestBody);
 }
 
+function togglePublish(published) {
+    var xhr = new XMLHttpRequest();
+
+    function goToViewPage() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            window.location.href = xhr.responseText;
+        }
+    }
+    xhr.open('POST', '/publish/' + storyIdFromUrl());
+    xhr.onreadystatechange = goToViewPage;
+    xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+    xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');
+    xhr.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8');
+    xhr.send(published);
+}
+
 function savePage() {
     if (storyIdFromUrl().length === 0) postData(false);
     if (Images.length > 0) {

@@ -1,20 +1,19 @@
 import json
 import datetime
 
-from django.shortcuts import render, redirect, get_object_or_404, render_to_response
+from django.shortcuts import render, get_object_or_404
 from django.core.context_processors import csrf
 from django.http import HttpResponse
-from django.contrib import messages, auth
+from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
 
-from trip_journal_app.models import Story, Picture, Map_artifact
+from trip_journal_app.models import Story, Picture
 from trip_journal_app.forms import UploadFileForm
 from trip_journal_app.utils.story_utils import story_contents
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 
 def home(request):
@@ -69,6 +68,19 @@ def save(request, story_id):
         story.date_publish = datetime.datetime.now()
         story.save()
         return HttpResponse(story.id)
+
+
+@login_required
+@require_POST
+def publish(request, story_id):
+    user = auth.get_user(request)
+    story = get_object_or_404(Story, pk=int(story_id))
+    if user != story.user:
+        return HttpResponse('Unathorized', status=401)
+    assert request.body in ('true', 'false')
+    story.published = (request.body == 'true')
+    story.save()
+    return HttpResponse('/story/%s' % story_id)
 
 
 @login_required
@@ -139,7 +151,6 @@ def search_story_near_by(request):
         except EmptyPage:
             # If page is out of range (e.g. 9999), deliver last page of results.
             stories = paginator.page(paginator.num_pages)
-        print list_of_stories
         return render(request, 'stories_near_by.html', {'stories_list': stories})
 
 

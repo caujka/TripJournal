@@ -114,11 +114,22 @@ IMG_STORAGE = os.path.join(os.path.dirname(BASE_DIR), 'Pictures')
 TEMP_DIR = '/var/tmp'
 
 AUTHENTICATION_BACKENDS = (
+    'social.backends.facebook.FacebookOAuth2',
     'social.backends.google.GoogleOAuth2',
+    'social.backends.twitter.TwitterOAuth',
+    'social.backends.vk.VKOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
 google_secrets = json.load(open('google_client_secrets.json'))
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = google_secrets[u'web'][u'client_id']
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = google_secrets[u'web'][u'client_secret']
+
+facebook_secrets = json.load(open('facebook_client_secrets.json'))
+SOCIAL_AUTH_FACEBOOK_KEY = facebook_secrets[u'web'][u'client_id']
+SOCIAL_AUTH_FACEBOOK_SECRET = facebook_secrets[u'web'][u'client_secret']
+
+vk_secrets = json.load(open('vk_client_secrets.json'))
+SOCIAL_AUTH_VK_OAUTH2_KEY = vk_secrets[u'web'][u'client_id']
+SOCIAL_AUTH_VK_OAUTH2_SECRET = vk_secrets[u'web'][u'client_secret']
 

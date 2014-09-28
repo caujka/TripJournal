@@ -26,7 +26,9 @@
                 </div>
             {% else %}
                 <div>
-                    <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}">Login with Google</a>
+                    <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}">Google</a>
+                    <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">Facebook</a>
+                    <a href="{% url 'social:begin' 'vk-oauth2' %}?next={{ request.path }}">VK</a>
                 </div>
             {% endif %}
             {% endblock %}

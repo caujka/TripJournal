@@ -21,7 +21,7 @@ class Story(models.Model):
     date_publish = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
     track = models.TextField(blank=True, null=True)
-    rating = models.FloatField(blank=True, null=True)
+    rating = models.IntegerField(default=0)
     published = models.BooleanField(default=False)
     user = models.ForeignKey(User)
     tags = models.ManyToManyField(Tag)
@@ -38,27 +38,35 @@ class Story(models.Model):
     def get_map_artifacts(self):
         return Map_artifact.objects.filter(story=self.id)
 
-    def get_pictures_urls(self, max_size):
+    def get_pictures_urls(self):
         '''
-        Returns a dictionary where pictures ids are keys and stored pictures
-        of appropriate size are values.
+        Returns a dictionary where pictures ids are keys and tuple of all
+        stored pictures sizes and respective urls size are values.
         '''
         pictures = Picture.objects.filter(story=self.id)
         return dict([
-            (pic.id, pic.get_stored_pic_by_size(max_size))
+            (pic.id, tuple({'size': stored_pic.size, 'url': stored_pic.url} for
+                      stored_pic in pic.get_stored_pics()))
             for pic in pictures
         ])
 
-    def get_text_with_pic_urls(self, max_pic_size):
+    def get_text_with_pic_urls(self):
         '''
         Takes story text and desirable size of pictures and adds
         urls to respective block of content.
         '''
-        pics = self.get_pictures_urls(max_pic_size)
+        pics = self.get_pictures_urls()
         text = json.loads(self.text, encoding='utf8')
         for block in text:
             if block[u'type'] == u'img':
                 block[u'url'] = pics[block[u'id']]
+        return text
+
+    def get_text_with_pic_objects(self):
+        text = json.loads(self.text, encoding='utf8')
+        for block in text:
+            if block[u'type'] == u'img':
+                block[u'pic'] = Picture.objects.get(pk=int(block[u'id']))
         return text
 
     @classmethod
@@ -84,6 +92,7 @@ class Story(models.Model):
         list_of_stories.sort(key = lambda k: k['distance'])
         return list_of_stories
 
+
 class Picture(models.Model):
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
@@ -91,20 +100,28 @@ class Picture(models.Model):
     SIZES = IMAGE_SIZES
 
     def __unicode__(self):
-        return self.name
+        return str(self.id)
 
-    def get_stored_pic_by_size(self, max_accatible_size):
+    def get_stored_pics(self):
         '''
         Retrun the object Stored picture with the greatest size
         not bigger than max_accatible_size. If there isn't smaller
         pictures returns the smallest from available.
         '''
+        return Stored_picture.objects.filter(picture=self.id)
+
+    def get_stored_pic_by_size(self, accatible_size):
+        '''
+        Retrun the object Stored picture with the smallest size
+        not smaller than max_accatible_size. If there isn't larger
+        pictures returns the largest from available.
+        '''
         story_pics = Stored_picture.objects.filter(picture=self.id)
-        accetable_pics = story_pics.filter(size__lt=max_accatible_size)
+        accetable_pics = story_pics.filter(size__gte=accatible_size)
         if accetable_pics:
-            pic = accetable_pics.order_by('size').last()
+            pic = accetable_pics.order_by('size').first()
             return pic
-        return story_pics.order_by('size').first()
+        return story_pics.order_by('size').last()
 
     def save_in_sizes(self, image):
         '''

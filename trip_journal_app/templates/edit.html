@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
     {% load staticfiles %}
+    {% load trip_journal_extras %}
     {% block title %}Edit story{% endblock %}
     {% block css %}
         <link rel="stylesheet" href="{% static "css/base.css"%}">
@@ -9,8 +10,8 @@
         <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false&libraries=drawing">
 </script>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+	    <script src="{% static "javascript/ajax_requests.js" %}"></script>
         <script src="{% static "javascript/create.js" %}"></script>
-	<script src="{% static "javascript/ajax_requests.js" %}"></script>
     {% endblock %}
     {% block content %}
     <div id="map-canvas-wrapper">
@@ -39,8 +40,8 @@
 		    </div>
                 {% elif story_block.type == 'img' %}
 	            <div class="saved img">
-		        <p>{{ story_block.url }}</p>
-                        <p style="display:none;">{{story_block.id}}</p>
+		        <p>{{ story_block.pic|get_stored_pic_by_size:800 }}</p>
+                <p style="display:none;">{{story_block.id}}</p>
 		    </div>
 	        {% endif %}
 	    {% endfor %}
@@ -105,7 +106,8 @@
 
         <div id="publish_panel" class="block">
             <button id="view" class="button">view</button>
-            <button id="publish" class="button" onClick="publish()">publish</button>
+            <button id="publish" class="button" onClick="togglePublish('true')">Publish</button>
+            <button id="unpublish" class="button" onClick="togglePublish('false')">Unpublish</button>
         </div>
     </main>
     {% endblock %}

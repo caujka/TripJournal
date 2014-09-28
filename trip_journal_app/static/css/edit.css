@@ -33,11 +33,11 @@ main{
     background: url("../images/plus-sign.png") 35px 35px no-repeat #8ed41f;
 }
 .key_panel{
-    width: 200px;
+    width: 215px;
     height: 25px;
     border: 1px solid #aaa;
     border-radius: 5px;
-    margin-left:600px;
+    margin-left:540px;
     visibility:hidden;
 }
 .block_title{
@@ -194,7 +194,7 @@ main{
 #add_comment_t,#add_treasure_t,#add_comment_p,#add_treasure_p{
     display: none;
 }
-#bottom, #edit, #delete, #top{
+#bottom, #edit, #delete, #top,#addmarker,#removemarker{
     display: inline-block;
     width: 25px;
     height: 25px;
@@ -221,7 +221,14 @@ main{
     bottom: 0px;
     background:  url("../images/delete.png") no-repeat;
 }
-
+#addmarker{
+    bottom: 0px;
+    background:  url("../images/marker.png") no-repeat;
+}
+#removemarker{
+    bottom: 0px;
+    background:  url("../images/deletemarker.png") no-repeat;
+}
 #map-canvas-wrapper {
     position: fixed;
     top: 70px;

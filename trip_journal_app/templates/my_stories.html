@@ -5,11 +5,11 @@
     <table>
     {% for story in stories %}
         <tr>
-            <td>{{ story.title }}</td>
-            <td><a href="{% url "story" story.id %}">View</a></td>
+            <td><a href="{% url "story" story.id %}">{{ story.title }}</a></td>
             <td><a href="{% url "edit" story.id %}">Edit</a></td>
         </tr>
     {% endfor %}
     </table>
+    <br/>
     <a href="{% url "edit" '' %}">Create new story</a>
 {% endblock %}

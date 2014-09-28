@@ -7,7 +7,6 @@ https://docs.djangoproject.com/en/1.6/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
-import json
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -16,6 +15,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # local settings
 import TripJournal.local_settings as local_settings
+
+from utils import client_key_and_secret
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -121,15 +122,15 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-google_secrets = json.load(open('google_client_secrets.json'))
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = google_secrets[u'web'][u'client_id']
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = google_secrets[u'web'][u'client_secret']
+CLIENT_SECRETS_DIR = os.path.join(BASE_DIR, 'TripJournal', 'client_secrets')
 
-facebook_secrets = json.load(open('facebook_client_secrets.json'))
-SOCIAL_AUTH_FACEBOOK_KEY = facebook_secrets[u'web'][u'client_id']
-SOCIAL_AUTH_FACEBOOK_SECRET = facebook_secrets[u'web'][u'client_secret']
-
-vk_secrets = json.load(open('vk_client_secrets.json'))
-SOCIAL_AUTH_VK_OAUTH2_KEY = vk_secrets[u'web'][u'client_id']
-SOCIAL_AUTH_VK_OAUTH2_SECRET = vk_secrets[u'web'][u'client_secret']
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY, SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = (
+    client_key_and_secret(CLIENT_SECRETS_DIR, 'google')
+)
+SOCIAL_AUTH_FACEBOOK_KEY, SOCIAL_AUTH_FACEBOOK_SECRET = (
+    client_key_and_secret(CLIENT_SECRETS_DIR, 'facebook')
+)
+SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET = (
+    client_key_and_secret(CLIENT_SECRETS_DIR, 'vk')
+)
 

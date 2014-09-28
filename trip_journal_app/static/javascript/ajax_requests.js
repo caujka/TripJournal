@@ -31,9 +31,11 @@ function storyBlocksJson() {
 
     for (i = 0; i < Blocks.length; ++i) {
         type = BlockTypes[i];
+	marker = getMarkerLocation(i);
         htmlBlock = document.getElementById('contentarea_' + (Blocks[i]));
         block = {
-            'type': type
+            'type': type,
+	    'marker' : marker
         };
         if (type === 'text') {
             block.content = htmlBlock.children[0].innerHTML;

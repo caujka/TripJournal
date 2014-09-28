@@ -181,15 +181,15 @@ function add_saved_blocks() {
     for (i=0; i < blocks_num; i++) {
         block = blocks[0];
         block_type = block.classList[1];
-        if (block_type === 'text') {
+        if (block_type === 'saved_text') {
             block_text = text_block_template(block.children[0].innerHTML);
-	    marker = block.children[1].innerHTML;
-        } else if (block_type === 'img') {
+	        marker = block.children[1].innerHTML;
+        } else if (block_type === 'saved_img') {
             block_text = img_block_template(
                 block.children[0].innerHTML,
                 block.children[1].innerHTML
             );
-	    marker = block.children[2].innerHTML;
+            marker = block.children[2].innerHTML;
         }
         block.parentNode.removeChild(block);
         appendBlock(story_content, block_text, block_type, saved=true);

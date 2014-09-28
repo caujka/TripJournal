@@ -1,7 +1,7 @@
 import json
 import datetime
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.context_processors import csrf
 from django.http import HttpResponse
 from django.contrib import auth
@@ -103,7 +103,10 @@ def upload_img(request, story_id):
 
 
 def story(request, story_id):
-    return story_contents(request, story_id, 'story.html')
+    if story_id:
+        return story_contents(request, story_id, 'story.html')
+    else:
+	return redirect('/')
 
 
 @login_required

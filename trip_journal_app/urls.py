@@ -11,7 +11,7 @@ urlpatterns = [
     # image uploads
     url(r'^upload/(?P<story_id>\d+)$', views.upload_img, name='upload_img'),
     # view story
-    url(r'^story/(?P<story_id>\d+)$', views.story, name='story'),
+    url(r'^story/(?P<story_id>\d*)$', views.story, name='story'),
     # list of user stories
     url(r'^my_stories/$', views.user_stories, name='user_stories'),
     # list of nearby stories

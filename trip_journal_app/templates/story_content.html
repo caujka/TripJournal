@@ -2,11 +2,12 @@
 
 {% for story_block in story_blocks %}
 {% if story_block.type == 'text' %}
-<div class="saved saved_text">
+<div class="saved text">
     <p>{{ story_block.content|safe }}</p>
+    <p style="display:none;">{{story_block.marker}}</p>
 </div>
 {% elif story_block.type == 'img' %}
-<div class="saved saved_img">
+<div class="saved img">
     {% if page == 'story' %}
     <img src="{{ story_block.pic|get_stored_pic_by_size:800 }}">
     {% elif page == 'edit' %}

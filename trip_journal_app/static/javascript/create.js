@@ -181,10 +181,10 @@ function add_saved_blocks() {
     for (i=0; i < blocks_num; i++) {
         block = blocks[0];
         block_type = block.classList[1];
-        if (block_type === 'saved_text') {
+        if (block_type === 'text') {
             block_text = text_block_template(block.children[0].innerHTML);
 	        marker = block.children[1].innerHTML;
-        } else if (block_type === 'saved_img') {
+        } else if (block_type === 'img') {
             block_text = img_block_template(
                 block.children[0].innerHTML,
                 block.children[1].innerHTML

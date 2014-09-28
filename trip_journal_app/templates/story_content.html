@@ -1,0 +1,19 @@
+{% load trip_journal_extras %}
+
+{% for story_block in story_blocks %}
+{% if story_block.type == 'text' %}
+<div class="saved_text">
+    <p>{{ story_block.content|safe }}</p>
+</div>
+{% elif story_block.type == 'img' %}
+<div class="saved_img">
+    {% if page == 'story' %}
+    <img src="{{ story_block.pic|get_stored_pic_by_size:800 }}">
+    {% elif page == 'edit' %}
+    <p>{{ story_block.pic|get_stored_pic_by_size:800 }}</p>
+    <p style="display:none;">{{story_block.id}}</p>
+    <p style="display:none;">{{story_block.marker}}</p>
+    {% endif %}
+</div>
+{% endif %}
+{% endfor %}

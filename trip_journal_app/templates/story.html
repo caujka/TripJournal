@@ -10,13 +10,15 @@
         <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false&libraries=drawing">
 </script>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
-        <script src="{% static "javascript/create.js" %}"></script>
+       
+	<script src="{% static "javascript/story.js" %}"></script>
     {% endblock %}
     {% block content %}
     <main>
-        <div id="map-canvas-wrapper">
-            <div id="map-canvas"></div>
-        </div>
+         <div id="map-canvas-wrapper">
+           
+             <div id="map-canvas"></div>
+         </div>>
         <div id="story_content" class="block">
             <div class="brd">
             <div id="story_title" class="title"><h2>{{story.title}}</h2></div>
@@ -24,12 +26,15 @@
 	    <p class="published">Published: {{story.date_publish}}</p>
             {% for story_block in story_blocks %}
 	        {% if story_block.type == 'text' %}
-                    <div class="saved_text">
-		        <p>{{ story_block.content|safe }}</p>
+                    <div class="saved saved_text">
+			<p style="display:none;">{{story_block.marker}}</p>
+		        <p>{{ story_block.content|safe }}</p>		
 		    </div>
                 {% elif story_block.type == 'img' %}
-	            <div class="saved_img">
-                    <img src="{{ story_block.pic|get_stored_pic_by_size:800 }}">
+	            <div class="saved saved_img">
+                        <p style="display:none;">{{story_block.marker}}</p>
+                        <img src="{{ story_block.pic|get_stored_pic_by_size:800 }}">
+		        <p style="display:none;">{{story_block.id}}</p>
 		    </div>
 	        {% endif %}
 	    {% endfor %}

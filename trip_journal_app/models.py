@@ -21,7 +21,7 @@ class Story(models.Model):
     date_publish = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
     track = models.TextField(blank=True, null=True)
-    rating = models.FloatField(blank=True, null=True)
+    rating = models.IntegerField(default=0)
     published = models.BooleanField(default=False)
     user = models.ForeignKey(User)
     tags = models.ManyToManyField(Tag)
@@ -97,6 +97,7 @@ class Picture(models.Model):
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     story = models.ForeignKey(Story)
+    rating_picture = models.IntegerField(default=0)
     SIZES = IMAGE_SIZES
 
     def __unicode__(self):
@@ -150,6 +151,33 @@ class Picture(models.Model):
 
         # delete temp file
         os.remove(file_name)
+
+    @classmethod
+    def get_sorted_picture_list(cls, latitude, longitude):
+        pictures = cls.objects.all()
+        list_of_pictures = []
+        req = 'SELECT (POWER(latitude - %f, 2) + POWER(longitude - %f, 2)) as distance, id, latitude, longitude'
+        ' from trip_journal_app_picture ORDER BY distance;' % (latitude, longitude)
+        for pic in Picture.objects.raw():
+            list_of_pictures.append(pic)
+
+
+
+
+        # for pic in pictures:
+        #     coordinates = []
+        #     distance = []
+        #     pictures = Picture.objects.filter(picture_id=pic.id)
+        #     for picture in pictures:
+        #         if picture.latitude and picture.longitude:
+        #             coordinates.append([float(picture.latitude), float(picture.longitude)])
+        #     if coordinates:
+        #         for coordinate in coordinates:
+        #             dist = math.sqrt((latitude - coordinate[0])**2 + (longitude - coordinate[1])**2)
+        #             distance.append(dist)
+        #         list_of_pictures.append({'story': pic, 'distance': min(distance)})
+        #list_of_pictures.sort(key = lambda k: k['distance'])
+        return list_of_pictures
 
 
 class Stored_picture(models.Model):

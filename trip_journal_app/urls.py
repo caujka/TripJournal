@@ -21,4 +21,6 @@ urlpatterns = [
         name='search_stories_near_by'),
     url(r'^$', views.home, name='home'),
     url(r'^publish/(?P<story_id>\d+)$', views.publish, name='publish'),
+    url(r'^pagination/', views.make_paging_for_story_search,
+        name='make_paging_for_story_search'),
 ]

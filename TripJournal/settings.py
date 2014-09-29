@@ -133,3 +133,4 @@ vk_secrets = json.load(open('vk_client_secrets.json'))
 SOCIAL_AUTH_VK_OAUTH2_KEY = vk_secrets[u'web'][u'client_id']
 SOCIAL_AUTH_VK_OAUTH2_SECRET = vk_secrets[u'web'][u'client_secret']
 
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'

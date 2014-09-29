@@ -16,6 +16,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from django.template.context import RequestContext
 
+from django.contrib.sessions.backends.db import SessionStore
+
+
 def home(request):
     """
     Home page view.
@@ -143,17 +146,26 @@ def search_story_near_by(request):
     if request.method == 'GET':
         x = float(request.GET.get('latitude', ''))
         y = float(request.GET.get('longitude', ''))
-        list_of_stories = Story.get_sorted_story_list(x, y)
-        paginator = Paginator(list_of_stories, 3)
-        page = request.GET.get('page')
-        try:
-            stories = paginator.page(page)
-        except PageNotAnInteger:
-            # If page is not an integer, deliver first page.
-            stories = paginator.page(1)
-        except EmptyPage:
-            # If page is out of range (e.g. 9999), deliver last page of results.
-            stories = paginator.page(paginator.num_pages)
-        return render(request, 'stories_near_by.html', {'stories_list': stories})
+        sess = SessionStore()
+        sess['story_list'] = Story.get_sorted_story_list(x, y)
+        sess.save()
+        response = redirect('/pagination/')
+        response.set_cookie('pagination', sess.session_key)
+        return response
 
+def make_paging_for_story_search(request):
+    sess_key = request.COOKIES['pagination']
+    sess = SessionStore(session_key=sess_key)
+    list_of_stories = sess['story_list']
+    paginator = Paginator(list_of_stories, 1)
+    page = request.GET.get('page')
+    try:
+        stories = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        stories = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        stories = paginator.page(paginator.num_pages)
+    return render(request, 'stories_near_by.html', {'stories_list': stories})
 

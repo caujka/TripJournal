@@ -42,6 +42,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('latitude', models.FloatField(null=True, blank=True)),
                 ('longitude', models.FloatField(null=True, blank=True)),
+                ('rating', models.IntegerField(default=0)),
             ],
             options={
             },
@@ -52,7 +53,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('size', models.IntegerField()),
-                ('url', models.CharField(max_length=2000)),
+                ('_url', models.CharField(max_length=2000)),
                 ('picture', models.ForeignKey(to='trip_journal_app.Picture')),
             ],
             options={
@@ -68,8 +69,8 @@ class Migration(migrations.Migration):
                 ('date_publish', models.DateTimeField(auto_now_add=True)),
                 ('text', models.TextField()),
                 ('track', models.TextField(null=True, blank=True)),
-                ('rating', models.FloatField(null=True, blank=True)),
                 ('published', models.BooleanField(default=False)),
+                ('rating', models.ManyToManyField(to=settings.AUTH_USER_MODEL)),
             ],
             options={
             },
@@ -94,7 +95,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='story',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(related_name=b'owner', to=settings.AUTH_USER_MODEL),
             preserve_default=True,
         ),
         migrations.AddField(

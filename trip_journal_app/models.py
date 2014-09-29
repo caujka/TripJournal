@@ -21,9 +21,9 @@ class Story(models.Model):
     date_publish = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
     track = models.TextField(blank=True, null=True)
-    rating = models.IntegerField(default=0)
+    rating = models.ManyToManyField(User)
     published = models.BooleanField(default=False)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, related_name='owner')
     tags = models.ManyToManyField(Tag)
 
     def __unicode__(self):
@@ -92,12 +92,16 @@ class Story(models.Model):
         list_of_stories.sort(key = lambda k: k['distance'])
         return list_of_stories
 
+    def likes_count(self):
+        return self.rating.count()
+
+
 
 class Picture(models.Model):
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     story = models.ForeignKey(Story)
-    rating_picture = models.IntegerField(default=0)
+    rating = models.IntegerField(default=0)
     SIZES = IMAGE_SIZES
 
     def __unicode__(self):

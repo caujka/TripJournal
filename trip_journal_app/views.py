@@ -172,19 +172,13 @@ def make_paging_for_story_search(request):
 
     return render(request, 'pictures_near_by.html', {'picture_list': stories})
 
+
+@login_required
 def addrating(request, story_id):
-    try:
-        if story_id in request.COOKIES:
-            redirect('/story/' + str(story_id))
-        else:
-            story = Story.objects.get(pk=int(story_id))
-            story.rating += 1
-            story.save()
-            response = redirect('/story/' + str(story_id))
-            response.set_cookie(story_id, 'like')
-            return response
-    except ObjectDoesNotExist:
-        raise Http404
+    story = get_object_or_404(Story, pk=int(story_id))
+    user = auth.get_user(request)
+    story.rating.add(user)
+    story.save()
     return redirect('/story/' + str(story_id))
 
 def addrating_to_pictures(request):

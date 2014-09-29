@@ -7,6 +7,12 @@
         <tr>
             <td><a href="{% url "story" story.id %}">{{ story.title }}</a></td>
             <td><a href="{% url "edit" story.id %}">Edit</a></td>
+            <td>
+                <form method="POST" action="{% url "delete" story.id %}">
+                    {% csrf_token %}
+                    <input type="submit" value="delete">
+                </form>
+            </td>
         </tr>
     {% endfor %}
     </table>

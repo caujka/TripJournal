@@ -3,18 +3,19 @@ import datetime
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.context_processors import csrf
+from django.core.urlresolvers import reverse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
+from django.template.context import RequestContext
 
 from trip_journal_app.models import Story, Picture
 from trip_journal_app.forms import UploadFileForm
 from trip_journal_app.utils.story_utils import story_contents
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from django.template.context import RequestContext
 
 def home(request):
     """
@@ -156,4 +157,14 @@ def search_story_near_by(request):
             stories = paginator.page(paginator.num_pages)
         return render(request, 'stories_near_by.html', {'stories_list': stories})
 
+
+@login_required
+@require_POST
+def delete(request, story_id):
+    story = get_object_or_404(Story, pk=int(story_id))
+    user = auth.get_user(request)
+    if user != story.user:
+        return HttpResponse('Unathorized', status=401)
+    story.delete()
+    return redirect(reverse('user_stories'))
 

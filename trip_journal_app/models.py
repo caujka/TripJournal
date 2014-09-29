@@ -96,6 +96,7 @@ class Story(models.Model):
 class Picture(models.Model):
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
+    rating_picture = models.IntegerField(default=0)
     story = models.ForeignKey(Story)
     SIZES = IMAGE_SIZES
 
@@ -129,8 +130,8 @@ class Picture(models.Model):
         and writes them to path defined in Stored_picture class.
         '''
         # check if Pictures directory exists
-        if not os.path.exists(Stored_picture.SAVE_PATH):
-            os.makedirs(Stored_picture.SAVE_PATH)
+        if not os.path.exists(Stored_picture.STORAGE):
+            os.makedirs(Stored_picture.STORAGE)
 
         # temporary storing file
         img_name = image.name
@@ -141,7 +142,7 @@ class Picture(models.Model):
 
         # resizing original image
         names_and_sizes = resize_and_save_pics(
-            file_name, str(self.id), self.SIZES, Stored_picture.SAVE_PATH
+            file_name, str(self.id), self.SIZES, Stored_picture.STORAGE
         )
         for name, size in names_and_sizes:
             stored_pic = Stored_picture(picture=self, size=size)
@@ -156,8 +157,11 @@ class Stored_picture(models.Model):
     picture = models.ForeignKey(Picture)
     size = models.IntegerField()
     _url = models.CharField(max_length=2000)
-    SAVE_PATH = IMG_STORAGE
+    STORAGE = IMG_STORAGE
     URL_PREFIX = STORED_IMG_DOMAIN
+
+    def __unicode__(self):
+        return self.url
 
     @property
     def url(self):
@@ -166,9 +170,6 @@ class Stored_picture(models.Model):
     @url.setter
     def url(self, value):
         self._url = value
-
-    def __unicode__(self):
-        return self.url
 
 
 class Comment(models.Model):

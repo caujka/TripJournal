@@ -4,7 +4,6 @@ from trip_journal_app import views
 
 
 urlpatterns = [
-
     url(r'^edit/(?P<story_id>\d*)$', views.edit, name='edit'),
     # saving contents of story
     url(r'^save/(?P<story_id>\d*)$', views.save, name='save'),
@@ -21,4 +20,5 @@ urlpatterns = [
         name='search_stories_near_by'),
     url(r'^$', views.home, name='home'),
     url(r'^publish/(?P<story_id>\d+)$', views.publish, name='publish'),
+    url(r'^delete/(?P<story_id>\d+)$', views.delete, name='delete'),
 ]

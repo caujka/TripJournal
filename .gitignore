@@ -62,3 +62,5 @@ local_settings.py
 *~
 .idea
 google_client_secrets.json
+facebook_client_secrets.json
+vk_client_secrets.json

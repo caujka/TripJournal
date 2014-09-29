@@ -92,11 +92,20 @@
                 <span class="block_title">video</span>
             </div>
         </div>
-
+ 
+        {% if story.id %}
         <div id="publish_panel" class="block">
-            <button id="view" class="button">view</button>
-            <button id="publish" class="button" onClick="togglePublish('true')">Publish</button>
-            <button id="unpublish" class="button" onClick="togglePublish('false')">Unpublish</button>
+           <form id="view_form" action="{% url "story" story.id %}">
+                <input type="submit" value="view" class="button" id="view">
+            </form>
+            {% include 'toggle_publish_buttons.html' with story_id=story.id %}
+        {% else %}
+        <div id="publish_panel" class="invisible">
+           <form id="view_form" action="{% url "story" "0" %}">
+                <input type="submit" value='view' class="button" id="view">
+            </form>
+            {% include 'toggle_publish_buttons.html' with story_id=0 %}
+        {% endif %}
         </div>
     </main>
     {% endblock %}

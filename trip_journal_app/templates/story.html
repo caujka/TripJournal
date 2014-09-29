@@ -27,6 +27,14 @@
         </div>
     </div>
 
-      
+    <div id="user_buttons">
+        {% if user == story.user %}
+            <form action="{% url 'edit' story.id%}">
+                <input type="submit" value="Edit this story" />
+            </form>
+            {% include 'toggle_publish_buttons.html' with story_id=story.id %}
+
+        {% endif %}
+    </div>
     </main>
     {% endblock %}

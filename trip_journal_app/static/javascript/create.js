@@ -212,6 +212,7 @@ window.onload = function() {
         text_panel = document.getElementById('text_panel'),
         photo_panel = document.getElementById('photo_panel'),
         video_panel = document.getElementById('video_panel'),
+        publish_panel = document.getElementById('publish_panel'),
         title = document.getElementById('title'),
 
         fileSelect = document.getElementById('type_file');
@@ -359,7 +360,9 @@ window.onload = function() {
         story_content.style.display = 'block';
     }
     document.getElementById('add_panel').style.display = 'block';
-    document.getElementById('publish_panel').style.display = 'block';
+    publish_panel.style.display = (
+        (publish_panel.className === 'invisible') ? 'none' : 'block'
+    );
 
     // document.getElementById('type_file').onchange = add_img;
     document.getElementById('adds_block_t').onclick = save_text_story;

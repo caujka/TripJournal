@@ -2,6 +2,7 @@
 <html>
     <head>
         {% load staticfiles %}
+        {% load trip_journal_extras %}
         <meta charset="UTF-8">
         <title>{% block title %}{% endblock %}</title>
         {% block css %}
@@ -18,16 +19,18 @@
         <div id="menu">
             {% block menu %}
             <div><a href={% url 'home' %}>Main page</a></div>
-            <div><a href="{% url 'stories_near_by' %}">Stories near by</a></div>
+{#            <div><a href="{% url 'stories_near_by' %}">Stories near by</a></div>#}
             <div><a href="{% url 'pictures_near_by' %}">Pictures</a></div>
             {% if user and not user.is_anonymous %}
                 <div><a href="{% url 'user_stories' %}">My stories</a></div>
                 <div>
-                    <a href="{% url 'auth:logout' %}?next={{ request.path }}">Logout {{ user.username }}</a>
+                    <a href="{% url 'auth:logout' %}?next={% url 'home' %}">Logout {{ user.username }}</a>
                 </div>
             {% else %}
                 <div>
-                    <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}">Login with Google</a>
+                    <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request|login_next }}">Google</a>
+                    <a href="{% url 'social:begin' 'facebook' %}?next={{ request|login_next }}">Facebook</a>
+                    <a href="{% url 'social:begin' 'vk-oauth2' %}?next={{ request|login_next }}">VK</a>
                 </div>
             {% endif %}
             {% endblock %}

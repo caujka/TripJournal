@@ -29,7 +29,7 @@
         <div align="center">
         <span>
             {% if stories_list.has_previous %}
-                <a href="?page={{ stories_list.previous_page_number }}">Prev</a>
+                <a href="/pagination/?page={{ stories_list.previous_page_number }}">Prev</a>
             {% endif %}
 
             <span>
@@ -37,7 +37,7 @@
             </span>
 
             {% if stories_list.has_next %}
-                <a href="?page={{ stories_list.next_page_number }}">Next</a>
+                <a href="/pagination/?page={{ stories_list.next_page_number }}">Next</a>
             {% endif %}
         </span>
         </div>

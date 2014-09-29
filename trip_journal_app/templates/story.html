@@ -10,34 +10,32 @@
         <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false&libraries=drawing">
 </script>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
-        <script src="{% static "javascript/create.js" %}"></script>
+       
+	<script src="{% static "javascript/story.js" %}"></script>
     {% endblock %}
     {% block content %}
     <main>
-        <div id="map-canvas-wrapper">
-            <div id="map-canvas"></div>
-        </div>
-        <div id="story_content" class="block">
-            <div class="brd">
+    <div id="map-canvas-wrapper">
+        <div id="map-canvas"></div>
+    </div>
+    <div id="story_content" class="block">
+        <div class="brd">
             <div id="story_title" class="title"><h2>{{story.title}}</h2></div>
-	    <p class="author">Author: {{story.user}}</p>
-	    <p class="published">Published: {{story.date_publish}}</p>
-            {% for story_block in story_blocks %}
-	        {% if story_block.type == 'text' %}
-                    <div class="saved_text">
-		        <p>{{ story_block.content|safe }}</p>
-		    </div>
-                {% elif story_block.type == 'img' %}
-	            <div class="saved_img">
-                    <img src="{{ story_block.pic|get_stored_pic_by_size:800 }}">
-                    <p><a href="/story/addrating_to_pictures/?picture={{ story_block.pic.id }}&story={{story.id}}"><img src="{% static "like.jpg" %}" width="25px" height="25px"></a>{{ story_block.pic.rating_picture }}</p>
-		    </div>
-	        {% endif %}
-	    {% endfor %}
-            </div>
-        <p><a href="/story/addrating/{{ story.id }}/"><img src="{% static "like.jpg" %}" width="25px" height="25px"></a>{{ story.rating }}</p>
+            <p class="author">Author: {{story.user}}</p>
+            <p class="published">Published: {{story.date_publish}}</p>
+            {% include "story_content.html" with page="story" %}
         </div>
+            <p><a href="/story/addrating/{{ story.id }}/"><img src="{% static "like.jpg" %}" width="25px" height="25px"></a>{{ story.rating }}</p>
+    </div>
 
-      
+    <div id="user_buttons">
+        {% if user == story.user %}
+            <form action="{% url 'edit' story.id%}">
+                <input type="submit" value="Edit this story" />
+            </form>
+            {% include 'toggle_publish_buttons.html' with story_id=story.id %}
+
+        {% endif %}
+    </div>
     </main>
     {% endblock %}

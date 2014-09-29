@@ -11,13 +11,9 @@ urlpatterns = [
     # image uploads
     url(r'^upload/(?P<story_id>\d+)$', views.upload_img, name='upload_img'),
     # view story
-    url(r'^story/(?P<story_id>\d+)$', views.story, name='story'),
+    url(r'^story/(?P<story_id>\d*)$', views.story, name='story'),
     # list of user stories
     url(r'^my_stories/$', views.user_stories, name='user_stories'),
-    # list of near by stories
-    url(r'^stories_near_by/$', views.show_story_near_by_page, name='stories_near_by'),
-    # loging in user
-    #url(r'^search_stories_near_by/', views.search_story_near_by, name='search_stories_near_by'),
 
     url(r'^$', views.home, name='home'),
     # add likes to stories
@@ -26,5 +22,14 @@ urlpatterns = [
     url(r'^story/addrating_to_pictures/$', views.addrating_to_pictures, name='addrating_to_pictures'),
     # list of near by pictures
     url(r'^pictures_near_by/$', views.show_picture_near_by_page, name='pictures_near_by'),
-    url(r'^pagination/$', views.make_paging_for_story_search, name='make_paging_for_story_search'),
+    # list of nearby stories
+    #url(r'^stories_near_by/$', views.show_story_near_by_page,
+        #name='stories_near_by'),
+    #url(r'^search_stories_near_by/', views.search_story_near_by,
+    #    name='search_stories_near_by'),
+    url(r'^$', views.home, name='home'),
+    url(r'^publish/(?P<story_id>\d+)$', views.publish, name='publish'),
+    url(r'^pagination/', views.make_paging_for_story_search,
+        name='make_paging_for_story_search'),
+
 ]

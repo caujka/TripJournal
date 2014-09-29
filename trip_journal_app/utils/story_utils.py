@@ -8,12 +8,12 @@ def story_contents(request, story_id, template, check_user=False):
     # if story_id is empty rednders template without added text
     story_blocks = {}
     story = Story()
+    user = auth.get_user(request)
     # if story_id exists renders its content to story.html page
     if story_id:
         try:
             story = Story.objects.get(pk=int(story_id))
             if check_user:
-                user = auth.get_user(request)
                 if user != story.user:
                     messages.info(request, 'Edit your own stories!')
                     return redirect('/my_stories/')
@@ -28,6 +28,7 @@ def story_contents(request, story_id, template, check_user=False):
             return redirect('/my_stories/')
     context = {
         'story_blocks': story_blocks,
-        'story': story
+        'story': story,
+        'user': user,
     }
     return render(request, template, context)

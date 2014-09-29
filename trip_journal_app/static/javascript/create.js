@@ -106,7 +106,9 @@ function deleteBlock(itemstr) {
         block = document.getElementById("block_" + Blocks[poss]);
     block.parentNode.removeChild(block);
     Blocks.splice(poss, 1);
-    removeMark(BlockMarkers[poss]);
+    if(BlockMarkers[poss] !== null){
+        removeMark(BlockMarkers[poss]);
+    }
     BlockMarkers.splice(poss, 1);
     BlockTypes.splice(poss, 1);
     deleteImagesFromBlock(item);

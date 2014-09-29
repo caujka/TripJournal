@@ -80,10 +80,10 @@ def publish(request, story_id):
     story = get_object_or_404(Story, pk=int(story_id))
     if user != story.user:
         return HttpResponse('Unathorized', status=401)
-    assert request.body in ('true', 'false')
-    story.published = (request.body == 'true')
+    assert request.POST['publish'] in (u'True', u'False')
+    story.published = (request.POST['publish'] == 'False')
     story.save()
-    return HttpResponse('/story/%s' % story_id)
+    return redirect('/story/%s' % story_id)
 
 
 @login_required
@@ -109,7 +109,7 @@ def story(request, story_id):
     if story_id:
         return story_contents(request, story_id, 'story.html')
     else:
-	return redirect('/')
+        return redirect('/')
 
 
 @login_required

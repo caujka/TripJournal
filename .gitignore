@@ -61,6 +61,6 @@ local_settings.py
 # temporal files
 *~
 .idea
-google_client_secrets.json
-facebook_client_secrets.json
-vk_client_secrets.json
+
+client_secrets
+

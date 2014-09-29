@@ -23,29 +23,18 @@
     </div>
 
     <main>
-        <div id="story_content" class="block">
-            {% if not story.title %}
-            <div id="title_panel" class="block hide">
-                <input id="title" type="text" name="title_story" class="text_story" placeholder="+ Title of story">
-                <button id="add_title" class="button_2">+</button>
-            </div>
-            {% endif %}
-
-            <h2 id="story_title" contenteditable="true">{{story.title}}</h2>
-
-            {% for story_block in story_blocks %}
-	        {% if story_block.type == 'text' %}
-                    <div class="saved text">
-		        <p>{{ story_block.content|safe }}</p>
-		    </div>
-                {% elif story_block.type == 'img' %}
-	            <div class="saved img">
-		        <p>{{ story_block.pic|get_stored_pic_by_size:800 }}</p>
-                <p style="display:none;">{{story_block.id}}</p>
-		    </div>
-	        {% endif %}
-	    {% endfor %}
+    <div id="story_content" class="block">
+        {% if not story.title %}
+        <div id="title_panel" class="block hide">
+            <input id="title" type="text" name="title_story" class="text_story" placeholder="+ Title of story">
+            <button id="add_title" class="button_2">+</button>
         </div>
+        {% endif %}
+
+        <h2 id="story_title" contenteditable="true">{{story.title}}</h2>
+
+        {% include 'story_content.html' with page="edit" %}
+    </div>
 
         <div id="text_panel" class="block hide" >
             <textarea id="textarea" name="text" class="element_story" placeholder="+ Text to story"></textarea>
@@ -103,11 +92,20 @@
                 <span class="block_title">video</span>
             </div>
         </div>
-
+ 
+        {% if story.id %}
         <div id="publish_panel" class="block">
-            <button id="view" class="button">view</button>
-            <button id="publish" class="button" onClick="togglePublish('true')">Publish</button>
-            <button id="unpublish" class="button" onClick="togglePublish('false')">Unpublish</button>
+           <form id="view_form" action="{% url "story" story.id %}">
+                <input type="submit" value="view" class="button" id="view">
+            </form>
+            {% include 'toggle_publish_buttons.html' with story_id=story.id %}
+        {% else %}
+        <div id="publish_panel" class="invisible">
+           <form id="view_form" action="{% url "story" "0" %}">
+                <input type="submit" value='view' class="button" id="view">
+            </form>
+            {% include 'toggle_publish_buttons.html' with story_id=0 %}
+        {% endif %}
         </div>
     </main>
     {% endblock %}

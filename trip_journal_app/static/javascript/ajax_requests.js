@@ -31,9 +31,11 @@ function storyBlocksJson() {
 
     for (i = 0; i < Blocks.length; ++i) {
         type = BlockTypes[i];
+	marker = getMarkerLocation(i);
         htmlBlock = document.getElementById('contentarea_' + (Blocks[i]));
         block = {
-            'type': type
+            'type': type,
+	    'marker' : marker
         };
         if (type === 'text') {
             block.content = htmlBlock.children[0].innerHTML;
@@ -88,20 +90,26 @@ function postData(async){
         requestBody = JSON.stringify(storyBlocksJson());
 
     /**
-     * Appends story id to page url 
+     * Appends story id to page url and urls form publsih panel
+     * and makes publish panel visble
      * if request was sent from /edit/ page.
      */
-    function addStoryIdToUrl() {
+    function addStoryIdToUrls() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var newId = xhr.responseText;
             if (!document.URL.endsWith(newId)) {
                 window.history.pushState(
                     'new_id', 'Title', '/edit/' + newId
                 );
+                var publish_panel = document.getElementById('publish_panel');
+                publish_panel.className = 'block';
+                publish_panel.style.display = 'block';
+                document.getElementById('publish_form').action = '/publish/' + newId;
+                document.getElementById('view_form').action = '/story/' + newId;
             }
         }
     }
-    xhr.onreadystatechange = addStoryIdToUrl;
+    xhr.onreadystatechange = addStoryIdToUrls;
     xhr.open('POST', '/save/' + storyIdFromUrl(), async);
     xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
     xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');
@@ -109,21 +117,6 @@ function postData(async){
     xhr.send(requestBody);
 }
 
-function togglePublish(published) {
-    var xhr = new XMLHttpRequest();
-
-    function goToViewPage() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            window.location.href = xhr.responseText;
-        }
-    }
-    xhr.open('POST', '/publish/' + storyIdFromUrl());
-    xhr.onreadystatechange = goToViewPage;
-    xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-    xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');
-    xhr.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8');
-    xhr.send(published);
-}
 
 function savePage() {
     if (storyIdFromUrl().length === 0) postData(false);

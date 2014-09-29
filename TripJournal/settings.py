@@ -135,3 +135,4 @@ SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET = (
     client_key_and_secret(CLIENT_SECRETS_DIR, 'vk')
 )
 
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'

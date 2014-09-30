@@ -12,7 +12,7 @@ function add_markers() {
 
     for (i = 0; i < blocks.length; i++) {
         block = blocks[i];
-        marker = block.children[0].innerHTML;
+        marker = block.children[1].innerHTML;
         appendBlockMarker(marker);
     }
 }

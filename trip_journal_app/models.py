@@ -21,9 +21,9 @@ class Story(models.Model):
     date_publish = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
     track = models.TextField(blank=True, null=True)
-    rating = models.IntegerField(default=0)
+    rating = models.ManyToManyField(User)
     published = models.BooleanField(default=False)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, related_name='owner')
     tags = models.ManyToManyField(Tag)
 
     def __unicode__(self):
@@ -92,11 +92,17 @@ class Story(models.Model):
         list_of_stories.sort(key = lambda k: k['distance'])
         return list_of_stories
 
+    def likes_count(self):
+        return self.rating.count()
+
+
 
 class Picture(models.Model):
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
+    rating_picture = models.IntegerField(default=0)
     story = models.ForeignKey(Story)
+    rating = models.IntegerField(default=0)
     SIZES = IMAGE_SIZES
 
     def __unicode__(self):
@@ -129,8 +135,8 @@ class Picture(models.Model):
         and writes them to path defined in Stored_picture class.
         '''
         # check if Pictures directory exists
-        if not os.path.exists(Stored_picture.SAVE_PATH):
-            os.makedirs(Stored_picture.SAVE_PATH)
+        if not os.path.exists(Stored_picture.STORAGE):
+            os.makedirs(Stored_picture.STORAGE)
 
         # temporary storing file
         img_name = image.name
@@ -141,7 +147,7 @@ class Picture(models.Model):
 
         # resizing original image
         names_and_sizes = resize_and_save_pics(
-            file_name, str(self.id), self.SIZES, Stored_picture.SAVE_PATH
+            file_name, str(self.id), self.SIZES, Stored_picture.STORAGE
         )
         for name, size in names_and_sizes:
             stored_pic = Stored_picture(picture=self, size=size)
@@ -151,13 +157,43 @@ class Picture(models.Model):
         # delete temp file
         os.remove(file_name)
 
+    @classmethod
+    def get_sorted_picture_list(cls, latitude, longitude):
+        pictures = cls.objects.all()
+        list_of_pictures = []
+        req = 'SELECT (POWER(latitude - %f, 2) + POWER(longitude - %f, 2)) as distance, id, latitude, longitude'
+        ' from trip_journal_app_picture ORDER BY distance;' % (latitude, longitude)
+        for pic in Picture.objects.raw():
+            list_of_pictures.append(pic)
+
+
+
+
+        # for pic in pictures:
+        #     coordinates = []
+        #     distance = []
+        #     pictures = Picture.objects.filter(picture_id=pic.id)
+        #     for picture in pictures:
+        #         if picture.latitude and picture.longitude:
+        #             coordinates.append([float(picture.latitude), float(picture.longitude)])
+        #     if coordinates:
+        #         for coordinate in coordinates:
+        #             dist = math.sqrt((latitude - coordinate[0])**2 + (longitude - coordinate[1])**2)
+        #             distance.append(dist)
+        #         list_of_pictures.append({'story': pic, 'distance': min(distance)})
+        #list_of_pictures.sort(key = lambda k: k['distance'])
+        return list_of_pictures
+
 
 class Stored_picture(models.Model):
     picture = models.ForeignKey(Picture)
     size = models.IntegerField()
     _url = models.CharField(max_length=2000)
-    SAVE_PATH = IMG_STORAGE
+    STORAGE = IMG_STORAGE
     URL_PREFIX = STORED_IMG_DOMAIN
+
+    def __unicode__(self):
+        return self.url
 
     @property
     def url(self):
@@ -166,9 +202,6 @@ class Stored_picture(models.Model):
     @url.setter
     def url(self, value):
         self._url = value
-
-    def __unicode__(self):
-        return self.url
 
 
 class Comment(models.Model):

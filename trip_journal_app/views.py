@@ -3,20 +3,20 @@ import datetime
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.context_processors import csrf
-from django.http import HttpResponse
+from django.core.urlresolvers import reverse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponse, Http404
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from django.contrib.sessions.backends.db import SessionStore
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
+from django.template.context import RequestContext
+from django.core.exceptions import ObjectDoesNotExist
 
 from trip_journal_app.models import Story, Picture
 from trip_journal_app.forms import UploadFileForm
 from trip_journal_app.utils.story_utils import story_contents
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
-from django.template.context import RequestContext
-
-from django.contrib.sessions.backends.db import SessionStore
 
 
 def home(request):
@@ -141,22 +141,23 @@ def show_story_near_by_page(request):
         request, 'stories_near_by.html')
 
 
-def search_story_near_by(request):
+def pictures_near_by(request):
     stor = csrf(request)
     if request.method == 'GET':
         x = float(request.GET.get('latitude', ''))
         y = float(request.GET.get('longitude', ''))
         sess = SessionStore()
-        sess['story_list'] = Story.get_sorted_story_list(x, y)
+        sess['picture_list'] = Picture.get_sorted_picture_list(x, y)
         sess.save()
         response = redirect('/pagination/')
         response.set_cookie('pagination', sess.session_key)
         return response
 
+
 def make_paging_for_story_search(request):
     sess_key = request.COOKIES['pagination']
     sess = SessionStore(session_key=sess_key)
-    list_of_stories = sess['story_list']
+    list_of_stories = sess['picture_list']
     paginator = Paginator(list_of_stories, 1)
     page = request.GET.get('page')
     try:
@@ -167,5 +168,71 @@ def make_paging_for_story_search(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         stories = paginator.page(paginator.num_pages)
-    return render(request, 'stories_near_by.html', {'stories_list': stories})
+
+    return render(request, 'pictures_near_by.html', {'picture_list': stories})
+
+
+@login_required
+def addrating(request, story_id):
+    story = get_object_or_404(Story, pk=int(story_id))
+    user = auth.get_user(request)
+    story.rating.add(user)
+    story.save()
+    return redirect('/story/' + str(story_id))
+
+
+def addrating_to_pictures(request):
+    story_id = request.GET['story']
+    picture_id = request.GET['picture']
+    try:
+        if picture_id in request.COOKIES:
+            redirect('/story/' + str(story_id))
+        else:
+            picture = Picture.objects.get(pk=int(picture_id))
+            picture.rating_picture += 1
+            picture.save()
+            response = redirect('/story/' + str(story_id))
+            response.set_cookie(picture_id, 'like_picture')
+            return response
+    except ObjectDoesNotExist:
+        raise Http404
+    return redirect('/story/' + str(story_id))
+
+
+def show_picture_near_by_page(request):
+    """
+    Search pictures near by page
+    """
+    return render(
+        request, 'pictures_near_by.html')
+
+# def search_picture_near_by(request):
+#     pict = csrf(request)
+#     if request.method == 'GET':
+#         x = float(request.GET.get('latitude', ''))
+#         y = float(request.GET.get('longitude', ''))
+#         list_of_pictures = Picture.get_sorted_picture_list(x, y)
+#         paginator = Paginator(list_of_pictures, 3)
+#         page = request.GET.get('page')
+#         try:
+#             pictures = paginator.page(page)
+#         except PageNotAnInteger:
+#             # If page is not an integer, deliver first page.
+#             pictures = paginator.page(1)
+#         except EmptyPage:
+#             # If page is out of range (e.g. 9999), deliver last page of results.
+#             pictures = paginator.page(paginator.num_pages)
+#         print list_of_pictures
+#         return render(request, 'pictures_near_by.html', {'pictures_list': pictures})
+
+
+@login_required
+@require_POST
+def delete(request, story_id):
+    story = get_object_or_404(Story, pk=int(story_id))
+    user = auth.get_user(request)
+    if user != story.user:
+        return HttpResponse('Unathorized', status=401)
+    story.delete()
+    return redirect(reverse('user_stories'))
 

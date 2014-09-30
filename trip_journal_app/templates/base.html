@@ -19,7 +19,8 @@
         <div id="menu">
             {% block menu %}
             <div><a href={% url 'home' %}>Main page</a></div>
-            <div><a href="{% url 'stories_near_by' %}">Stories near by</a></div>
+{#            <div><a href="{% url 'stories_near_by' %}">Stories near by</a></div>#}
+            <div><a href="{% url 'pictures_near_by' %}">Pictures</a></div>
             {% if user and not user.is_anonymous %}
                 <div><a href="{% url 'user_stories' %}">My stories</a></div>
                 <div>

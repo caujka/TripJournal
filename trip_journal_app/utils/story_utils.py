@@ -32,3 +32,4 @@ def story_contents(request, story_id, template, check_user=False):
         'user': user,
     }
     return render(request, template, context)
+

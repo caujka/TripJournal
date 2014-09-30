@@ -95,6 +95,13 @@ class Story(models.Model):
     def likes_count(self):
         return self.rating.count()
 
+    def first_text(self):
+        return next((block for block in self.get_text_with_pic_objects()
+                    if block['type'] == 'text'), None)
+
+    def first_img(self):
+        return next((block for block in self.get_text_with_pic_objects()
+                    if block['type'] == 'img'), None)
 
 
 class Picture(models.Model):

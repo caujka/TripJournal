@@ -50,7 +50,7 @@ function appendBlock(story, blockContent, block_type, saved) {
             ['edit', 'editBlock'],
             ['delete', 'deleteBlock'],
             ['addmarker', 'setactivemarker'],
-            ['removemarker', 'removeBlockMark'],
+            ['removemarker', 'removeBlockMark']
         ];
 
     function create_button(button_name_and_func) {

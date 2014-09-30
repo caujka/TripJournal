@@ -181,22 +181,28 @@ def addrating(request, story_id):
     return redirect('/story/' + str(story_id))
 
 
-def addrating_to_pictures(request):
-    story_id = request.GET['story']
-    picture_id = request.GET['picture']
-    try:
-        if picture_id in request.COOKIES:
-            redirect('/story/' + str(story_id))
-        else:
-            picture = Picture.objects.get(pk=int(picture_id))
-            picture.rating_picture += 1
-            picture.save()
-            response = redirect('/story/' + str(story_id))
-            response.set_cookie(picture_id, 'like_picture')
-            return response
-    except ObjectDoesNotExist:
-        raise Http404
+@login_required
+def addrating_to_pictures(request, story_id, picture_id):
+    # story_id = request.GET['story']
+    # picture_id = request.GET['picture']
+    pic = get_object_or_404(Picture, pk=int(picture_id))
+    user = auth.get_user(request)
+    pic.likes.add(user)
+    pic.save()
     return redirect('/story/' + str(story_id))
+    # try:
+    #     if picture_id in request.COOKIES:
+    #         redirect('/story/' + str(story_id))
+    #     else:
+    #         picture = Picture.objects.get(pk=int(picture_id))
+    #         picture.rating_picture += 1
+    #         picture.save()
+    #         response = redirect('/story/' + str(story_id))
+    #         response.set_cookie(picture_id, 'like_picture')
+    #         return response
+    # except ObjectDoesNotExist:
+    #     raise Http404
+    #return redirect('/story/' + str(story_id))
 
 
 def show_picture_near_by_page(request):

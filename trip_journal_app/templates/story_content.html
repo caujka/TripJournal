@@ -10,7 +10,7 @@
 <div class="saved img">
     {% if page == 'story' %}
     <img src="{{ story_block.pic|get_stored_pic_by_size:800 }}">
-        <p><a href="/story/addrating_to_pictures/?picture={{ story_block.pic.id }}&story={{story.id}}"><img src="{% static "like.jpg" %}" width="25px" height="25px"></a>{{ story_block.pic.rating_picture }}</p>
+        <p><a href="/story/addrating_to_pictures/?picture={{ story_block.pic.id }}&story={{story.id}}"><img src="{% static "like.jpg" %}" width="25px" height="25px"></a>{{ story_block.pic.likes_picture_count }}</p>
     {% elif page == 'edit' %}
     <p>{{ story_block.pic|get_stored_pic_by_size:800 }}</p>
     <p style="display:none;">{{story_block.id}}</p>

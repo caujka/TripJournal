@@ -107,10 +107,14 @@ class Story(models.Model):
 class Picture(models.Model):
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
-    rating_picture = models.IntegerField(default=0)
     story = models.ForeignKey(Story)
-    rating = models.IntegerField(default=0)
+    #rating = models.ManyToManyField(User)
+    likes = models.ManyToManyField(User)
+    #user = models.ForeignKey(User, verbose_name='owner')
     SIZES = IMAGE_SIZES
+
+    def likes_picture_count(self):
+        return self.likes.count()
 
     def __unicode__(self):
         return str(self.id)

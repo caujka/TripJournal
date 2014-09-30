@@ -192,9 +192,9 @@ def addrating(request, story_id):
 
 
 @login_required
-def addrating_to_pictures(request, story_id, picture_id):
-    # story_id = request.GET['story']
-    # picture_id = request.GET['picture']
+def addrating_to_pictures(request):
+    story_id = request.GET['story']
+    picture_id = request.GET['picture']
     pic = get_object_or_404(Picture, pk=int(picture_id))
     user = auth.get_user(request)
     pic.likes.add(user)

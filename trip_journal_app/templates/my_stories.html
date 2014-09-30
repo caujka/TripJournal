@@ -8,28 +8,30 @@
 {% block title %}My stories{% endblock %}
 {% block content %}
     <h3>Your stories</h3>
-    <a href="{% url "edit" '' %}">Create new story</a>
+    <p><a href="{% url "edit" '' %}">Create new story</a></p>
 
-    {% for story in stories %}
-        <div class="story_block">
-            <div class="story_preview">
-                <div class="img_block">
-                {% if story.first_img %}
-                    <img src="{{ story.first_img.pic|get_stored_pic_by_size:400 }}">
-                {% endif %}
+    <div id="stories">
+        {% for story in stories %}
+            <div class="story_block">
+                <div class="story_preview">
+                    <div class="img_block">
+                    {% if story.first_img %}
+                        <img src="{{ story.first_img.pic|get_stored_pic_by_size:400 }}">
+                    {% endif %}
+                    </div>
+                    <div class="title_block">
+                        <a href="{% url "story" story.id %}">{{ story.title }}</a></td>
+                    </div>
                 </div>
-                <div class="title_block">
-                    <a href="{% url "story" story.id %}">{{ story.title }}</a></td>
+                <div class="story_buttons">
+                    <a href="{% url "edit" story.id %}">Edit</a></td>
+                    <form method="POST" action="{% url "delete" story.id %}">
+                        {% csrf_token %}
+                        <input type="submit" value="delete">
+                        {% include "toggle_publish_buttons.html" with story_id=story.id %}
+                    </form>
                 </div>
             </div>
-            <div class="story_buttons">
-                <a href="{% url "edit" story.id %}">Edit</a></td>
-                <form method="POST" action="{% url "delete" story.id %}">
-                    {% csrf_token %}
-                    <input type="submit" value="delete">
-                    {% include "toggle_publish_buttons.html" with story_id=story.id %}
-                </form>
-            </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
 {% endblock %}

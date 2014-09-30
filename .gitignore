@@ -61,6 +61,5 @@ local_settings.py
 # temporal files
 *~
 .idea
-
 client_secrets
 

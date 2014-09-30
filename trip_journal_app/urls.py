@@ -24,10 +24,10 @@ urlpatterns = [
     url(r'^pictures_near_by/$', views.show_picture_near_by_page,
         name='pictures_near_by'),
     # list of nearby stories
-    # url(r'^stories_near_by/$', views.show_story_near_by_page,
-    #     name='stories_near_by'),
-    # url(r'^search_stories_near_by/', views.search_story_near_by,
-    #     name='search_stories_near_by'),
+    url(r'^stories_near_by/$', views.show_story_near_by_page,
+        name='stories_near_by'),
+    url(r'^search_items_near_by/', views.search_items_near_by,
+         name='search_items_near_by'),
     url(r'^$', views.home, name='home'),
     # toggling publish state for story
     url(r'^publish/(?P<story_id>\d+)$', views.publish, name='publish'),

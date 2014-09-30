@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Stories near the place{% endblock %}
+
+{% block content %}
+    <h3>Her you can search stories near the place</h3>
+    <form action="/search_stories_near_by/" method="get">
+        {% csrf_token %}
+        Enter Latitude: <br>
+        <input type="text" name="latitude" id="latitude" required><br>
+        Enter Longitude:<br>
+        <input type="text" name="longitude" id="longitude" required>
+        <input type="hidden" name="type" value="{{ type }}">
+        <input type="submit" value="Search">
+    </form>
+    {% if items_list %}
+        <ul>
+        {% for item in items_list %}
+            {% if item.story.id %}
+                <li>
+                    <div style="display: inline-block">
+                    <div style="width:450px">
+                        <a href="{% url "story" item.story.id %}">{{ item.story.title }}</a>
+                    </div>
+                    <div style="width:50px">{{ item.story.user }}</div>
+                    <div style="width:150px">{{ item.story.date_publish|date }}</div>
+                    </div>
+                </li>
+            {% elif item.picture.id %}
+                <li>
+                    <div style="display: inline-block">
+                    <div style="width:450px">
+                        <a href="{% url "picture" picture.picture.id %}"></a>
+                    </div>
+                    </div>
+                </li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+
+        <div align="center">
+        <span>
+            {% if items_list.has_previous %}
+                <a href="/pagination/?page={{ items_list.previous_page_number }}">Prev</a>
+            {% endif %}
+
+            <span>
+                {{ items_list.number }} of {{ items_list.paginator.num_pages }}
+            </span>
+
+            {% if items_list.has_next %}
+                <a href="/pagination/?page={{ items_list.next_page_number }}">Next</a>
+            {% endif %}
+        </span>
+        </div>
+    {% endif %}
+
+{% endblock %}

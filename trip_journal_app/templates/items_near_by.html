@@ -13,10 +13,8 @@
         <input type="submit" value="Search">
     </form>
     {% if items_list %}
-        <ul>
         {% if item_type == 'story' %}
             {% for item in items_list %}
-                <li>
                     <div style="display: inline-block">
                     <div style="width:450px">
                         <a href="{% url "story" item.story.id %}">{{ item.story.title }}</a>
@@ -24,18 +22,14 @@
                     <div style="width:50px">{{ item.story.user }}</div>
                     <div style="width:150px">{{ item.story.date_publish|date }}</div>
                     </div>
-                </li>
             {% endfor %}   
         {% elif item_type == 'picture' %}
             {% for item in items_list %}
-                <li>
                     <div style="width:450px">
-                        <p>ksjfgvhrwlghrew;</p>
+                        <img src="{{ item|get_stored_pic_by_size:400 }}">
                     </div>
-                </li>
             {% endfor %}
         {% endif %}
-        </ul>
 
         <div align="center">
         <span>

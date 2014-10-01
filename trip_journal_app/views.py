@@ -165,7 +165,7 @@ def search_items_near_by(request):
         return response
 
 
-def make_paging_for_story_search(request):
+def make_paging_for_items_search(request):
     sess_key = request.COOKIES['pagination']
     sess = SessionStore(session_key=sess_key)
     list_of_items = sess['items_list']

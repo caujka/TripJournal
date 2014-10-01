@@ -32,7 +32,7 @@ urlpatterns = [
     # toggling publish state for story
     url(r'^publish/(?P<story_id>\d+)$', views.publish, name='publish'),
     url(r'^delete/(?P<story_id>\d+)$', views.delete, name='delete'),
-    url(r'^pagination/', views.make_paging_for_story_search,
-        name='make_paging_for_story_search'),
+    url(r'^pagination/', views.make_paging_for_items_search,
+        name='make_paging_for_items_search'),
 ]
 

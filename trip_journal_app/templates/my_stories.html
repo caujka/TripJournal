@@ -28,8 +28,8 @@
                     <form method="POST" action="{% url "delete" story.id %}">
                         {% csrf_token %}
                         <input type="submit" value="delete">
-                        {% include "toggle_publish_buttons.html" with story_id=story.id %}
                     </form>
+                    {% include "toggle_publish_buttons.html" with story_id=story.id %}
                 </div>
             </div>
         {% endfor %}

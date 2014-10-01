@@ -1,0 +1,27 @@
+div {
+    /*border: black solid thin;*/
+}
+
+#stories{
+    margin-left: auto;
+    margin-right: auto;
+    width: 830px;
+}
+
+.story_block {
+    background-color: #F5F5F5;
+}
+
+.story_block {
+    display: inline-block;
+}
+
+.img_block {
+    width: 200px;
+    height: 150px;
+    overflow: hidden;
+}
+
+.img_block img {
+    width: 200px;
+}

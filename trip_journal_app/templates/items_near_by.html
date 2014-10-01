@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
+{% load trip_journal_extras %}
 {% block title %}Stories near the place{% endblock %}
 
 {% block content %}
-    <h3>Her you can search stories near the place</h3>
+    <h3>Here you can search stories near the place</h3>
     <form action="/search_items_near_by/" method="get">
         Enter Latitude: <br>
         <input type="text" name="latitude" id="latitude" required><br>
@@ -12,10 +13,8 @@
         <input type="submit" value="Search">
     </form>
     {% if items_list %}
-        <ul>
-        {% for item in items_list %}
-            {% if item.story.id %}
-                <li>
+        {% if item_type == 'story' %}
+            {% for item in items_list %}
                     <div style="display: inline-block">
                     <div style="width:450px">
                         <a href="{% url "story" item.story.id %}">{{ item.story.title }}</a>
@@ -23,18 +22,14 @@
                     <div style="width:50px">{{ item.story.user }}</div>
                     <div style="width:150px">{{ item.story.date_publish|date }}</div>
                     </div>
-                </li>
-            {% elif item.picture.id %}
-                <li>
-                    <div style="display: inline-block">
+            {% endfor %}   
+        {% elif item_type == 'picture' %}
+            {% for item in items_list %}
                     <div style="width:450px">
-                        <a href="{% url "picture" picture.picture.id %}"></a>
+                        <img src="{{ item|get_stored_pic_by_size:400 }}">
                     </div>
-                    </div>
-                </li>
-            {% endif %}
-        {% endfor %}
-        </ul>
+            {% endfor %}
+        {% endif %}
 
         <div align="center">
         <span>

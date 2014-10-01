@@ -3,13 +3,12 @@
 
 {% block content %}
     <h3>Her you can search stories near the place</h3>
-    <form action="/search_stories_near_by/" method="get">
-        {% csrf_token %}
+    <form action="/search_items_near_by/" method="get">
         Enter Latitude: <br>
         <input type="text" name="latitude" id="latitude" required><br>
         Enter Longitude:<br>
         <input type="text" name="longitude" id="longitude" required>
-        <input type="hidden" name="type" value="{{ type }}">
+        <input type="hidden" name="item_type" value="{{ item_type }}">
         <input type="submit" value="Search">
     </form>
     {% if items_list %}

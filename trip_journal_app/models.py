@@ -101,9 +101,7 @@ class Picture(models.Model):
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     story = models.ForeignKey(Story)
-    #rating = models.ManyToManyField(User)
     likes = models.ManyToManyField(User)
-    #user = models.ForeignKey(User, verbose_name='owner')
     SIZES = IMAGE_SIZES
 
     def likes_picture_count(self):
@@ -166,26 +164,9 @@ class Picture(models.Model):
         pictures = cls.objects.all()
         list_of_pictures = []
         req = 'SELECT (POWER(latitude - %f, 2) + POWER(longitude - %f, 2)) as distance, id, latitude, longitude'
-        ' from trip_journal_app_picture ORDER BY distance;' % (latitude, longitude)
-        for pic in Picture.objects.raw():
+        ' from trip_journal_app_picture WHERE latitude IS NOT NULL AND longitude IS NOT NULL ORDER BY distance;' % (latitude, longitude)
+        for pic in Picture.objects.raw(req):
             list_of_pictures.append(pic)
-
-
-
-
-        # for pic in pictures:
-        #     coordinates = []
-        #     distance = []
-        #     pictures = Picture.objects.filter(picture_id=pic.id)
-        #     for picture in pictures:
-        #         if picture.latitude and picture.longitude:
-        #             coordinates.append([float(picture.latitude), float(picture.longitude)])
-        #     if coordinates:
-        #         for coordinate in coordinates:
-        #             dist = math.sqrt((latitude - coordinate[0])**2 + (longitude - coordinate[1])**2)
-        #             distance.append(dist)
-        #         list_of_pictures.append({'story': pic, 'distance': min(distance)})
-        #list_of_pictures.sort(key = lambda k: k['distance'])
         return list_of_pictures
 
 

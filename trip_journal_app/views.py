@@ -154,14 +154,15 @@ def search_items_near_by(request):
         x = float(request.GET.get('latitude', ''))
         y = float(request.GET.get('longitude', ''))
         sess = SessionStore()
-        if request.GET.get('item_type','') == 'picture':
-            sess['items_list'] = Picture.get_sorted_picture_list(x, y)
+        if request.GET.get('item_type','') == u'picture':
+            sess['items_list'] = {'item_type': 'picture', 'items': Picture.get_sorted_picture_list(x, y)}
             sess.save()
-        elif request.GET.get('item_type','') == 'story':
-            sess['items_list'] = Story.get_sorted_stories_list(x, y)
+        elif request.GET.get('item_type','') == u'story':
+            sess['items_list'] = {'item_type': 'story', 'items': Story.get_sorted_stories_list(x, y)}
             sess.save()
         response = redirect('/pagination/')
         response.set_cookie('pagination', sess.session_key)
+        print list(sess['items_list']['items'])
         return response
 
 
@@ -169,7 +170,7 @@ def make_paging_for_items_search(request):
     sess_key = request.COOKIES['pagination']
     sess = SessionStore(session_key=sess_key)
     list_of_items = sess['items_list']
-    paginator = Paginator(list_of_items, 1)
+    paginator = Paginator(list_of_items['items'], 1)
     page = request.GET.get('page')
     try:
         items = paginator.page(page)
@@ -179,7 +180,7 @@ def make_paging_for_items_search(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         items = paginator.page(paginator.num_pages)
-    return render(request, 'items_near_by.html', {'items_list': items})
+    return render(request, 'items_near_by.html', {'items_list': items, 'item_type': list_of_items['item_type']})
 
 
 @login_required

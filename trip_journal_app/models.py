@@ -69,6 +69,10 @@ class Story(models.Model):
                 block[u'pic'] = Picture.objects.get(pk=int(block[u'id']))
         return text
 
+#         req = 'SELECT (POWER(latitude - %f, 2) + POWER(longitude - %f, 2)) as distance, id, latitude, longitude from trip_journal_app_picture WHERE latitude IS NOT NULL AND longitude IS NOT NULL ORDER BY distance;' % (latitude, longitude)
+#         list_of_pictures = list(Picture.objects.raw(req))
+#         return list_of_pictu
+
     @classmethod
     def get_sorted_stories_list(cls, latitude, longitude):
         stories = cls.objects.all()
@@ -161,11 +165,8 @@ class Picture(models.Model):
 
     @classmethod
     def get_sorted_picture_list(cls, latitude, longitude):
-        pictures = cls.objects.all()
-        list_of_pictures = []
         req = 'SELECT (POWER(latitude - %f, 2) + POWER(longitude - %f, 2)) as distance, id, latitude, longitude from trip_journal_app_picture WHERE latitude IS NOT NULL AND longitude IS NOT NULL ORDER BY distance;' % (latitude, longitude)
-        for pic in Picture.objects.raw(req):
-            list_of_pictures.append(pic)
+        list_of_pictures = list(Picture.objects.raw(req))
         return list_of_pictures
 
 

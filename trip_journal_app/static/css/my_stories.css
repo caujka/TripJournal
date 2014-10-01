@@ -2,18 +2,15 @@ div {
     /*border: black solid thin;*/
 }
 
-#stories{
-    margin-left: auto;
-    margin-right: auto;
-    width: 830px;
-}
-
 .story_block {
     background-color: #F5F5F5;
+    vertical-align: top;
 }
 
 .story_block {
     display: inline-block;
+    margin-bottom: 10px;
+    margin-left: 10px;
 }
 
 .img_block {
@@ -24,4 +21,52 @@ div {
 
 .img_block img {
     width: 200px;
+}
+
+.title_block {
+    width: 200px;
+    height: 70px;
+}
+
+.title_block p {
+    padding: 10px;
+    margin: 0px;
+}
+
+.title_block a {
+    text-decoration: none;
+    font-size: 1.1em;
+    color: #AE3C3C;
+}
+
+.story_likes {
+    color: #B3B3B3;
+}
+
+.story_likes img {
+    width: 15px;
+    padding: 5px 5px 0px 10px;
+}
+
+.story_likes p {
+    margin: 0;
+}
+
+.story_buttons a, input {
+    display: block;
+    font-size: 1em;
+    font-weight: normal;
+    text-align: center;
+    height: 30px;
+    background-color: #F2F2F2;
+    width: 100%;
+    border: 0;
+    border-top: thin solid #E6E6E6;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: gray;
+}
+
+.story_buttons a:hover, input:hover {
+    background-color: white;
 }

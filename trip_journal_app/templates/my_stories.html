@@ -19,12 +19,21 @@
                         <img src="{{ story.first_img.pic|get_stored_pic_by_size:400 }}">
                     {% endif %}
                     </div>
+                    <div class="story_likes">
+                        <p>
+                        <img src="{% static "images/heart.svg" %}">{{ story.likes_count }}
+                        </p>
+                    </div>
                     <div class="title_block">
-                        <a href="{% url "story" story.id %}">{{ story.title }}</a></td>
+                        <p>
+                        <a href="{% url "story" story.id %}">{{ story.title }}</a>
+                        </p>
                     </div>
                 </div>
                 <div class="story_buttons">
-                    <a href="{% url "edit" story.id %}">Edit</a></td>
+                    <div>
+                        <a href="{% url "edit" story.id %}">Edit</a>
+                    </div>
                     <form method="POST" action="{% url "delete" story.id %}">
                         {% csrf_token %}
                         <input type="submit" value="delete">

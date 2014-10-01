@@ -114,7 +114,7 @@ def show_story_near_by_page(request):
     Search stories near by page
     """
     return render(
-        request, 'items_near_by.html', {item_type: 'story'})
+        request, 'items_near_by.html', {'item_type': 'story'})
 
 
 def show_picture_near_by_page(request):
@@ -122,7 +122,7 @@ def show_picture_near_by_page(request):
     Search pictures near by page
     """
     return render(
-        request, 'items_near_by.html', {item_type: 'picture'})
+        request, 'items_near_by.html', {'item_type': 'picture'})
 
 
 def search_items_near_by(request):
@@ -141,7 +141,7 @@ def search_items_near_by(request):
         return response
 
 
-def make_paging_for_story_search(request):
+def make_paging_for_items_search(request):
     sess_key = request.COOKIES['pagination']
     sess = SessionStore(session_key=sess_key)
     list_of_items = sess['items_list']
@@ -176,19 +176,6 @@ def addrating_to_pictures(request):
     pic.likes.add(user)
     pic.save()
     return redirect('/story/' + str(story_id))
-    # try:
-    #     if picture_id in request.COOKIES:
-    #         redirect('/story/' + str(story_id))
-    #     else:
-    #         picture = Picture.objects.get(pk=int(picture_id))
-    #         picture.rating_picture += 1
-    #         picture.save()
-    #         response = redirect('/story/' + str(story_id))
-    #         response.set_cookie(picture_id, 'like_picture')
-    #         return response
-    # except ObjectDoesNotExist:
-    #     raise Http404
-    #return redirect('/story/' + str(story_id))
 
 
 @login_required

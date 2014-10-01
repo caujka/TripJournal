@@ -175,8 +175,8 @@ class Picture(models.Model):
         pictures = cls.objects.all()
         list_of_pictures = []
         req = 'SELECT (POWER(latitude - %f, 2) + POWER(longitude - %f, 2)) as distance, id, latitude, longitude'
-        ' from trip_journal_app_picture ORDER BY distance;' % (latitude, longitude)
-        for pic in Picture.objects.raw():
+        ' from trip_journal_app_picture WHERE latitude IS NOT NULL AND longitude IS NOT NULL ORDER BY distance;' % (latitude, longitude)
+        for pic in Picture.objects.raw(req):
             list_of_pictures.append(pic)
         return list_of_pictures
 

@@ -4,7 +4,7 @@
 {% load trip_journal_extras %}
 {% block title %}Trip Journal{% endblock %}
 {% block css %}
-<link rel="stylesheet" href="{% static "css/base.css"%}">
+{{ block.super }}
 <link rel="stylesheet" href="{% static "css/index.css" %}">
 {% endblock %}
 {% block header %}
@@ -19,19 +19,19 @@
     <div id="stories">
         {% for story in stories %}
         <div class="story_list_container">
-            {% if story.img %}
+            {% if story.first_img %}
             <div class="story_img_container">
-                <img src="{{story.img.pic|get_stored_pic_by_size:400}}">
+                <img src="{{ story.first_img.pic|get_stored_pic_by_size:400 }}">
             </div>
             {% endif %}
             <div class="story_name_container">
-                <a href="{% url "story" story.story.id %}">{{ story.story.title }}</a>
+                <a href="{% url "story" story.id %}">{{ story.title }}</a>
             </div>
             <div class="story_text_container">
-                <p>{{story.text.content}}</p>
+                <p>{{ story.first_text.content }}</p>
             </div>
-            <div class="story_username_container">{{ story.story.user }}</div>
-            <div class="story_datepublish_container">{{ story.story.date_publish|date }}</div>
+            <div class="story_username_container">{{ story.user }}</div>
+            <div class="story_datepublish_container">{{ story.date_publish|date }}</div>
         </div>
         {% endfor %}
     </div>

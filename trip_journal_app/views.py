@@ -2,7 +2,6 @@ import json
 import datetime
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.core.context_processors import csrf
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, Http404
@@ -11,7 +10,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sessions.backends.db import SessionStore
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
-from django.template.context import RequestContext
 from django.core.exceptions import ObjectDoesNotExist
 
 from trip_journal_app.models import Story, Picture
@@ -23,30 +21,9 @@ def home(request):
     """
     Home page view.
     """
-    context = RequestContext(request,
-                           {'request': request,
-                            'user': request.user})
-    stories = []
-    for story in Story.objects.filter(published=True):
-        if story.text:
-            story_blocks = story.get_text_with_pic_objects()
-            first_text = next(
-                (block for block in story_blocks if block['type'] == 'text'),
-                None
-            )
-            first_img = next(
-                (block for block in story_blocks if block['type'] == 'img'),
-                None
-            )
-            stories.append(
-                {'story': story,
-                 'text': first_text,
-                 'img': first_img}
-            )
-    return render(
-        request, 'index.html',
-        {'stories': stories, 'user': auth.get_user(request)}, context_instance=context
-    )
+    stories = Story.objects.filter(published=True)
+    context = {'stories': stories, 'user': auth.get_user(request)}
+    return render(request, 'index.html', context)
 
 
 @login_required
@@ -127,10 +104,9 @@ def user_stories(request):
     Shows list of user stories and link to create new story.
     """
     user = auth.get_user(request)
-    if user:
-        stories = Story.objects.filter(user=user)
-        context = {'stories': stories}
-        return render(request, 'my_stories.html', context)
+    stories = Story.objects.filter(user=user)
+    context = {'stories': stories}
+    return render(request, 'my_stories.html', context)
 
 
 def show_story_near_by_page(request):

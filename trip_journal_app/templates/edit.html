@@ -32,7 +32,17 @@
                 <button id="add_title" class="button_2">+</button>
             </div>
             {% endif %}
-
+<!-- igor tag -->
+            {% block tags %}
+            <div id="tags_list">
+                <div id="button_list"></div>
+                <div id="tag_input_block">
+                    <input type="text" id="tag_input" placeholder=" + Tags">
+                    <span id="tag_add">+</span>
+                </div>
+            </div>
+            {% endblock %}
+<!-- end igor tag -->
             <h2 id="story_title" contenteditable="true">{{story.title}}</h2>
 
             {% for story_block in story_blocks %}

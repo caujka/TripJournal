@@ -15,7 +15,6 @@ import os.path
 from multiprocessing import Pool
 from TripJournal.settings import IMAGE_SIZES
 
-
 def resize(original_pic, size):
     """
     original_pic - name of picture file to resize.

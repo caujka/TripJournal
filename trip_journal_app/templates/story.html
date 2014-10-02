@@ -1,37 +1,44 @@
  {% extends 'base.html' %}
     {% load staticfiles %}
+    {% load trip_journal_extras %}
     {% block title %}View story{% endblock %}
     {% block css %}
-        <link rel="stylesheet" href="{% static "css/base.css"%}">
+        {{ block.super }}
         <link rel="stylesheet" href="{% static "css/story.css" %}">
     {% endblock %}
     {% block scripts %}
         <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false&libraries=drawing">
 </script>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
-        <script src="{% static "javascript/view.js" %}"></script>
+       
+	<script src="{% static "javascript/story.js" %}"></script>
     {% endblock %}
     {% block content %}
     <main>
+    <div id="map-canvas-wrapper">
         <div id="map-canvas"></div>
-
-        <div id="story_content" class="block">
+    </div>
+    <div id="story_content" class="block">
+        <div class="brd">
             <div id="story_title" class="title"><h2>{{story.title}}</h2></div>
-	    <p class="author">Author: {{story.user}}</p>
-	    <p class="published">Published: {{story.date_publish}}</p>
-            {% for story_block in story_blocks %}
-	        {% if story_block.type == 'text' %}
-                    <div class="saved_text">
-		        <p>{{ story_block.content|safe }}</p>
-		    </div>
-                {% elif story_block.type = 'img' %}
-	            <div class="saved_img">
-                    <img src="{{ story_block.url }}">
-		    </div>
-	        {% endif %}
-	    {% endfor %}
+            <p class="author"><span class="sign">Author:</span> {{ story.user }}</p>
+            <p class="published"><span class="sign">Published:</span> {{ story.date_publish|date }}</p>
+            {% include "story_content.html" with page="story" %}
         </div>
+        <p>
+        <span class="sign">Like this story: </span>
+        <a href="/story/addrating/{{ story.id }}/"><img class="like_img" src="{% static "images/heart.svg" %}"></a>{{ story.likes_count }}
+        </p>
+    </div>
 
-      
+    <div id="user_buttons">
+        {% if user == story.user %}
+            <form action="{% url 'edit' story.id%}">
+                <input type="submit" value="Edit this story" />
+            </form>
+            {% include 'toggle_publish_buttons.html' with story_id=story.id %}
+
+        {% endif %}
+    </div>
     </main>
     {% endblock %}

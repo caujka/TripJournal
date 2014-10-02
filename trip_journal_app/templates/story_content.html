@@ -1,0 +1,26 @@
+{% load trip_journal_extras %}
+{% load staticfiles %}
+{% for story_block in story_blocks %}
+{% if story_block.type == 'text' %}
+<div class="saved text">
+    <p>{{ story_block.content|safe }}</p>
+    <p style="display:none;">{{story_block.marker}}</p>
+</div>
+{% elif story_block.type == 'img' %}
+<div class="saved img">
+    {% if page == 'story' %}
+    <img class="story_photo" src="{{ story_block.pic|get_stored_pic_by_size:800 }}">
+    <p style="display:none;">{{story_block.marker}}</p>
+        <p class="like">
+        <a href="/story/addrating_to_pictures/?picture={{ story_block.pic.id }}&story={{story.id}}">
+            <img class="like_img" src="{% static "images/red_heart.svg" %}"></a>
+        {{ story_block.pic.likes_picture_count }}
+        </p>
+    {% elif page == 'edit' %}
+    <p>{{ story_block.pic|get_stored_pic_by_size:800 }}</p>
+    <p style="display:none;">{{story_block.id}}</p>
+    <p style="display:none;">{{story_block.marker}}</p>
+    {% endif %}
+</div>
+{% endif %}
+{% endfor %}

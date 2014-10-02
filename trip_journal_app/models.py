@@ -1,6 +1,7 @@
 from django.db import models
 import json
 import os
+import math
 from TripJournal.settings import (IMAGE_SIZES, STORED_IMG_DOMAIN,
                                   IMG_STORAGE, TEMP_DIR)
 from trip_journal_app.utils.resize_image import resize_and_save_pics
@@ -20,9 +21,9 @@ class Story(models.Model):
     date_publish = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
     track = models.TextField(blank=True, null=True)
-    rating = models.FloatField(blank=True, null=True)
+    rating = models.ManyToManyField(User)
     published = models.BooleanField(default=False)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, related_name='owner')
     tags = models.ManyToManyField(Tag)
 
     def __unicode__(self):
@@ -37,51 +38,109 @@ class Story(models.Model):
     def get_map_artifacts(self):
         return Map_artifact.objects.filter(story=self.id)
 
-    def get_pictures_urls(self, max_size):
+    def get_pictures_urls(self):
         '''
-        Returns a dictionary where pictures ids are keys and stored pictures
-        of appropriate size are values.
+        Returns a dictionary where pictures ids are keys and tuple of all
+        stored pictures sizes and respective urls size are values.
         '''
         pictures = Picture.objects.filter(story=self.id)
         return dict([
-            (pic.id, pic.get_stored_pic_by_size(max_size))
+            (pic.id, tuple({'size': stored_pic.size, 'url': stored_pic.url} for
+                      stored_pic in pic.get_stored_pics()))
             for pic in pictures
         ])
 
-    def get_text_with_pic_urls(self, max_pic_size):
+    def get_text_with_pic_urls(self):
         '''
         Takes story text and desirable size of pictures and adds
         urls to respective block of content.
         '''
-        pics = self.get_pictures_urls(max_pic_size)
+        pics = self.get_pictures_urls()
         text = json.loads(self.text, encoding='utf8')
         for block in text:
             if block[u'type'] == u'img':
                 block[u'url'] = pics[block[u'id']]
         return text
 
+    def get_text_with_pic_objects(self):
+        text = json.loads(self.text, encoding='utf8')
+        # for situations when picture id wasn't saved for some reason
+        text = filter(
+            lambda x: x['type'] != "img" or not x['id'] is None, text
+        )
+        for block in text:
+            if block[u'type'] == u'img':
+                block[u'pic'] = Picture.objects.get(pk=int(block[u'id']))
+        return text
+
+    @classmethod
+    def get_sorted_stories_list(cls, latitude, longitude):
+        stories = cls.objects.all()
+        list_of_stories = []
+        for st in stories:
+            coordinates = []
+            distance = []
+            pictures = Picture.objects.filter(story_id=st.id)
+            artifacts = Map_artifact.objects.filter(story_id=st.id)
+            for picture in pictures:
+                if picture.latitude and picture.longitude:
+                    coordinates.append([float(picture.latitude), float(picture.longitude)])
+            for artifact in artifacts:
+                if artifact.latitude and artifact.longitude:
+                    coordinates.append([float(artifact.latitude), float(artifact.longitude)])
+            if coordinates:
+                for coordinate in coordinates:
+                    dist = math.sqrt((latitude - coordinate[0])**2 + (longitude - coordinate[1])**2)
+                    distance.append(dist)
+                list_of_stories.append({'story': st, 'distance': min(distance)})
+        list_of_stories.sort(key = lambda k: k['distance'])
+        return list_of_stories
+
+    def likes_count(self):
+        return self.rating.count()
+
+    def first_text(self):
+        return next((block for block in self.get_text_with_pic_objects()
+                    if block['type'] == 'text'), None)
+
+    def first_img(self):
+        return next((block for block in self.get_text_with_pic_objects()
+                    if block['type'] == 'img'), None)
+
 
 class Picture(models.Model):
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     story = models.ForeignKey(Story)
+    likes = models.ManyToManyField(User)
     SIZES = IMAGE_SIZES
 
-    def __unicode__(self):
-        return self.name
+    def likes_picture_count(self):
+        return self.likes.count()
 
-    def get_stored_pic_by_size(self, max_accatible_size):
+    def __unicode__(self):
+        return str(self.id)
+
+    def get_stored_pics(self):
         '''
         Retrun the object Stored picture with the greatest size
         not bigger than max_accatible_size. If there isn't smaller
         pictures returns the smallest from available.
         '''
+        return Stored_picture.objects.filter(picture=self.id)
+
+    def get_stored_pic_by_size(self, accatible_size):
+        '''
+        Retrun the object Stored picture with the smallest size
+        not smaller than max_accatible_size. If there isn't larger
+        pictures returns the largest from available.
+        '''
         story_pics = Stored_picture.objects.filter(picture=self.id)
-        accetable_pics = story_pics.filter(size__lt=max_accatible_size)
+        accetable_pics = story_pics.filter(size__gte=accatible_size)
         if accetable_pics:
-            pic = accetable_pics.order_by('size').last()
+            pic = accetable_pics.order_by('size').first()
             return pic
-        return story_pics.order_by('size').first()
+        return story_pics.order_by('size').last()
 
     def save_in_sizes(self, image):
         '''
@@ -89,8 +148,8 @@ class Picture(models.Model):
         and writes them to path defined in Stored_picture class.
         '''
         # check if Pictures directory exists
-        if not os.path.exists(Stored_picture.SAVE_PATH):
-            os.makedirs(Stored_picture.SAVE_PATH)
+        if not os.path.exists(Stored_picture.STORAGE):
+            os.makedirs(Stored_picture.STORAGE)
 
         # temporary storing file
         img_name = image.name
@@ -101,7 +160,7 @@ class Picture(models.Model):
 
         # resizing original image
         names_and_sizes = resize_and_save_pics(
-            file_name, str(self.id), self.SIZES, Stored_picture.SAVE_PATH
+            file_name, str(self.id), self.SIZES, Stored_picture.STORAGE
         )
         for name, size in names_and_sizes:
             stored_pic = Stored_picture(picture=self, size=size)
@@ -111,13 +170,24 @@ class Picture(models.Model):
         # delete temp file
         os.remove(file_name)
 
+    @classmethod
+    def get_sorted_picture_list(cls, latitude, longitude):
+#        list_of_pictures = []
+        req = 'SELECT (POWER(latitude - %f, 2) + POWER(longitude - %f, 2)) as distance, id, latitude, longitude from trip_journal_app_picture WHERE latitude IS NOT NULL AND longitude IS NOT NULL ORDER BY distance;' % (latitude, longitude)
+        list_of_pictures = list(Picture.objects.raw(req))
+#            list_of_pictures.append(pic)
+        return list_of_pictures
+
 
 class Stored_picture(models.Model):
     picture = models.ForeignKey(Picture)
     size = models.IntegerField()
     _url = models.CharField(max_length=2000)
-    SAVE_PATH = IMG_STORAGE
+    STORAGE = IMG_STORAGE
     URL_PREFIX = STORED_IMG_DOMAIN
+
+    def __unicode__(self):
+        return self.url
 
     @property
     def url(self):
@@ -126,9 +196,6 @@ class Stored_picture(models.Model):
     @url.setter
     def url(self, value):
         self._url = value
-
-    def __unicode__(self):
-        return self.url
 
 
 class Comment(models.Model):

@@ -1,48 +1,37 @@
+                 
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load trip_journal_extras %}
 {% block title %}Trip Journal{% endblock %}
 {% block css %}
-<link rel="stylesheet" href="{% static "css/base.css"%}">
+{{ block.super }}
 <link rel="stylesheet" href="{% static "css/index.css" %}">
 {% endblock %}
 {% block header %}
 <p id='cite_name'>Trip Journal</p>
-<div class="login_form">
-    {% if not user.id %}
-    <form action="/login/" method="post">
-        {% csrf_token %}
-        <input type="text" name="username" id="username">
-        <input type="password" name="password" id="password">
-        {% if request.GET.next %}
-        <input type="hidden" name="next" value="{{ request.GET.next }}">
-        {% endif %}
-        <input type="submit" value="Login">
-    </form>
-    {% endif %}
-</div>
 {% endblock %}
 {% block content %}
     <div id="welcome">
-        <h2>Wellcome to TripJournal</h2>
+        <h2>Welcome to TripJournal</h2>
         <p>Take first step to your journey of a thousand miles</p>
         <p>. . .</p>
     </div>
     <div id="stories">
         {% for story in stories %}
         <div class="story_list_container">
-            {% if story.img %}
+            {% if story.first_img %}
             <div class="story_img_container">
-                <img src="{{story.img.url}}">
+                <img src="{{ story.first_img.pic|get_stored_pic_by_size:400 }}">
             </div>
             {% endif %}
             <div class="story_name_container">
-                <a href="{% url "story" story.story.id %}">{{ story.story.title }}</a>
+                <a href="{% url "story" story.id %}">{{ story.title }}</a>
             </div>
             <div class="story_text_container">
-                <p>{{story.text.content}}</p>
+                <p>{{ story.first_text.content }}</p>
             </div>
-            <div class="story_username_container">{{ story.story.user }}</div>
-            <div class="story_datepublish_container">{{ story.story.date_publish|date }}</div>
+            <div class="story_username_container">{{ story.user }}</div>
+            <div class="story_datepublish_container">{{ story.date_publish|date }}</div>
         </div>
         {% endfor %}
     </div>

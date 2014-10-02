@@ -13,7 +13,7 @@ body {
     width: 100%;
     right: 0;
     margin: 0;
-    background-color: rgba(97, 156, 126, 0.8);
+    background-color: #80B098;
     height: 65px;
     color: white;
     z-index: 1;
@@ -73,7 +73,10 @@ body {
 }
 
 .info {
-    border: solid #FFCC00;
+    position: relative;
+    top: 65px;
+    color: #003366;
+    border: solid #FFEA99;
     padding: 5px 5px 5px 35px;
     background: #FFEA99 url('../images/info.svg') no-repeat left top;
     background-size: 30px 30px;

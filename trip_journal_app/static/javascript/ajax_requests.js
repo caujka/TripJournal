@@ -1,112 +1,128 @@
-/*
-Module for sending ajax POST request with block contents from edit page. 
-*/
+/**
+ * Module for sending ajax POST request with block contents from edit page. 
+ */
+
+// for browser that don't support endsWith method for strings
+if (typeof String.prototype.endsWith !== 'function') {
+    String.prototype.endsWith = function(suffix) {
+        return this.indexOf(suffix, this.length - suffix.length) !== -1;
+    };
+}
 
 function getCookie(name) {
-  var value = '; ' + document.cookie;
-  var parts = value.split('; ' + name + '=');
-  if (parts.length == 2) return parts.pop().split(';').shift();
+    var value = '; ' + document.cookie;
+    var parts = value.split('; ' + name + '=');
+    if (parts.length === 2) {
+        return parts.pop().split(';').shift();
+    } else {
+        return undefined;
+    }
 }
 
-function story_id_from_url() {
-    var curr_url = document.URL.split(['/']);
-    return curr_url[curr_url.length - 1];
+function storyIdFromUrl() {
+    var currUrl = document.URL.split(['/']);
+    return currUrl[currUrl.length - 1];
 }
 
-function jsonForming() {
-    var i, type, block, body, block_content, block_text,
+function storyBlocksJson() {
+    var i, type, block, blockContent, blockText,
         title = document.getElementById('story_title').innerHTML,
         blocks = [];
 
     for (i = 0; i < Blocks.length; ++i) {
         type = BlockTypes[i];
-        html_block = document.getElementById('contentarea_' + (Blocks[i]));
+	marker = getMarkerLocation(i);
+        htmlBlock = document.getElementById('contentarea_' + (Blocks[i]));
         block = {
-            "type": type
+            'type': type,
+	    'marker' : marker
         };
-        if (type === "text") {
-            block.content = html_block.children[0].innerHTML;
+        if (type === 'text') {
+            block.content = htmlBlock.children[0].innerHTML;
         }
-        if (type === "img") {
-            block.id = parseInt(html_block.children[1].innerHTML);
+        if (type === 'img') {
+            block.id = parseInt(htmlBlock.children[1].innerHTML);
         }
         blocks.push(block);
     }
-    body = {
-        "title": title,
-        "blocks": blocks
+    return {
+        'title': title,
+        'blocks': blocks,
     };
-    return body;
 }
 
-function post_images(story_id){
-    var i, formData, xhr, img_block_index, img,
-        number_of_img = Images.length,
-        curr_url = document.URL.split(['/']),
-        story_id = curr_url[curr_url.length - 1];
+function postImages(storyId){
+    var i, formData, xhr, imgBlockIndex, img,
+        numberOfImg = Images.length;
 
-    function add_image_id_from_db(block_num) {
-        // This function sets hidden element with
-        // picture id from database when picture is saved.
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                var block_container = document.getElementById(
-                    'contentarea_' + block_num.toString()
-                );
-                pic_id_in_db = parseInt(xhr.responseText);
-                block_container.children[1].innerHTML = pic_id_in_db;
-                post_data(true);
-            }
+    /**
+     * Sets hidden element with
+     * picture id from database when picture is saved.
+     */
+    function addImageIdFromDB(blockNum) {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var blockContainer = document.getElementById(
+                'contentarea_' + blockNum.toString()
+            );
+            picIdInDB = parseInt(xhr.responseText);
+            blockContainer.children[1].innerHTML = picIdInDB;
+            postData(true);
         } 
     }
-    for (i=0; i < number_of_img; ++i){
+    for (i=0; i < numberOfImg; ++i){
         formData = new FormData();
         img = Images.shift();
         formData.append('file', img.image);
         xhr = new XMLHttpRequest();
-        img_block_index = img.block;
+        imgBlockIndex = img.block;
         xhr.onreadystatechange = function() {
-            add_image_id_from_db(img_block_index);
+            addImageIdFromDB(imgBlockIndex);
         };
-        xhr.open('POST', '/upload/' + story_id_from_url());
+        xhr.open('POST', '/upload/' + storyIdFromUrl());
         xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+        xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');
         xhr.send(formData);
     }
 }
 
-function post_data(async){
-   var xhr = new XMLHttpRequest(),
-       request_body = JSON.stringify(jsonForming());
+function postData(async){
+    var xhr = new XMLHttpRequest(),
+        requestBody = JSON.stringify(storyBlocksJson());
 
-    function change_url() {
-        // This function appends story id to page url
-        // if request was sent from /edit/ page.
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                new_id = xhr.responseText;
-                if (! document.URL.endsWith(new_id)) {
-                    window.history.pushState(
-                        'new_id', 'Title', '/edit/' + new_id
-                    );
-                }
-            } else {
-                alert('There was a problem with the request.');
+    /**
+     * Appends story id to page url and urls form publsih panel
+     * and makes publish panel visble
+     * if request was sent from /edit/ page.
+     */
+    function addStoryIdToUrls() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var newId = xhr.responseText;
+            if (!document.URL.endsWith(newId)) {
+                window.history.pushState(
+                    'new_id', 'Title', '/edit/' + newId
+                );
+                var publish_panel = document.getElementById('publish_panel');
+                publish_panel.className = 'block';
+                publish_panel.style.display = 'block';
+                document.getElementById('publish_form').action = '/publish/' + newId;
+                document.getElementById('view_form').action = '/story/' + newId;
             }
         }
     }
-
-    xhr.onreadystatechange = change_url;
-    xhr.open('POST', '/save/' + story_id_from_url(), async);
+    xhr.onreadystatechange = addStoryIdToUrls;
+    xhr.open('POST', '/save/' + storyIdFromUrl(), async);
     xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+    xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-    xhr.send(request_body);
+    xhr.send(requestBody);
 }
 
-function publish() {
-    if (story_id_from_url().length === 0) post_data(false);
+
+function savePage() {
+    if (storyIdFromUrl().length === 0) postData(false);
     if (Images.length > 0) {
-        post_images();
+        postImages();
     } else {
-        post_data(true);
+        postData(true);
     }
 }

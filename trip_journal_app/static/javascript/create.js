@@ -1,19 +1,22 @@
 var number = 1,
+    current_marker = -1,
+    temp_positions = [],
     Blocks = [],
     BlockTypes = [],
+    BlockMarkers = [],
     Images = [];
 
-function deleteImagesFromBlock(blockNumber){
-    for (var i=0; i < Images.length; ++i){
-        if (Images[i].block === blockNumber){
+function deleteImagesFromBlock(blockNumber) {
+    for (var i=0; i < Images.length; ++i) {
+        if (Images[i].block === blockNumber) {
             Images.splice(i, 1);
         }
     }
 }
 
-function swapImagesFromBlock(blockNumber1, blockNumber2){
-    for (var i=0;i<Images.length; ++i){
-        if(Images[i].block === blockNumber1) {
+function swapImagesFromBlock(blockNumber1, blockNumber2) {
+    for (var i=0; i<Images.length; ++i) {
+        if (Images[i].block === blockNumber1) {
             Images[i].block = blockNumber2;
         }
         else if (Images[i].block === blockNumber2) {
@@ -22,9 +25,9 @@ function swapImagesFromBlock(blockNumber1, blockNumber2){
     }
 }
 
-function addImagesFromTemp(){
+function addImagesFromTemp() {
     var i;
-    for(i=0; i < Images.length; ++i){
+    for(i=0; i < Images.length; ++i) {
         if (Images[i].state === 'temp') {
             Images[i].state = 'loaded';
             Images[i].block = number;
@@ -32,20 +35,28 @@ function addImagesFromTemp(){
     }
 }
 
-function appendBlock(story, blockContent, block_type) {
-    var container = document.createElement("div"),
-        keybar = document.createElement("div"),
+function appendBlockMarker(marker) {
+    if(marker !== 'None'){
+        temp_positions.push({'block' : current_marker, 'position' : marker});
+    }
+}
+
+function appendBlock(story, blockContent, block_type, saved) {
+    var container = document.createElement('div'),
+        keybar = document.createElement('div'),
         buttons = [
             ['top', 'moveup'],
             ['bottom', 'movedown'],
             ['edit', 'editBlock'],
-            ['delete', 'deleteBlock']
+            ['delete', 'deleteBlock'],
+            ['addmarker', 'setactivemarker'],
+            ['removemarker', 'removeBlockMark']
         ];
 
     function create_button(button_name_and_func) {
         var button_name = button_name_and_func[0],
             button_func = button_name_and_func[1],
-            button = document.createElement("button");
+            button = document.createElement('button');
         button.setAttribute('onClick', button_func + "('" + number + "')");
         button.id = button_name;
         keybar.appendChild(button);
@@ -76,11 +87,17 @@ function appendBlock(story, blockContent, block_type) {
     story.appendChild(container);
 
     Blocks.push(number);
+    BlockMarkers.push(null);
     BlockTypes.push(block_type);
 	if (block_type == 'img') {
         addImagesFromTemp(number);
     }
+    
+    current_marker = Blocks.length - 1;
     number++;
+    if (!saved) {
+        savePage();
+    }
 }
 
 function deleteBlock(itemstr) {
@@ -89,8 +106,13 @@ function deleteBlock(itemstr) {
         block = document.getElementById("block_" + Blocks[poss]);
     block.parentNode.removeChild(block);
     Blocks.splice(poss, 1);
+    if(BlockMarkers[poss] !== null){
+        removeMark(BlockMarkers[poss]);
+    }
+    BlockMarkers.splice(poss, 1);
     BlockTypes.splice(poss, 1);
     deleteImagesFromBlock(item);
+    savePage();
 }
 
 
@@ -102,13 +124,17 @@ function move_block(itemstr, direction) {
     if ((poss + direction) in Blocks) {
         var blockprev = document.getElementById('contentarea_' + (Blocks[poss + direction])),
             prevconen = blockprev.innerHTML,
+	    block_marker = BlockMarkers[poss],
             block_type = BlockTypes[poss];
         blockprev.innerHTML = block.innerHTML;
         block.innerHTML = prevconen;
+        BlockMarkers[poss] = BlockMarkers[poss + direction];
+        BlockMarkers[poss + direction] = block_marker;
         BlockTypes[poss] = BlockTypes[poss + direction];
         BlockTypes[poss + direction] = block_type;
         swapImagesFromBlock(Blocks[poss + direction], Blocks[poss]);
     }
+    savePage();
 }
 
 function moveup(itemstr) {
@@ -150,7 +176,7 @@ function img_block_template(src, img_id) {
 }
 
 function add_saved_blocks() {
-    var i, block, block_text, block_type,
+    var i, block, block_text, block_type, marker,
         blocks = document.getElementsByClassName('saved'),
         blocks_num = blocks.length,
         story_content = document.getElementById('story_content');
@@ -159,14 +185,17 @@ function add_saved_blocks() {
         block_type = block.classList[1];
         if (block_type === 'text') {
             block_text = text_block_template(block.children[0].innerHTML);
+	        marker = block.children[1].innerHTML;
         } else if (block_type === 'img') {
             block_text = img_block_template(
                 block.children[0].innerHTML,
                 block.children[1].innerHTML
             );
+            marker = block.children[2].innerHTML;
         }
         block.parentNode.removeChild(block);
-        appendBlock(story_content, block_text, block_type);
+        appendBlock(story_content, block_text, block_type, saved=true);
+	appendBlockMarker(marker);
     }
 }
 
@@ -185,6 +214,7 @@ window.onload = function() {
         text_panel = document.getElementById('text_panel'),
         photo_panel = document.getElementById('photo_panel'),
         video_panel = document.getElementById('video_panel'),
+        publish_panel = document.getElementById('publish_panel'),
         title = document.getElementById('title'),
 
         fileSelect = document.getElementById('type_file');
@@ -218,7 +248,7 @@ window.onload = function() {
             i;
 
         for (i = 0; i < arr_1.length; i++) {
-            arr_1[i].style.background = "url(\"../static/images/plus-sign_2.png\") 35px 35px no-repeat #83a054";
+            arr_1[i].style.background = "#80B098";
         }
         for (i = 0; i < arr_2.length; i++) {
             arr_2[i].style.display = 'none';
@@ -332,7 +362,9 @@ window.onload = function() {
         story_content.style.display = 'block';
     }
     document.getElementById('add_panel').style.display = 'block';
-    document.getElementById('publish_panel').style.display = 'block';
+    publish_panel.style.display = (
+        (publish_panel.className === 'invisible') ? 'none' : 'block'
+    );
 
     // document.getElementById('type_file').onchange = add_img;
     document.getElementById('adds_block_t').onclick = save_text_story;
@@ -406,6 +438,7 @@ function delete_img(id) {
     }
 }
 
+
 //Volodya
 var geocoder;
 var markersArray = [];
@@ -444,12 +477,28 @@ function initialize() {
       drawingModes: [
         google.maps.drawing.OverlayType.POLYLINE
       ]
-    },
+    }
 
   });
   drawingManager.setMap(map);
+
+    for (var i=0; i < temp_positions.length; ++i) {
+	var position = JSON.parse(temp_positions[i].position.replace("u'k'", '"k"').replace("u'B'", '"B"'));
+        var location = new google.maps.LatLng(position.k, position.B);
+	var marker = new google.maps.Marker({
+            position: location,
+            map: map
+        });
+        if(BlockMarkers[current_marker] !== null){
+            removeMark(BlockMarkers[temp_positions[i].block]);
+        }
+
+        markersArray.push(marker);
+        i = markersArray.length - 1;
+        BlockMarkers[temp_positions[i].block] = i;
+    }
 }
-$ = jQuery;
+
 function handleNoGeolocation(errorFlag) {
   if (errorFlag) {
     var content = 'Error: The Geolocation service failed.';
@@ -467,55 +516,30 @@ function handleNoGeolocation(errorFlag) {
 }
 
 // Add a marker to the map and push to the array.
-function placeMarker(location, bar_id) {
+function placeMarker(location) {
     var marker = new google.maps.Marker({
         position: location,
         map: map
     });
-    //Get last added textarea id
-    var textboxes;
-    textboxes = document.getElementsByClassName('key_panel');
-    last_element = textboxes[textboxes.length-1]
-    bar_id='#'+last_element.id;
-    //add marker in markers array
+       
+    if(current_marker !== -1){
+        if(BlockMarkers[current_marker] !== null){
+            removeMark(BlockMarkers[current_marker]);
+        }
 
-    markersArray.push(marker);
-    i = markersArray.length - 1;
-    jQuery(bar_id).append('<button onclick="centerMap(' + i + '); return false;">Marker</button>');
+        markersArray.push(marker);
+        i = markersArray.length - 1;
+        BlockMarkers[current_marker] = i;
+    }
 
-    //var markerButton = document.createElement("button");
-    //	markerButton.setAttribute('onClick', "centerMap(' + i + '); return false;");
-    //	markerButton.id = "buu";
-    //	document.getElementById("#keybar_"+number).append(markerButton);
-    //var markerButton = document.getElementsByClassName("key_panel");
-    //<button onclick="centerMap(' + i + '); return false;">Marker</button>
-    //var keybar = document.createElement("div");
-	//keybar.id="keybar_"+number;
-	//keybar.className="key_panel"
-
+    savePage();
 }
 
 // Sets the map on all markers in the array.
 function setAllMap(map) {
-  for (var i = 0; i < markersArray.length; i++) {
-    markersArray[i].setMap(map);
-  }
-}
-
-// Removes the markers from the map, but keeps them in the array.
-function clearMarkers() {
-  setAllMap(null);
-}
-
-// Shows any markers currently in the array.
-function showMarkers() {
-  setAllMap(map);
-}
-
-// Deletes all markers in the array by removing references to them.
-function deleteMarkers() {
-  clearMarkers();
-  markersArray = [];
+    for (var i = 0; i < markersArray.length; i++) {
+        markersArray[i].setMap(map);
+    }
 }
 
 function codeAddress() {
@@ -529,8 +553,37 @@ function codeAddress() {
   });
 }
 
+function setactivemarker(itemstr){
+    var item = parseInt(itemstr);
+    current_marker = Blocks.indexOf(item);
+}
+
+function removeBlockMark(itemstr){
+    var item = parseInt(itemstr);
+    var index = Blocks.indexOf(item);  
+    removeMark(BlockMarkers[index]);
+    BlockMarkers[index] = null;
+}
+
+function getMarkerLocation(i){
+    if(BlockMarkers[i] !== null){
+	var marker =  markersArray[BlockMarkers[i]];
+	if(marker !== null){
+            return marker.position;
+	}
+    }
+
+    return null;
+}
+
+
 google.maps.event.addDomListener(window, 'load', initialize);
 	function centerMap(i) {
         map.setCenter(markersArray[i].getPosition());
 	}
 
+google.maps.event.addDomListener(window, 'load', initialize);
+    function removeMark(i) {
+        markersArray[i].setMap(null);
+        markersArray[i] = null;
+    }

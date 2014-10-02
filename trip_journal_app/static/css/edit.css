@@ -16,34 +16,32 @@ main{
     position: relative;
     top: 5px;
 }
-.add_block{
+
+.add_block {
     width: 100px;
-    height: 70px;
+    background-color: #80B098;
+    height: 22px;
     text-align: center;
     border: 1px solid #aaa;
-    border-radius: 5px;
     margin: 2px;
     padding: 10px;
     display: inline-block;
-    background: url("../images/plus-sign_2.png") 35px 35px no-repeat #83a054;
     cursor: crosshair;
     position: relative;
 }
 .add_block:hover{
-    background: url("../images/plus-sign.png") 35px 35px no-repeat #8ed41f;
+    background-color: #8ED41F;
 }
 .key_panel{
-    width: 200px;
+    width: 215px;
     height: 25px;
     border: 1px solid #aaa;
-    border-radius: 5px;
-    margin-left:600px;
+    margin-left:540px;
     visibility:hidden;
 }
 .block_title{
     text-transform: uppercase;
-    font-weight: bold;
-    color: #fff;
+    color: #FFFFCC;
 }
 .clear{
     clear: both;
@@ -57,19 +55,17 @@ main{
 .add_panel{
     text-align: center;
 }
-.button{
-    text-transform: uppercase;
-    font-size: 20px;
-    font-weight: bold;
-    padding: 10px 18px;
-    margin: 5px;
-    background: #83a054;
-    border: none;
-    border-radius: 8px;
-    box-shadow: inset -1px -1px 10px #050;
-    color: #ff0;
-    outline: none;
+
+
+#publish_panel form {
+    display: inline-block;
 }
+
+.button {
+    display: inline-block;
+    text-transform: uppercase;
+}
+
 .button:active,.button_2:active,.button_4:active{
     background: #f00;
 }
@@ -104,7 +100,6 @@ main{
     padding: 4px 9px;
     background: #fff;
     border: 1px solid #83a054;
-    border-radius: 5px;
     color: #83a054;
     outline: none;
 }
@@ -144,7 +139,6 @@ main{
 
 .block_story{
     border: 1px solid #aaa;
-    border-radius: 10px;
     margin: 5px;
     text-align: left;
     padding: 10px;
@@ -194,7 +188,7 @@ main{
 #add_comment_t,#add_treasure_t,#add_comment_p,#add_treasure_p{
     display: none;
 }
-#bottom, #edit, #delete, #top{
+#bottom, #edit, #delete, #top,#addmarker,#removemarker{
     display: inline-block;
     width: 25px;
     height: 25px;
@@ -221,7 +215,14 @@ main{
     bottom: 0px;
     background:  url("../images/delete.png") no-repeat;
 }
-
+#addmarker{
+    bottom: 0px;
+    background:  url("../images/marker.png") no-repeat;
+}
+#removemarker{
+    bottom: 0px;
+    background:  url("../images/deletemarker.png") no-repeat;
+}
 #map-canvas-wrapper {
     position: fixed;
     top: 70px;
@@ -288,3 +289,7 @@ main{
     vertical-align: top;
 }
 /*end igor tag*/
+p.description_story {
+    margin-top: 2px;
+}
+

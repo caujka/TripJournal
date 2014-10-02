@@ -147,7 +147,10 @@ def make_paging_for_items_search(request):
     sess_key = request.COOKIES['pagination']
     sess = SessionStore(session_key=sess_key)
     list_of_items = sess['items_list']
-    paginator = Paginator(list_of_items['items'], 1)
+    if list_of_items['item_type'] == 'pictures':
+        paginator = Paginator(list_of_items['items'], 10)
+    elif list_of_items['item_type'] == 'stories':
+        paginator = Paginator(list_of_items['items'], 2)
     page = request.GET.get('page')
     try:
         items = paginator.page(page)

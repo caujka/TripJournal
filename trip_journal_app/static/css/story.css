@@ -38,12 +38,14 @@
 
 .story_photo {
     width: 100%;
+    margin-top: 8px;
 }
 
 .saved {
     background-color: #FDFDFD;
     color: #333333;
     border-bottom: thin solid #F8F8F8;
+    position: relative;
 }
 
 .saved p {
@@ -51,4 +53,15 @@
 }
 .saved.text p {
     padding: 8px 5px 8px 10px;
+}
+
+.like {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    color: #e5f0f8;
+}
+
+.like_img {
+    width: 18px;
 }

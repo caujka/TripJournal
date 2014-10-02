@@ -11,9 +11,9 @@
     {% if page == 'story' %}
     <img class="story_photo" src="{{ story_block.pic|get_stored_pic_by_size:800 }}">
     <p style="display:none;">{{story_block.marker}}</p>
-        <p>
+        <p class="like">
         <a href="/story/addrating_to_pictures/?picture={{ story_block.pic.id }}&story={{story.id}}">
-            <img src="{% static "like.jpg" %}" width="25px" height="25px"></a>
+            <img class="like_img" src="{% static "images/red_heart.svg" %}"></a>
         {{ story_block.pic.likes_picture_count }}
         </p>
     {% elif page == 'edit' %}

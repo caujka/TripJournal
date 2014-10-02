@@ -114,7 +114,7 @@ def show_story_near_by_page(request):
     Search stories near by page
     """
     return render(
-        request, 'items_near_by.html', {'item_type': 'story'})
+        request, 'items_near_by.html', {'item_type': 'stories'})
 
 
 def show_picture_near_by_page(request):
@@ -122,7 +122,7 @@ def show_picture_near_by_page(request):
     Search pictures near by page
     """
     return render(
-        request, 'items_near_by.html', {'item_type': 'picture'})
+        request, 'items_near_by.html', {'item_type': 'pictures'})
 
 
 def search_items_near_by(request):
@@ -130,15 +130,16 @@ def search_items_near_by(request):
         x = float(request.GET.get('latitude', ''))
         y = float(request.GET.get('longitude', ''))
         sess = SessionStore()
-        if request.GET.get('item_type','') == u'picture':
-            sess['items_list'] = {'item_type': 'picture', 'items': Picture.get_sorted_picture_list(x, y)}
+        if request.GET.get('item_type','') == u'pictures':
+            sess['items_list'] = {'item_type': 'pictures', 
+                                'items': Picture.get_sorted_picture_list(x, y)}
             sess.save()
-        elif request.GET.get('item_type','') == u'story':
-            sess['items_list'] = {'item_type': 'story', 'items': Story.get_sorted_stories_list(x, y)}
+        elif request.GET.get('item_type','') == u'stories':
+            sess['items_list'] = {'item_type': 'stories', 
+                                'items': Story.get_sorted_stories_list(x, y)}
             sess.save()
         response = redirect('/pagination/')
         response.set_cookie('pagination', sess.session_key)
-        print list(sess['items_list']['items'])
         return response
 
 
@@ -146,7 +147,10 @@ def make_paging_for_items_search(request):
     sess_key = request.COOKIES['pagination']
     sess = SessionStore(session_key=sess_key)
     list_of_items = sess['items_list']
-    paginator = Paginator(list_of_items['items'], 1)
+    if list_of_items['item_type'] == 'pictures':
+        paginator = Paginator(list_of_items['items'], 10)
+    elif list_of_items['item_type'] == 'stories':
+        paginator = Paginator(list_of_items['items'], 2)
     page = request.GET.get('page')
     try:
         items = paginator.page(page)
@@ -156,7 +160,8 @@ def make_paging_for_items_search(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         items = paginator.page(paginator.num_pages)
-    return render(request, 'items_near_by.html', {'items_list': items, 'item_type': list_of_items['item_type']})
+    return render(request, 'items_near_by.html', {'items_list': items, 
+                'item_type': list_of_items['item_type']})
 
 
 @login_required

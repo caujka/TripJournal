@@ -13,25 +13,42 @@ body {
     width: 100%;
     right: 0;
     margin: 0;
-    background-color: #80B098;
-    height: 65px;
+    background-color: #31797d;
+    height: 50px;
     color: white;
     z-index: 1;
 }
 
 #cite_name {
-    margin: 10px 0px 0px 10px;
+    display: inline-block;
+    margin: 8px 0px 0px 8px;
+    border: white solid 2px;
+}
+
+#cite_name p {
+    padding: 4px;
+    margin: 0;
+}
+
+#cite_name p a {
+    text-decoration: none;
+    color: white;
     text-transform: uppercase;
     font-weight: 500;
-    font-size: 1.4em;
-    padding: 4px;
-    display: inline-block;
-    border: white solid 2px;
+    font-size: 1.25em;
+}
+
+#cite_name:hover {
+    background-color: white;
+}
+
+#cite_name a:hover {
+    color: #31797d;
 }
 
 #menu {
     position: fixed;
-    top: 10px;
+    top: 5px;
     right: 10px;
     z-index: 2;
     font-variant: small-caps;
@@ -40,12 +57,13 @@ body {
 
 #menu div {
     display: inline-block;
-    padding: 10px;
+    padding: 8px;
+    border: #31797d solid 2px;
     border-right: white solid 2px;
 }
 
 #menu div:last-of-type {
-    border-right: 0;
+    border-right:  #31797d solid 2px;
 }
 
 #menu div a {
@@ -54,8 +72,8 @@ body {
     text-decoration: none;
 }
 
-#menu div a:hover {
-    color: #CDE7B1;
+#menu div:hover {
+    border: white solid 2px;
 }
 
 #content {

@@ -78,7 +78,7 @@ body {
 
 #content {
     position: relative;
-    top: 65px;
+    top: 53px;
     margin-left: auto;
     margin-right: auto;
     width: 1000px;
@@ -92,12 +92,12 @@ body {
 
 .info {
     position: relative;
-    top: 65px;
-    color: #003366;
+    top: 50px;
+    color: #31797d;
     border: solid #FFEA99;
     padding: 5px 5px 5px 35px;
-    background: #FFEA99 url('../images/info.svg') no-repeat left top;
-    background-size: 30px 30px;
+    background: #FFEA99 url('../images/info.svg') no-repeat 5px 2px;
+    background-size: 23px 23px;
 }
 
 

@@ -18,27 +18,30 @@
     <div id="map-canvas-wrapper">
         <div id="map-canvas"></div>
     </div>
-    <div id="story_content" class="block">
-        <div class="brd">
-            <div id="story_title" class="title"><h2>{{story.title}}</h2></div>
-            <p class="author"><span class="sign">Author:</span> {{ story.user }}</p>
-            <p class="published"><span class="sign">Published:</span> {{ story.date_publish|date }}</p>
-            {% include "story_content.html" with page="story" %}
+    <div id="story" class="block">
+        <div id="story_title" class="title"><h2>{{story.title}}</h2></div>
+        <div id="story_info">
+            <p>
+                <span id="pub_date">{{ story.date_publish|date }} </span>
+                by
+                <span id="author">{{ story.user }}</span>
+                <span id="like_story">
+                {{ story.likes_count }}<a href="{% url 'addrating' story.id %}"><img class="like_img" src="{% static "images/heart.png" %}"></a>
+                </span>
+            </p>
         </div>
-        <p>
-        <span class="sign">Like this story: </span>
-        <a href="/story/addrating/{{ story.id }}/"><img class="like_img" src="{% static "images/heart.svg" %}"></a>{{ story.likes_count }}
-        </p>
+        {% include "story_content.html" with page="story" %}
+
+        <div id="user_buttons">
+            {% if user == story.user %}
+                <form action="{% url 'edit' story.id%}">
+                    <input type="submit" value="Edit this story" />
+                </form>
+                {% include 'toggle_publish_buttons.html' with story_id=story.id %}
+
+            {% endif %}
+        </div>
     </div>
 
-    <div id="user_buttons">
-        {% if user == story.user %}
-            <form action="{% url 'edit' story.id%}">
-                <input type="submit" value="Edit this story" />
-            </form>
-            {% include 'toggle_publish_buttons.html' with story_id=story.id %}
-
-        {% endif %}
-    </div>
     </main>
     {% endblock %}

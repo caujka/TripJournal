@@ -12,7 +12,10 @@
    version="1.1"
    id="svg2"
    inkscape:version="0.48.5 r10040"
-   sodipodi:docname="red_heart.svg">
+   sodipodi:docname="red_heart.svg"
+   inkscape:export-filename="/media/storage/code/projects/LAMP_Lv-120/TripJournal/trip_journal_app/static/images/green_heart.png"
+   inkscape:export-xdpi="60"
+   inkscape:export-ydpi="60">
   <metadata
      id="metadata10">
     <rdf:RDF>
@@ -41,15 +44,15 @@
      id="namedview6"
      showgrid="false"
      inkscape:zoom="2.2264151"
-     inkscape:cx="-29.584745"
+     inkscape:cx="-72.75"
      inkscape:cy="53"
      inkscape:window-x="0"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2" />
   <path
-     d="M 58,17 C 52,7 42,0 30,0 13,0 0,13 0,30 0,63 18,68 58,106 98,68 116,63 116,30 116,13 103,0 86,0 74,0 64,7 58,17 z"
+     d="M 58,20.054893 C 52.50915,10.903475 43.35773,4.4974814 32.376027,4.4974814 16.818616,4.4974814 4.9217721,16.394325 4.9217721,31.951737 4.9217721,62.151419 21.394325,66.727128 58,101.50252 94.605675,66.727128 111.07823,62.151419 111.07823,31.951737 111.07823,16.394325 99.181384,4.4974814 83.623973,4.4974814 72.64227,4.4974814 63.49085,10.903475 58,20.054893 z"
      id="path4"
-     style="fill:#e5f0f8;stroke:none;fill-opacity:1"
+     style="fill:#cccccc;fill-opacity:1;stroke:#2a2f36;stroke-width:6.88591433000000031;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
      inkscape:connector-curvature="0" />
 </svg>

@@ -372,14 +372,14 @@ window.onload = function() {
     document.getElementById('adds_block_p').onclick = save_photo_story;
     document.getElementById('clear_block_p').onclick = clear;
 
-    document.getElementById('comment_but_t').onclick = function() {
-        comment_t.style.display = 'inline-block';
-        comment_t.focus();
-    };
-    document.getElementById('treasure_but_t').onclick = function() {
-        treasure_t.style.display = 'inline-block';
-        treasure_t.focus();
-    };
+    // document.getElementById('comment_but_t').onclick = function() {
+    //     comment_t.style.display = 'inline-block';
+    //     comment_t.focus();
+    // };
+    // document.getElementById('treasure_but_t').onclick = function() {
+    //     treasure_t.style.display = 'inline-block';
+    //     treasure_t.focus();
+    // };
 // igor tags -----
 
 tags_view();

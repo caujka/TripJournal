@@ -79,10 +79,11 @@ div.saved.img {
 
 .like {
     position: absolute;
-    bottom: -11px;
+    bottom: 3px;
     left: 8px;
     color: #fff;
     font-size: 1.1em;
+    margin: 0;
 }
 
 .like_pic_link, .like_story_link {
@@ -101,12 +102,12 @@ div.saved.img {
     background-size: 100% 100%;
 }
 
-.like_pic_link:hover {
+.like_pic_link:hover, .like_pic_link.liked {
     background: url("../images/white_full_heart.png");
     background-size: 100% 100%;
 }
 
-.like_story_link:hover {
+.like_story_link:hover, .like_story_link.liked {
     background: url("../images/red_full_heart.png");
     background-size: 100% 100%;
 }

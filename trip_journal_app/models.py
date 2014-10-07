@@ -29,15 +29,6 @@ class Story(models.Model):
     def __unicode__(self):
         return self.title
 
-    def get_tags(self):
-        return self.tags.all()
-
-    def get_comments(self):
-        return Comment.objects.filter(story=self.id)
-
-    def get_map_artifacts(self):
-        return Map_artifact.objects.filter(story=self.id)
-
     def get_pictures_urls(self):
         '''
         Returns a dictionary where pictures ids are keys and tuple of all
@@ -98,6 +89,9 @@ class Story(models.Model):
 
     def likes_count(self):
         return self.rating.count()
+
+    def is_liked_by(self, user):
+        return self.rating.filter(id=user.id).exists()
 
     def first_text(self):
         return next((block for block in self.get_text_with_pic_objects()
@@ -172,11 +166,12 @@ class Picture(models.Model):
 
     @classmethod
     def get_sorted_picture_list(cls, latitude, longitude):
-#        list_of_pictures = []
         req = 'SELECT (POWER(latitude - %f, 2) + POWER(longitude - %f, 2)) as distance, id, latitude, longitude from trip_journal_app_picture WHERE latitude IS NOT NULL AND longitude IS NOT NULL ORDER BY distance;' % (latitude, longitude)
         list_of_pictures = list(Picture.objects.raw(req))
-#            list_of_pictures.append(pic)
         return list_of_pictures
+
+    def is_liked_by(self, user):
+        return self.likes.filter(id=user.id).exists()
 
 
 class Stored_picture(models.Model):

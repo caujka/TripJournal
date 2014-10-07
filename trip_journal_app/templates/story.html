@@ -26,7 +26,8 @@
                 by
                 <span id="author">{{ story.user }}</span>
                 <span id="like_story">
-                {{ story.likes_count }}<a href="{% url 'addrating' story.id %}"><img class="like_img" src="{% static "images/heart.png" %}"></a>
+                {{ story.likes_count }}
+                <a class="like_story_link" href="{% url 'addrating' story.id %}"><span>Like</span></a>
                 </span>
             </p>
         </div>

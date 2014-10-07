@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% load trip_journal_extras %}
-{% block title %}Stories near the place{% endblock %}
+{% block title %}{{ item_type }} near the place{% endblock %}
 
 {% block content %}
-    <h3>Here you can search stories near the place</h3>
+    <h3>Here you can search {{ item_type }} near the place</h3>
     <form action="/search_items_near_by/" method="get">
         Enter Latitude: <br>
         <input type="text" name="latitude" id="latitude" required><br>

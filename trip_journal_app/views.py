@@ -138,7 +138,7 @@ def show_story_near_by_page(request):
     Search stories near by page
     """
     return render(
-        request, 'items_near_by.html', {'item_type': 'story'})
+        request, 'items_near_by.html', {'item_type': 'stories'})
 
 
 def show_picture_near_by_page(request):
@@ -146,7 +146,7 @@ def show_picture_near_by_page(request):
     Search pictures near by page
     """
     return render(
-        request, 'items_near_by.html', {'item_type': 'picture'})
+        request, 'items_near_by.html', {'item_type': 'pictures'})
 
 
 def search_items_near_by(request):

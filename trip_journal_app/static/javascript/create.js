@@ -7,7 +7,7 @@ var number = 1,
     Images = [];
 
 function deleteImagesFromBlock(blockNumber) {
-    for (var i=0; i < Images.length; ++i) {
+    for (var i=0; i < Images.length; i++) {
         if (Images[i].block === blockNumber) {
             Images.splice(i, 1);
         }
@@ -15,7 +15,7 @@ function deleteImagesFromBlock(blockNumber) {
 }
 
 function swapImagesFromBlock(blockNumber1, blockNumber2) {
-    for (var i=0; i<Images.length; ++i) {
+    for (var i=0; i<Images.length; i++) {
         if (Images[i].block === blockNumber1) {
             Images[i].block = blockNumber2;
         }
@@ -27,7 +27,7 @@ function swapImagesFromBlock(blockNumber1, blockNumber2) {
 
 function addImagesFromTemp() {
     var i;
-    for(i=0; i < Images.length; ++i) {
+    for(i=0; i < Images.length; i++) {
         if (Images[i].state === 'temp') {
             Images[i].state = 'loaded';
             Images[i].block = number;
@@ -434,7 +434,7 @@ function initialize() {
   });
   drawingManager.setMap(map);
 
-    for (var i=0; i < temp_positions.length; ++i) {
+    for (var i=0; i < temp_positions.length; i++) {
 	var position = JSON.parse(temp_positions[i].position.replace("u'k'", '"k"').replace("u'B'", '"B"'));
         var location = new google.maps.LatLng(position.k, position.B);
 	var marker = new google.maps.Marker({

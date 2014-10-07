@@ -243,6 +243,52 @@ main{
     text-align: left;
 }
 
+/*igor tag*/
+
+#tags_list{
+    text-align: left;
+    padding: 5px 70px;
+}
+.tags_button{
+    padding: 2px 5px;
+    margin: 1px;
+    border: 1px solid #ccc;
+    display: inline-block;
+}
+.tags_delete{
+    color: #daa;
+    display: inline-block;
+    padding: 2px 4px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+}
+#tag_add{
+    position: absolute;
+    color: #aca;
+    font-weight: bold;
+    font-size: 30px;
+    cursor: pointer;
+    display: inline-block;
+    right: 5px;
+    top: -4px;
+}
+#tag_input{
+    border: 1px solid #ccc;
+    display: inline-block;
+    height: 23px;
+    width: 120px;
+    margin: 1px;
+    outline: none;
+    padding: 2px 25px 2px 2px;
+    vertical-align: top;
+}
+#tag_input_block, #button_list{
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+}
+/*end igor tag*/
 p.description_story {
     margin-top: 2px;
 }

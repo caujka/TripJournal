@@ -1,9 +1,11 @@
+#content {
+    width: 1090px;
+}
 #map-canvas-wrapper {
     position: fixed;
-    top: 40px;
     height: 400px;
     width: 390px;
-    margin-top:100px;
+    margin-top:0px;
     margin-left: 705px;
 }
 
@@ -12,56 +14,134 @@
     height: 100%;
 }
 
-#story_title {
-    margin-top: 30px;
-    color: #BE3C3C;
-    text-align: center;
+#story {
+    width: 680px;
+}
+
+#story_title, #story_info {
+    margin-left: 10px;
+}
+
+#story_title h2 {
     font-weight: normal;
-    text-transform: uppercase;
+    font-size: 2.2em;
+    margin-bottom: 15px;
+    color: #2a2f36;
 }
 
-#story_content {
-    width: 650px;
-}
-
-.author, .published {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    color: #333;
-    padding-left: 8px;
-}
-
-.sign {
-    color: #80B098;
+#story_info {
     margin-right: 10px;
+    margin-bottom: 16px;
+    border-top: thin solid #ccc;
+    border-bottom: thin solid #ccc;
+    color: #999;
+}
+
+#pub_date {
+    margin-right: 12px;
+}
+
+#author {
+    color: #f23c55;
+}
+
+#like_story {
+    float: right;
+}
+
+div.saved.img {
+    background: -webkit-linear-gradient(rgba(0, 0, 0, 0)) 91%, rgba(0, 0, 0, 0.65) 100%);
+    background: -o-linear-gradient(rgba(0, 0, 0, 0)) 91%, rgba(0, 0, 0, 0.65) 100%);
+    background: -moz-linear-gradient(rgba(0, 0, 0, 0)) 91%, rgba(0, 0, 0, 0.65) 100%);
+    background: linear-gradient(rgba(0, 0, 0, 0) 91%, rgba(0, 0, 0, 0.35) 100%);
 }
 
 .story_photo {
     width: 100%;
-    margin-top: 8px;
-}
-
-.saved {
-    background-color: #FDFDFD;
-    color: #333333;
-    border-bottom: thin solid #F8F8F8;
+    display: block;
+    z-index: -1;
     position: relative;
 }
 
-.saved p {
-    margin-bottom: 3px;
+.saved {
+    color: #2a2f36;
+    background-color: #fafefa;
+    border-bottom: thin solid #ccc;
+    position: relative;
+    line-height: 150%;
+    margin-bottom: 5px;
 }
+
 .saved.text p {
+    margin: 0;
     padding: 8px 5px 8px 10px;
 }
 
 .like {
     position: absolute;
-    bottom: 8px;
+    bottom: 3px;
     left: 8px;
-    color: #e5f0f8;
+    color: #fff;
+    font-size: 1.1em;
+    margin: 0;
 }
 
-.like_img {
-    width: 18px;
+.like_pic_link, .like_story_link {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
 }
+
+.like_pic_link {
+    background: url("../images/white_hollow_heart.png");
+    background-size: 100% 100%;
+}
+
+.like_story_link {
+    background: url("../images/red_hollow_heart.png");
+    background-size: 100% 100%;
+}
+
+.like_pic_link:hover, .like_pic_link.liked {
+    background: url("../images/white_full_heart.png");
+    background-size: 100% 100%;
+}
+
+.like_story_link:hover, .like_story_link.liked {
+    background: url("../images/red_full_heart.png");
+    background-size: 100% 100%;
+}
+
+.like_pic_link span, .like_story_link span {
+    display: none;
+}
+
+#user_buttons {
+    width: 350px;
+    margin-left: auto;
+    margin-right:auto;
+    padding: 16px;
+}
+
+#user_buttons form {
+    display: inline-block;
+}
+
+#user_buttons form input {
+    width: 160px;
+    height: 40px;
+    margin: 0 5px;
+    background-color: #61c791;
+    border: none;
+    text-transform: uppercase;
+    font-size: 1em;
+    color: white;
+    border: 2px solid #61c791;
+}
+
+#user_buttons form input:hover {
+    border: 2px solid #31797D;
+    background-color: white;
+    color: #31797D;
+}
+

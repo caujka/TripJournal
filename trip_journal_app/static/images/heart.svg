@@ -12,7 +12,10 @@
    version="1.1"
    id="svg2"
    inkscape:version="0.48.5 r10040"
-   sodipodi:docname="heart.svg">
+   sodipodi:docname="heart.svg"
+   inkscape:export-filename="/media/storage/code/projects/LAMP_Lv-120/TripJournal/trip_journal_app/static/images/heart.png"
+   inkscape:export-xdpi="60"
+   inkscape:export-ydpi="60">
   <metadata
      id="metadata10">
     <rdf:RDF>
@@ -39,16 +42,16 @@
      inkscape:window-height="702"
      id="namedview6"
      showgrid="false"
-     inkscape:zoom="2.2264151"
-     inkscape:cx="50.139831"
-     inkscape:cy="53"
+     inkscape:zoom="3.1486264"
+     inkscape:cx="15.730124"
+     inkscape:cy="54.178782"
      inkscape:window-x="0"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2" />
   <path
      d="M 58,17 C 52,7 42,0 30,0 C 13,0 0,13 0,30 C 0,63 18,68 58,106 C 98,68 116,63 116,30 C 116,13 103,0 86,0 C 74,0 64,7 58,17 z"
-     fill="#ff0707"
      id="path4"
-     style="fill:#b3b3b3;stroke:none" />
+     style="fill:#b3b3b3;stroke:none"
+     fill="#ff0707" />
 </svg>

@@ -164,23 +164,13 @@ def make_paging_for_items_search(request):
 
 
 @login_required
-def addrating(request, story_id):
-    story = get_object_or_404(Story, pk=int(story_id))
+@require_POST
+def like(request, item_id, item_to_like):
+    item = get_object_or_404(globals()[item_to_like], pk=int(item_id))
     user = auth.get_user(request)
-    story.likes.add(user)
-    story.save()
-    return redirect('/story/' + str(story_id))
-
-
-@login_required
-def addrating_to_pictures(request):
-    story_id = request.GET['story']
-    picture_id = request.GET['picture']
-    pic = get_object_or_404(Picture, pk=int(picture_id))
-    user = auth.get_user(request)
-    pic.likes.add(user)
-    pic.save()
-    return redirect('/story/' + str(story_id))
+    item.likes.add(user)
+    item.save()
+    return HttpResponse(item.likes_count())
 
 
 @login_required

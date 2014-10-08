@@ -1,10 +1,30 @@
 window.onload = function() {
     add_markers();
+
+    var likes = likeObjectsArray();
+    for (var i = 0; i < likes.length; i++) {
+        ( function (i) {
+            likes[i].likeLink.addEventListener('click', function(e){
+                e.preventDefault();
+                likeRequest(likes[i]);
+        }, 'false');
+        })(i);
+    }
 }
 
 var map;
 var geocoder;
 var markers = [];
+
+function getCookie(name) {
+    var value = '; ' + document.cookie;
+    var parts = value.split('; ' + name + '=');
+    if (parts.length === 2) {
+        return parts.pop().split(';').shift();
+    } else {
+        return undefined;
+    }
+}
 
 function add_markers() {
     var marker;
@@ -63,3 +83,52 @@ function centerMap(pos) {
     map.setCenter(pos);
 }
 
+function likeObjectsArray () {
+    var likes = [].slice.call(
+            document.getElementsByClassName('like')
+        );
+    likes.push(document.getElementById('like_story'));
+    var likesObjects = [];
+    for (var i = 0; i < likes.length; i++) {
+        console.log(likes[i]);
+        likesObjects.push(formObjectToLike(likes[i]));
+    }
+    return likesObjects;
+}
+
+function formObjectToLike(element) {
+    var objToLike = {},
+        children = element.childNodes;
+    for (var i = 0; i < children.length; i++) {
+        if (children[i].className === "likes_count") {
+            objToLike.likesCount = children[i];
+        }
+        else if (children[i].tagName === 'A') {
+            objToLike.url = children[i].getAttribute("href");
+            objToLike.likeLink = children[i];
+        }
+    }
+    return objToLike;
+}
+
+/*
+* Sends like POST request to picture or story url with id of that item.
+* When the response is returned adds 'liked' class to corresponding heart.
+* objToLike should have the following properties: url, element that contains
+* like count and link element to which class "liked" should be added.
+* */
+function likeRequest(objToLike) {
+    function showNewLike() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var likesCount = xhr.responseText;
+            objToLike.likesCount.innerHTML = likesCount;
+            objToLike.likeLink.classList.add("liked");
+        }
+    }
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', objToLike.url);
+    xhr.onreadystatechange = showNewLike;
+    xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+    xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');
+    xhr.send();
+}

@@ -11,7 +11,7 @@
     {% if page == 'story' %}
     <img class="story_photo" src="{{ story_block.pic|get_stored_pic_by_size:800 }}">
     <p style="display:none;">{{story_block.marker}}</p>
-    <p class="like">
+    <p class="like_picture">
         <a class="like_pic_link {% if story_block.pic|is_liked_by:user %}liked{% endif %}"
            href="{% url 'like_picture' story_block.pic.id %}">
         <span>Like</span></a>

@@ -85,7 +85,7 @@ function centerMap(pos) {
 
 function likeObjectsArray () {
     var likes = [].slice.call(
-            document.getElementsByClassName('like')
+            document.getElementsByClassName('like_picture')
         );
     likes.push(document.getElementById('like_story'));
     var likesObjects = [];

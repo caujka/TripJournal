@@ -269,7 +269,6 @@ window.onload = function() {
             content = text_block_template(text);
         appendBlock(story_cont, content, "text");
         clear();
-
     }
 
     function save_photo_story() {

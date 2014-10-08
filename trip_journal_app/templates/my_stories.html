@@ -7,8 +7,8 @@
 {% endblock %}
 {% block title %}My stories{% endblock %}
 {% block content %}
-    <h3>Your stories</h3>
-    <p><a href="{% url "edit" '' %}">Create new story</a></p>
+    <h3>Your stories:</h3>
+    <p id="new_story_link"><a href="{% url "edit" '' %}">Create new story</a></p>
 
     <div id="stories">
         {% for story in stories %}
@@ -21,7 +21,7 @@
                     </div>
                     <div class="story_likes">
                         <p>
-                        <img src="{% static "images/heart.svg" %}">{{ story.likes_count }}
+                        <img src="{% static "images/white_hollow_heart.png" %}"> {{ story.likes_count }}
                         </p>
                     </div>
                     <div class="title_block">
@@ -31,14 +31,14 @@
                     </div>
                 </div>
                 <div class="story_buttons">
-                    <div>
-                        <a href="{% url "edit" story.id %}">Edit</a>
-                    </div>
+                    <form method="GET" action="{% url "edit" story.id %}">
+                        <input type="submit" value="edit"/>
+                    </form>
+                    {% include "toggle_publish_buttons.html" with story_id=story.id %}
                     <form method="POST" action="{% url "delete" story.id %}">
                         {% csrf_token %}
                         <input type="submit" value="delete">
                     </form>
-                    {% include "toggle_publish_buttons.html" with story_id=story.id %}
                 </div>
             </div>
         {% endfor %}

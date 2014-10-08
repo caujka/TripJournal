@@ -49,15 +49,18 @@
     float: right;
 }
 
-.like_img {
-    margin-left:8px;
-    margin-bottom:0px;
-    width: 14px;
+div.saved.img {
+    background: -webkit-linear-gradient(rgba(0, 0, 0, 0)) 91%, rgba(0, 0, 0, 0.65) 100%);
+    background: -o-linear-gradient(rgba(0, 0, 0, 0)) 91%, rgba(0, 0, 0, 0.65) 100%);
+    background: -moz-linear-gradient(rgba(0, 0, 0, 0)) 91%, rgba(0, 0, 0, 0.65) 100%);
+    background: linear-gradient(rgba(0, 0, 0, 0) 91%, rgba(0, 0, 0, 0.35) 100%);
 }
 
 .story_photo {
     width: 100%;
     display: block;
+    z-index: -1;
+    position: relative;
 }
 
 .saved {
@@ -76,10 +79,41 @@
 
 .like {
     position: absolute;
-    bottom: 8px;
+    bottom: 3px;
     left: 8px;
     color: #fff;
     font-size: 1.1em;
+    margin: 0;
+}
+
+.like_pic_link, .like_story_link {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+}
+
+.like_pic_link {
+    background: url("../images/white_hollow_heart.png");
+    background-size: 100% 100%;
+}
+
+.like_story_link {
+    background: url("../images/red_hollow_heart.png");
+    background-size: 100% 100%;
+}
+
+.like_pic_link:hover, .like_pic_link.liked {
+    background: url("../images/white_full_heart.png");
+    background-size: 100% 100%;
+}
+
+.like_story_link:hover, .like_story_link.liked {
+    background: url("../images/red_full_heart.png");
+    background-size: 100% 100%;
+}
+
+.like_pic_link span, .like_story_link span {
+    display: none;
 }
 
 #user_buttons {

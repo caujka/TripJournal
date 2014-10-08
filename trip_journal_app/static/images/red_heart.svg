@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="116"
+   height="106"
+   version="1.1"
+   id="svg2"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="red_heart.svg"
+   inkscape:export-filename="/media/storage/code/projects/LAMP_Lv-120/TripJournal/trip_journal_app/static/images/green_heart.png"
+   inkscape:export-xdpi="60"
+   inkscape:export-ydpi="60">
+  <metadata
+     id="metadata10">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1366"
+     inkscape:window-height="702"
+     id="namedview6"
+     showgrid="false"
+     inkscape:zoom="2.2264151"
+     inkscape:cx="-72.75"
+     inkscape:cy="53"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <path
+     d="M 58,20.054893 C 52.50915,10.903475 43.35773,4.4974814 32.376027,4.4974814 16.818616,4.4974814 4.9217721,16.394325 4.9217721,31.951737 4.9217721,62.151419 21.394325,66.727128 58,101.50252 94.605675,66.727128 111.07823,62.151419 111.07823,31.951737 111.07823,16.394325 99.181384,4.4974814 83.623973,4.4974814 72.64227,4.4974814 63.49085,10.903475 58,20.054893 z"
+     id="path4"
+     style="fill:#cccccc;fill-opacity:1;stroke:#2a2f36;stroke-width:6.88591433000000031;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+     inkscape:connector-curvature="0" />
+</svg>

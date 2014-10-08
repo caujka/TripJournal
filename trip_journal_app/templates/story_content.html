@@ -15,7 +15,7 @@
     <a class="like_pic_link {% if story_block.pic|is_liked_by:user %}liked{% endif %}"
         href="/story/addrating_to_pictures/?picture={{ story_block.pic.id }}&story={{story.id}}">
         <span>Like</span></a>
-    {{ story_block.pic.likes_picture_count }}
+    {{ story_block.pic.likes_count }}
     </p>
     {% elif page == 'edit' %}
     <p>{{ story_block.pic|get_stored_pic_by_size:800 }}</p>

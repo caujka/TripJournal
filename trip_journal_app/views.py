@@ -4,13 +4,12 @@ import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.sessions.backends.db import SessionStore
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
-from django.core.exceptions import ObjectDoesNotExist
 
 from trip_journal_app.models import Story, Picture
 from trip_journal_app.forms import UploadFileForm
@@ -131,11 +130,11 @@ def search_items_near_by(request):
         y = float(request.GET.get('longitude', ''))
         sess = SessionStore()
         if request.GET.get('item_type','') == u'pictures':
-            sess['items_list'] = {'item_type': 'pictures', 
+            sess['items_list'] = {'item_type': 'pictures',
                                 'items': Picture.get_sorted_picture_list(x, y)}
             sess.save()
         elif request.GET.get('item_type','') == u'stories':
-            sess['items_list'] = {'item_type': 'stories', 
+            sess['items_list'] = {'item_type': 'stories',
                                 'items': Story.get_sorted_stories_list(x, y)}
             sess.save()
         response = redirect('/pagination/')
@@ -160,7 +159,7 @@ def make_paging_for_items_search(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         items = paginator.page(paginator.num_pages)
-    return render(request, 'items_near_by.html', {'items_list': items, 
+    return render(request, 'items_near_by.html', {'items_list': items,
                 'item_type': list_of_items['item_type']})
 
 
@@ -168,7 +167,7 @@ def make_paging_for_items_search(request):
 def addrating(request, story_id):
     story = get_object_or_404(Story, pk=int(story_id))
     user = auth.get_user(request)
-    story.rating.add(user)
+    story.likes.add(user)
     story.save()
     return redirect('/story/' + str(story_id))
 

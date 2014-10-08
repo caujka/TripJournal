@@ -137,6 +137,7 @@ div.saved.img {
     font-size: 1em;
     color: white;
     border: 2px solid #61c791;
+    cursor: pointer;
 }
 
 #user_buttons form input:hover {

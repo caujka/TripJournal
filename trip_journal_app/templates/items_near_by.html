@@ -13,7 +13,7 @@
         <input type="submit" value="Search">
     </form>
     {% if items_list %}
-        {% if item_type == 'story' %}
+        {% if item_type == 'stories' %}
             {% for item in items_list %}
                     <div style="display: inline-block">
                     <div style="width:450px">
@@ -23,7 +23,7 @@
                     <div style="width:150px">{{ item.story.date_publish|date }}</div>
                     </div>
             {% endfor %}   
-        {% elif item_type == 'picture' %}
+        {% elif item_type == 'pictures' %}
             {% for item in items_list %}
                     <div style="width:450px">
                         <img src="{{ item|get_stored_pic_by_size:400 }}">

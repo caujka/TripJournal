@@ -1,27 +1,11 @@
-.title{
-
-    margin-left: 300px;
-   
-}
-.author{
-    margin-left: 50px;
-    margin-top: 50px;
-}
-
-.published{
-    margin-left:50px;
-}
-
-.text{
-    margin-left:30px;
-    margin-top:50px;
+#content {
+    width: 1090px;
 }
 #map-canvas-wrapper {
     position: fixed;
-    top: 70px;
     height: 400px;
     width: 390px;
-    margin-top:100px;
+    margin-top:0px;
     margin-left: 705px;
 }
 
@@ -29,3 +13,101 @@
     width: 100%;
     height: 100%;
 }
+
+#story {
+    width: 680px;
+}
+
+#story_title, #story_info {
+    margin-left: 10px;
+}
+
+#story_title h2 {
+    font-weight: normal;
+    font-size: 2.2em;
+    margin-bottom: 15px;
+    color: #2a2f36;
+}
+
+#story_info {
+    margin-right: 10px;
+    margin-bottom: 16px;
+    border-top: thin solid #ccc;
+    border-bottom: thin solid #ccc;
+    color: #999;
+}
+
+#pub_date {
+    margin-right: 12px;
+}
+
+#author {
+    color: #f23c55;
+}
+
+#like_story {
+    float: right;
+}
+
+.like_img {
+    margin-left:8px;
+    margin-bottom:0px;
+    width: 14px;
+}
+
+.story_photo {
+    width: 100%;
+    display: block;
+}
+
+.saved {
+    color: #2a2f36;
+    background-color: #fafefa;
+    border-bottom: thin solid #ccc;
+    position: relative;
+    line-height: 150%;
+    margin-bottom: 5px;
+}
+
+.saved.text p {
+    margin: 0;
+    padding: 8px 5px 8px 10px;
+}
+
+.like {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    color: #fff;
+    font-size: 1.1em;
+}
+
+#user_buttons {
+    width: 350px;
+    margin-left: auto;
+    margin-right:auto;
+    padding: 16px;
+}
+
+#user_buttons form {
+    display: inline-block;
+}
+
+#user_buttons form input {
+    width: 160px;
+    height: 40px;
+    margin: 0 5px;
+    background-color: #61c791;
+    border: none;
+    text-transform: uppercase;
+    font-size: 1em;
+    color: white;
+    border: 2px solid #61c791;
+}
+
+#user_buttons form input:hover {
+    border: 2px solid #31797D;
+    background-color: white;
+    color: #31797D;
+}
+

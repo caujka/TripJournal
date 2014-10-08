@@ -16,34 +16,32 @@ main{
     position: relative;
     top: 5px;
 }
-.add_block{
+
+.add_block {
     width: 100px;
-    height: 70px;
+    background-color: #80B098;
+    height: 22px;
     text-align: center;
     border: 1px solid #aaa;
-    border-radius: 5px;
     margin: 2px;
     padding: 10px;
     display: inline-block;
-    background: url("../images/plus-sign_2.png") 35px 35px no-repeat #83a054;
     cursor: crosshair;
     position: relative;
 }
 .add_block:hover{
-    background: url("../images/plus-sign.png") 35px 35px no-repeat #8ed41f;
+    background-color: #8ED41F;
 }
 .key_panel{
     width: 215px;
     height: 25px;
     border: 1px solid #aaa;
-    border-radius: 5px;
     margin-left:540px;
     visibility:hidden;
 }
 .block_title{
     text-transform: uppercase;
-    font-weight: bold;
-    color: #fff;
+    color: #FFFFCC;
 }
 .clear{
     clear: both;
@@ -57,19 +55,17 @@ main{
 .add_panel{
     text-align: center;
 }
-.button{
-    text-transform: uppercase;
-    font-size: 20px;
-    font-weight: bold;
-    padding: 10px 18px;
-    margin: 5px;
-    background: #83a054;
-    border: none;
-    border-radius: 8px;
-    box-shadow: inset -1px -1px 10px #050;
-    color: #ff0;
-    outline: none;
+
+
+#publish_panel form {
+    display: inline-block;
 }
+
+.button {
+    display: inline-block;
+    text-transform: uppercase;
+}
+
 .button:active,.button_2:active,.button_4:active{
     background: #f00;
 }
@@ -104,7 +100,6 @@ main{
     padding: 4px 9px;
     background: #fff;
     border: 1px solid #83a054;
-    border-radius: 5px;
     color: #83a054;
     outline: none;
 }
@@ -144,7 +139,6 @@ main{
 
 .block_story{
     border: 1px solid #aaa;
-    border-radius: 10px;
     margin: 5px;
     text-align: left;
     padding: 10px;
@@ -247,5 +241,55 @@ main{
     padding: 4px;
     border: 1px solid #999;
     text-align: left;
+}
+
+/*igor tag*/
+
+#tags_list{
+    text-align: left;
+    padding: 5px 70px;
+}
+.tags_button{
+    padding: 2px 5px;
+    margin: 1px;
+    border: 1px solid #ccc;
+    display: inline-block;
+}
+.tags_delete{
+    color: #daa;
+    display: inline-block;
+    padding: 2px 4px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+}
+#tag_add{
+    position: absolute;
+    color: #aca;
+    font-weight: bold;
+    font-size: 30px;
+    cursor: pointer;
+    display: inline-block;
+    right: 5px;
+    top: -4px;
+}
+#tag_input{
+    border: 1px solid #ccc;
+    display: inline-block;
+    height: 23px;
+    width: 120px;
+    margin: 1px;
+    outline: none;
+    padding: 2px 25px 2px 2px;
+    vertical-align: top;
+}
+#tag_input_block, #button_list{
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+}
+/*end igor tag*/
+p.description_story {
+    margin-top: 2px;
 }
 

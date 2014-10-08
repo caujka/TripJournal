@@ -31,6 +31,18 @@
         </div>
         {% endif %}
 
+        <!-- igor tag -->
+        {% block tags %}
+        <div id="tags_list">
+            <div id="button_list"></div>
+            <div id="tag_input_block">
+                <input type="text" id="tag_input" placeholder=" + Tags">
+                <span id="tag_add">+</span>
+            </div>
+        </div>
+        {% endblock %}
+        <!-- end igor tag -->
+
         <h2 id="story_title" contenteditable="true">{{ story.title }}</h2>
 
         {% include 'story_content.html' with page="edit" %}
@@ -74,12 +86,6 @@
             <button id="clear_block_p" class="button_2 delete_block">-</button>
         </div>
 	   
-        <div class="block" >
-            <button id="comment_but_t" class="button_4" >Add Comments</button>
-            <button id="treasure_but_t" class="button_4">Add Treasure</button>
-            <input id="add_comment_t" type="text" name="title_story" class="element_story">
-            <input id="add_treasure_t" type="text" name="title_story" class="text_story clear_cont">
-        </div>
 
         <div id="add_panel" class="block">
             <div id="added_text" class="add_block">

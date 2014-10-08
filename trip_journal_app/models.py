@@ -64,6 +64,10 @@ class Story(models.Model):
 
     def get_text_with_pic_objects(self):
         text = json.loads(self.text, encoding='utf8')
+        # for situations when picture id wasn't saved for some reason
+        text = filter(
+            lambda x: x['type'] != "img" or not x['id'] is None, text
+        )
         for block in text:
             if block[u'type'] == u'img':
                 block[u'pic'] = Picture.objects.get(pk=int(block[u'id']))
@@ -99,6 +103,13 @@ class Story(models.Model):
     def likes_count(self):
         return self.rating.count()
 
+    def first_text(self):
+        return next((block for block in self.get_text_with_pic_objects()
+                    if block['type'] == 'text'), None)
+
+    def first_img(self):
+        return next((block for block in self.get_text_with_pic_objects()
+                    if block['type'] == 'img'), None)
 
 
 class Picture(models.Model):

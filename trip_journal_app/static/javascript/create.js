@@ -115,6 +115,9 @@ function deleteBlock(itemstr) {
     savePage();
 }
 
+function editBlock(itemstr){
+    var item = parseInt(itemstr);
+}
 
 function move_block(itemstr, direction) {
     // direction (-1) - up, (+1) - down
@@ -248,7 +251,7 @@ window.onload = function() {
             i;
 
         for (i = 0; i < arr_1.length; i++) {
-            arr_1[i].style.background = "url(\"../static/images/plus-sign_2.png\") 35px 35px no-repeat #83a054";
+            arr_1[i].style.background = "#80B098";
         }
         for (i = 0; i < arr_2.length; i++) {
             arr_2[i].style.display = 'none';
@@ -372,16 +375,64 @@ window.onload = function() {
     document.getElementById('adds_block_p').onclick = save_photo_story;
     document.getElementById('clear_block_p').onclick = clear;
 
-    document.getElementById('comment_but_t').onclick = function() {
-        comment_t.style.display = 'inline-block';
-        comment_t.focus();
-    };
-    document.getElementById('treasure_but_t').onclick = function() {
-        treasure_t.style.display = 'inline-block';
-        treasure_t.focus();
-    };
+    // document.getElementById('comment_but_t').onclick = function() {
+    //     comment_t.style.display = 'inline-block';
+    //     comment_t.focus();
+    // };
+    // document.getElementById('treasure_but_t').onclick = function() {
+    //     treasure_t.style.display = 'inline-block';
+    //     treasure_t.focus();
+    // };
+// igor tags -----
+
+tags_view();
+
+var tag_add = document.getElementById('tag_add');
+tag_add.onclick = tags_add;
+
+function tags_add() {
+    var tag_input = document.getElementById('tag_input');
+    var reg = /^[а-яa-z0-9іїє]+$/i;
+    if (tag_input.value.search(reg) >= 0) {
+        var ref = true;
+        for(var i = 0; i < tags_arr.length; i++){
+            if(tag_input.value === tags_arr[i]) {
+                ref = false;
+            }
+        }
+        if (ref) {
+            tags_arr.push(tag_input.value.toLowerCase());
+            tag_input.value = '';
+        } else {
+            alert('\"'+tag_input.value+'\" is in tag\'s list');
+        }
+    } else {
+            alert('input a-z, а-я, 0-9');
+    }
+    tag_input.focus();
+    tags_view();
+    console.log(tags_arr);
+}
+
 };
 
+var tags_arr = new Array();
+
+function tags_view(){
+    var button_list = document.getElementById('button_list');
+    button_list.innerHTML = '';
+    for (var i = 0; i < tags_arr.length; i++) {
+        button_list.innerHTML += '<div class="tags_button">'+tags_arr[i]+
+        ' <span class="tags_delete" onclick="tag_delete('+i+')">x</span></div>'
+    }
+}
+
+function tag_delete(i) {
+    tags_arr.splice(i, 1);
+    tags_view();
+}
+
+// end tags -----
 
 function delete_img(id) {
     if(id) {

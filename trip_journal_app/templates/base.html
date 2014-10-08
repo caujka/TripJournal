@@ -13,24 +13,25 @@
     <body>
         <div id="header">
             {% block header %}
-            <p id='cite_name'>Trip Journal</p>
+            <div id='cite_name'>
+                <p><a href={% url 'home' %}>Trip Journal</a></p>
+            </div>
             {% endblock %}
         </div>
         <div id="menu">
             {% block menu %}
-            <div><a href={% url 'home' %}>Main page</a></div>
-            <div><a href="{% url 'stories_near_by' %}">Stories near by</a></div>
-            <div><a href="{% url 'pictures_near_by' %}">Pictures</a></div>
+            <div><a href="{% url 'stories_near_by' %}">stories near by</a></div>
+            <div><a href="{% url 'pictures_near_by' %}">pictures</a></div>
             {% if user and not user.is_anonymous %}
-                <div><a href="{% url 'user_stories' %}">My stories</a></div>
+                <div><a href="{% url 'user_stories' %}">my stories</a></div>
                 <div>
-                    <a href="{% url 'auth:logout' %}?next={% url 'home' %}">Logout {{ user.username }}</a>
+                    <a href="{% url 'auth:logout' %}?next={% url 'home' %}">logout {{ user.username }}</a>
                 </div>
             {% else %}
                 <div>
-                    <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request|login_next }}">Google</a>
-                    <a href="{% url 'social:begin' 'facebook' %}?next={{ request|login_next }}">Facebook</a>
-                    <a href="{% url 'social:begin' 'vk-oauth2' %}?next={{ request|login_next }}">VK</a>
+                    <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request|login_next }}">google</a>
+                    <a href="{% url 'social:begin' 'facebook' %}?next={{ request|login_next }}">facebook</a>
+                    <a href="{% url 'social:begin' 'vk-oauth2' %}?next={{ request|login_next }}">vk</a>
                 </div>
             {% endif %}
             {% endblock %}

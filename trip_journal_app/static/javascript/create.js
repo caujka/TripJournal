@@ -444,50 +444,52 @@ function delete_img(id) {
 //Volodya
 var geocoder;
 var markersArray = [];
+
 function initialize() {
     geocoder = new google.maps.Geocoder();
     var mapOptions = {
-    zoom: 14
-};
-    map = new google.maps.Map(document.getElementById('map-canvas'),
-							  mapOptions);
+        zoom: 14
+    };
+    map = new google.maps.Map(
+            document.getElementById('map-canvas'),
+            mapOptions);
     google.maps.event.addListener(map, 'click', function(event) {
-    	placeMarker(event.latLng);
-});
+        placeMarker(event.latLng);
+    });
 
     if(navigator.geolocation) {
-    	navigator.geolocation.getCurrentPosition(function(position) {
-        	var pos = new google.maps.LatLng(position.coords.latitude,
-                                            position.coords.longitude);
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = new google.maps.LatLng(position.coords.latitude,
+                    position.coords.longitude);
 
-    var infowindow = new google.maps.InfoWindow({
-        map: map,
-        position: pos,
-        content: "I'm here"
-    });
+            var infowindow = new google.maps.InfoWindow({
+                map: map,
+                position: pos,
+                content: "I'm here"
+            });
 
-    map.setCenter(pos);
-    }, function() {
-      handleNoGeolocation(true);
-    });
-  } else {
-    // browser doesn't support geolocation
-    heNoGeolocation(false);
-  }
-  var drawingManager = new google.maps.drawing.DrawingManager({
-    drawingControlOptions: {
-      drawingModes: [
-        google.maps.drawing.OverlayType.POLYLINE
-      ]
+            map.setCenter(pos);
+        }, function() {
+            handleNoGeolocation(true);
+        });
+    } else {
+        // browser doesn't support geolocation
+        heNoGeolocation(false);
     }
+    var drawingManager = new google.maps.drawing.DrawingManager({
+        drawingControlOptions: {
+            drawingModes: [
+                google.maps.drawing.OverlayType.POLYLINE
+            ]
+        }
 
-  });
-  drawingManager.setMap(map);
+    });
+    drawingManager.setMap(map);
 
     for (var i=0; i < temp_positions.length; i++) {
-	var position = JSON.parse(temp_positions[i].position.replace("u'k'", '"k"').replace("u'B'", '"B"'));
+        var position = JSON.parse(temp_positions[i].position.replace("u'k'", '"k"').replace("u'B'", '"B"'));
         var location = new google.maps.LatLng(position.k, position.B);
-	var marker = new google.maps.Marker({
+        var marker = new google.maps.Marker({
             position: location,
             map: map
         });
@@ -502,19 +504,20 @@ function initialize() {
 }
 
 function handleNoGeolocation(errorFlag) {
-  if (errorFlag) {
-    var content = 'Error: The Geolocation service failed.';
-  } else {
-    var content = 'Error: Your browser doesn\'t support geolocation.';
-  }
+    var content;
+    if (errorFlag) {
+        content = 'Error: The Geolocation service failed.';
+    } else {
+        content = 'Error: Your browser doesn\'t support geolocation.';
+    }
 
-  var options = {
-    map: map,
-    position: new google.maps.LatLng(49.839754, 24.029846),
-    content: content
-  };
-  var infowindow = new google.maps.InfoWindow(options);
-  map.setCenter(options.position);
+    var options = {
+        map: map,
+        position: new google.maps.LatLng(49.839754, 24.029846),
+        content: content
+    };
+    var infowindow = new google.maps.InfoWindow(options);
+    map.setCenter(options.position);
 }
 
 // Add a marker to the map and push to the array.
@@ -523,7 +526,7 @@ function placeMarker(location) {
         position: location,
         map: map
     });
-       
+
     if(current_marker !== -1){
         if(BlockMarkers[current_marker] !== null){
             removeMark(BlockMarkers[current_marker]);
@@ -545,14 +548,14 @@ function setAllMap(map) {
 }
 
 function codeAddress() {
-  var address = document.getElementById('address').value;
-  geocoder.geocode( { 'address': address}, function(results, status) {
-    if (status == google.maps.GeocoderStatus.OK) {
-        map.setCenter(results[0].geometry.location);
-      } else {
-      alert('Geocode was not successful for the following reason: ' + status);
-    }
-  });
+    var address = document.getElementById('address').value;
+    geocoder.geocode( { 'address': address}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            map.setCenter(results[0].geometry.location);
+        } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+        }
+    });
 }
 
 function setactivemarker(itemstr){
@@ -569,23 +572,22 @@ function removeBlockMark(itemstr){
 
 function getMarkerLocation(i){
     if(BlockMarkers[i] !== null){
-	var marker =  markersArray[BlockMarkers[i]];
-	if(marker !== null){
+        var marker =  markersArray[BlockMarkers[i]];
+        if(marker !== null){
             return marker.position;
-	}
+        }
     }
-
     return null;
 }
 
+function centerMap(i) {
+    map.setCenter(markersArray[i].getPosition());
+}
+
+function removeMark(i) {
+    markersArray[i].setMap(null);
+    markersArray[i] = null;
+}
 
 google.maps.event.addDomListener(window, 'load', initialize);
-	function centerMap(i) {
-        map.setCenter(markersArray[i].getPosition());
-	}
 
-google.maps.event.addDomListener(window, 'load', initialize);
-    function removeMark(i) {
-        markersArray[i].setMap(null);
-        markersArray[i] = null;
-    }

@@ -45,11 +45,27 @@ function initialize() {
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
     for (var i=0; i < markers.length; ++i) {
-        var position = JSON.parse(markers[i].marker.replace("u'k'", '"k"').replace("u'B'", '"B"'));
+        var position = JSON.parse(
+                markers[i].marker.replace("u'k'", '"k"').replace("u'B'", '"B"')
+                );
         var place = new google.maps.LatLng(position.k, position.B);
         markers[i].marker = placeMarker(place);
-        map.setCenter(place);
+
+        (function (i) {
+            google.maps.event.addListener(markers[i].marker, 'click', function() {
+                map.setZoom(15);
+                map.setCenter(markers[i].marker.getPosition());
+            });
+            google.maps.event.addListener(markers[i].marker, 'mouseover', function() {
+                markers[i].block.classList.add('active_marker_block');
+            });
+            google.maps.event.addListener(markers[i].marker, 'mouseout', function() {
+                markers[i].block.classList.remove('active_marker_block');
+            });
+        })(i);
     }
+
+    // bounds for all markers to bee seen on the map.
     var bounds = new google.maps.LatLngBounds();
     for (i=0; i < markers.length; i++) {
         bounds.extend(markers[i].marker.getPosition());

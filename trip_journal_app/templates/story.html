@@ -26,9 +26,9 @@
                 by
                 <span id="author">{{ story.user }}</span>
                 <span id="like_story">
-                {{ story.likes_count }}
-                <a class="like_story_link {% if story|is_liked_by:user %}liked{% endif %}"
-                    href="{% url 'addrating' story.id %}"><span>Like</span></a>
+                    <span class="likes_count">{{ story.likes_count }}</span>
+                    <a class="like_story_link {% if story|is_liked_by:user %}liked{% endif %}"
+                        href="{% url 'like_story' story.id %}"><span>Like</span></a>
                 </span>
             </p>
         </div>

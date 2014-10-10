@@ -166,7 +166,10 @@ def make_paging_for_items_search(request):
 @login_required
 @require_POST
 def like(request, item_id, item_to_like):
-    item = get_object_or_404(globals()[item_to_like], pk=int(item_id))
+    item = get_object_or_404(
+        globals()[item_to_like.capitalize()],
+        pk=int(item_id)
+    )
     user = auth.get_user(request)
     item.likes.add(user)
     item.save()

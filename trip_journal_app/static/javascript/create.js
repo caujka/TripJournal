@@ -117,6 +117,14 @@ function deleteBlock(itemstr) {
 
 function editBlock(itemstr){
     var item = parseInt(itemstr);
+    //var poss = Blocks.indexOf(item);
+    //clear();
+//    document.getElementById("block_1").style.visibility = 'hidden';
+    document.getElementById('added_text').style.background = '#8ed41f';
+    document.getElementById('text_panel').style.display = 'block';
+    document.getElementById('textarea').value = document.getElementsByClassName('description_story')[item-1].innerHTML;
+    document.getElementById('textarea').focus();
+//    deleteBlock(item);
 }
 
 function move_block(itemstr, direction) {
@@ -210,6 +218,7 @@ window.onload = function() {
         treasure_t = document.getElementById('add_treasure_t'),
         //comment_p = document.getElementById('add_comment_p'),
         //treasure_p = document.getElementById('add_treasure_p'),
+        edit = document.getElementById('add_treasure_t'),
         textarea = document.getElementById('textarea'),
         text = document.getElementById('added_text'),
         photo = document.getElementById('added_image'),
@@ -333,6 +342,7 @@ window.onload = function() {
         text_panel.style.display = 'block';
         document.getElementById('textarea').focus();
     };
+
 
     photo.onclick = function() {
         clear();

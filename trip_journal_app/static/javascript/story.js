@@ -11,16 +11,6 @@ var activeMarker = {
     scaledSize: new google.maps.Size(25, 40)
 };
 
-function getCookie(name) {
-    var value = '; ' + document.cookie;
-    var parts = value.split('; ' + name + '=');
-    if (parts.length === 2) {
-        return parts.pop().split(';').shift();
-    } else {
-        return undefined;
-    }
-}
-
 function collectMarkers() {
     var marker;
     var blocks = document.getElementsByClassName('saved');

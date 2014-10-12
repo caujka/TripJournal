@@ -1,28 +1,58 @@
 var map;
 var geocoder;
 var markers = [];
-var unactiveMarker = {
-    url: '../static/images/green_marker.png',
-    scaledSize: new google.maps.Size(20, 32)
-};
 
-var activeMarker = {
-    url: '../static/images/red_marker.png',
-    scaledSize: new google.maps.Size(25, 40)
-};
+function BlockAndMarker (blockElement) {
+    this.unactiveIcon = {
+        url: '../static/images/green_marker.png',
+        scaledSize: new google.maps.Size(20, 32)
+    };
+
+    this.activeIcon = {
+        url: '../static/images/red_marker.png',
+        scaledSize: new google.maps.Size(25, 40)
+    };
+
+    function coordinatesFromBlock( block ) {
+        var position = JSON.parse(
+            block.children[1].innerHTML.replace("u'k'", '"k"').replace("u'B'", '"B"')
+        );
+        return new google.maps.LatLng(position.k, position.B);
+    }
+
+    this.block = blockElement;
+    this.marker = new google.maps.Marker({
+        position: coordinatesFromBlock(blockElement),
+        map: map,
+        icon: this.unactiveIcon
+    });
+
+    this.showActive = function (centerOn) {
+        this.block.classList.add('active_marker_block');
+        this.marker.setIcon(this.activeIcon);
+        if (centerOn === 'marker') {
+            map.setZoom(14);
+            map.panTo(this.marker.getPosition());
+        } else if (centerOn === 'block') {
+            scrollToElement(this.block);
+        }
+    };
+
+    this.showUnactive = function () {
+        this.block.classList.remove('active_marker_block');
+        this.marker.setIcon(this.unactiveIcon);
+    };
+}
 
 function collectMarkers() {
-    var marker;
+    var markerElement, blockElement;
     var blocks = document.getElementsByClassName('saved');
 
     for (i = 0; i < blocks.length; i++) {
-        block = blocks[i];
-        marker = block.children[1].innerHTML;
-        if (marker !== 'None') {
-            markers.push({
-                block: block,
-                marker: marker
-            });
+        blockElement = blocks[i];
+        markerElement = blockElement.children[1].innerHTML;
+        if (markerElement !== 'None') {
+            markers.push(new BlockAndMarker(blockElement));
         }
     }
 }
@@ -34,28 +64,24 @@ function initialize() {
     };
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
-    for (var i=0; i < markers.length; ++i) {
-        var position = JSON.parse(
-                markers[i].marker.replace("u'k'", '"k"').replace("u'B'", '"B"')
-                );
-        var place = new google.maps.LatLng(position.k, position.B);
-        markers[i].marker = placeMarker(place);
+    collectMarkers();
 
+    for (var i=0; i < markers.length; ++i) {
         (function (i) {
             google.maps.event.addListener(markers[i].marker, 'click', function() {
                 map.setZoom(15);
                 map.setCenter(markers[i].marker.getPosition());
             });
             google.maps.event.addListener(markers[i].marker, 'mouseover', function() {
-                markers[i].block.classList.add('active_marker_block');
+                markers[i].showActive('block');
             });
             google.maps.event.addListener(markers[i].marker, 'mouseout', function() {
-                markers[i].block.classList.remove('active_marker_block');
+                markers[i].showUnactive();
             });
         })(i);
     }
 
-    // bounds for all markers to bee seen on the map.
+    // bounds for all the markers to be seen on the map.
     var bounds = new google.maps.LatLngBounds();
     for (i=0; i < markers.length; i++) {
         bounds.extend(markers[i].marker.getPosition());
@@ -64,30 +90,14 @@ function initialize() {
 }
 
 
-function placeMarker(place) {
-    var marker = new google.maps.Marker({
-        position: place,
-        map: map,
-        icon: unactiveMarker
-    });
-    return marker;
-}
-
-
-function centerMap(pos) {
-    map.setCenter(pos);
-}
-
 function addHoverListenersToBlocks() {
     for (var i = 0; i < markers.length; i++) {
         ( function (i) {
             markers[i].block.addEventListener('mouseover', function(){
-                markers[i].marker.setIcon(activeMarker);
-                map.setZoom(14);
-                map.setCenter(markers[i].marker.getPosition());
+                markers[i].showActive('marker');
             }, 'false');
             markers[i].block.addEventListener('mouseout', function() {
-                markers[i].marker.setIcon(unactiveMarker);
+                markers[i].showUnactive();
             }, 'false');
         })(i);
     }
@@ -148,14 +158,11 @@ function likeRequest(objToLike) {
     xhr.send();
 }
 
+google.maps.event.addDomListener(window, 'load', initialize);
+
 window.onload = function() {
-
-    collectMarkers();
-
     var likes = likeObjectsArray();
     addClickListenersToLikes(likes);
     addHoverListenersToBlocks();
 };
-
-google.maps.event.addDomListener(window, 'load', initialize);
 

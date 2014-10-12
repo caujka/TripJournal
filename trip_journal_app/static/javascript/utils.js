@@ -8,3 +8,10 @@ function getCookie(name) {
     }
 }
 
+function scrollToElement(elem) {
+    var htmlElement = document.getElementsByTagName('html')[0],
+        currentY = document.getElementsByTagName('html')[0].scrollTop,
+        targetY = elem.offsetTop;
+    htmlElement.scrollTop = targetY;
+    return;
+}

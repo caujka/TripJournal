@@ -74,7 +74,7 @@ function appendBlock(story, blockContent, block_type, saved) {
     container.className = "block_story";
 
     container.innerHTML =
-        '<div contenteditable="true" id="contentarea_' + number + '">' +
+        '<div contenteditable="false" id="contentarea_' + number + '">' +
         blockContent +
         '</div>';
 
@@ -116,15 +116,23 @@ function deleteBlock(itemstr) {
 }
 
 function editBlock(itemstr){
-    var item = parseInt(itemstr);
-    //var poss = Blocks.indexOf(item);
-    //clear();
-//    document.getElementById("block_1").style.visibility = 'hidden';
-    document.getElementById('added_text').style.background = '#8ed41f';
-    document.getElementById('text_panel').style.display = 'block';
-    document.getElementById('textarea').value = document.getElementsByClassName('description_story')[item-1].innerHTML;
-    document.getElementById('textarea').focus();
-//    deleteBlock(item);
+    var item = parseInt(itemstr),
+        poss = Blocks.indexOf(item),
+        block = document.getElementById("block_" + Blocks[poss]),
+        contentarea = document.getElementById('contentarea_' + Blocks[poss]),
+        keybar = document.getElementById('keybar_' + Blocks[poss]),
+        textarea = "<textarea id='editText' rows='4' cols='90'></textarea>",
+        saveButton = "<input type='button' value='Save' onclick='saveChanges()'>",
+        cancelButton = "<input type='button' value='Cancel' onclick='cancelChanges()'>";
+    contentarea.style.display = 'none';
+    keybar.style.display = 'none';
+    textarea.value = document.getElementsByClassName('description_story')[item-1].innerHTML;
+    block.innerHTML = block.innerHTML + textarea + saveButton + cancelButton;
+    function cancelChanges() {
+        contentarea.style.display = 'block';
+        keybar.style.display = 'block';
+        document.getElementById('block_1').innerHTML = '<p>jdshflksfgkljsfdhlgjsfdng</p>'
+    };
 }
 
 function move_block(itemstr, direction) {

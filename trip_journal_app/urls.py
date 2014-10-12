@@ -14,14 +14,9 @@ urlpatterns = [
     url(r'^story/(?P<story_id>\d*)$', views.story, name='story'),
     # list of user stories
     url(r'^my_stories/$', views.user_stories, name='user_stories'),
-    # add likes to stories
-    url(r'^story/like/(?P<item_id>\d+)/$', views.like,
-        {'item_to_like': 'Story'},
-        name='like_story'),
-    # add likes to pictures
-    url(r'^picture/like/(?P<item_id>\d+)/$', views.like,
-        {'item_to_like': 'Picture'},
-        name='like_picture'),
+    # add likes to stories and pictures
+    url(r'^(?P<item_to_like>story|picture)/like/(?P<item_id>\d+)/$',
+        views.like, name='like'),
     # list of near by pictures
     url(r'^pictures_near_by/$', views.show_picture_near_by_page,
         name='pictures_near_by'),

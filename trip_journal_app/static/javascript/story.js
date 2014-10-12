@@ -93,6 +93,8 @@ function addHoverListenersToBlocks() {
         ( function (i) {
             markers[i].block.addEventListener('mouseover', function(){
                 markers[i].marker.setIcon(activeMarker);
+                map.setZoom(14);
+                map.setCenter(markers[i].marker.getPosition());
             }, 'false');
             markers[i].block.addEventListener('mouseout', function() {
                 markers[i].marker.setIcon(unactiveMarker);
@@ -144,8 +146,7 @@ function addClickListenersToLikes(likes) {
 function likeRequest(objToLike) {
     function showNewLike() {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            var likesCount = xhr.responseText;
-            objToLike.likesCount.innerHTML = likesCount;
+            objToLike.likesCount.innerHTML = xhr.responseText;
             objToLike.likeLink.classList.add("liked");
         }
     }

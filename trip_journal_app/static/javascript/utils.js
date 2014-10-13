@@ -15,3 +15,14 @@ function scrollToElement(elem) {
     htmlElement.scrollTop = targetY;
     return;
 }
+
+function getInsideElement(parentElement, property, propertyName) {
+    var children = parentElement.childNodes;
+    for (var i = 0; i < children.length; i++) {
+        if (children[i][property] == propertyName) {
+            return children[i];
+        }
+    }
+    return;
+}
+

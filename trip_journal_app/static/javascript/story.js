@@ -14,8 +14,11 @@ function BlockAndMarker (blockElement) {
     };
 
     function coordinatesFromBlock( block ) {
+        var markerElement = getInsideElement(
+                block, 'className', 'block_marker'
+            );
         var position = JSON.parse(
-            block.children[1].innerHTML.replace("u'k'", '"k"').replace("u'B'", '"B"')
+            markerElement.innerHTML.replace("u'k'", '"k"').replace("u'B'", '"B"')
         );
         return new google.maps.LatLng(position.k, position.B);
     }
@@ -50,7 +53,9 @@ function collectMarkers() {
 
     for (i = 0; i < blocks.length; i++) {
         blockElement = blocks[i];
-        markerElement = blockElement.children[1].innerHTML;
+        markerElement = getInsideElement(
+                blockElement, 'className', 'block_marker'
+            ).innerHTML;
         if (markerElement !== 'None') {
             markers.push(new BlockAndMarker(blockElement));
         }
@@ -112,17 +117,10 @@ function likeObjectsArray () {
 }
 
 function formObjectToLike(element) {
-    var objToLike = {},
-        children = element.childNodes;
-    for (var i = 0; i < children.length; i++) {
-        if (children[i].className === "likes_count") {
-            objToLike.likesCount = children[i];
-        }
-        else if (children[i].tagName === 'A') {
-            objToLike.url = children[i].getAttribute("href");
-            objToLike.likeLink = children[i];
-        }
-    }
+    var objToLike = {};
+    objToLike.likesCount = getInsideElement(element, 'className', 'likes_count');
+    objToLike.likeLink = getInsideElement(element, 'tagName', 'A');
+    objToLike.url = objToLike.likeLink.getAttribute('href');
     return objToLike;
 }
 

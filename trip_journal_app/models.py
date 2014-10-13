@@ -21,7 +21,7 @@ class Story(models.Model):
     date_publish = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
     track = models.TextField(blank=True, null=True)
-    rating = models.ManyToManyField(User)
+    likes = models.ManyToManyField(User)
     published = models.BooleanField(default=False)
     user = models.ForeignKey(User, related_name='owner')
     tags = models.ManyToManyField(Tag)
@@ -64,6 +64,10 @@ class Story(models.Model):
                 block[u'pic'] = Picture.objects.get(pk=int(block[u'id']))
         return text
 
+#         req = 'SELECT (POWER(latitude - %f, 2) + POWER(longitude - %f, 2)) as distance, id, latitude, longitude from trip_journal_app_picture WHERE latitude IS NOT NULL AND longitude IS NOT NULL ORDER BY distance;' % (latitude, longitude)
+#         list_of_pictures = list(Picture.objects.raw(req))
+#         return list_of_pictu
+
     @classmethod
     def get_sorted_stories_list(cls, latitude, longitude):
         req = ('select (POWER(trip_journal_app_picture.latitude - %f, 2) + '
@@ -101,10 +105,10 @@ class Story(models.Model):
 #        return list_of_stories
 
     def likes_count(self):
-        return self.rating.count()
+        return self.likes.count()
 
     def is_liked_by(self, user):
-        return self.rating.filter(id=user.id).exists()
+        return self.likes.filter(id=user.id).exists()
 
     def first_text(self):
         return next((block for block in self.get_text_with_pic_objects()
@@ -122,7 +126,7 @@ class Picture(models.Model):
     likes = models.ManyToManyField(User)
     SIZES = IMAGE_SIZES
 
-    def likes_picture_count(self):
+    def likes_count(self):
         return self.likes.count()
 
     def __unicode__(self):

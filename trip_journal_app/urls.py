@@ -14,12 +14,9 @@ urlpatterns = [
     url(r'^story/(?P<story_id>\d*)$', views.story, name='story'),
     # list of user stories
     url(r'^my_stories/$', views.user_stories, name='user_stories'),
-    # add likes to stories
-    url(r'^story/addrating/(?P<story_id>\d+)/$', views.addrating,
-        name='addrating'),
-    # add likes to pictures
-    url(r'^story/addrating_to_pictures/$', views.addrating_to_pictures,
-        name='addrating_to_pictures'),
+    # add likes to stories and pictures
+    url(r'^(?P<item_to_like>story|picture)/like/(?P<item_id>\d+)/$',
+        views.like, name='like'),
     # list of near by pictures
     url(r'^pictures_near_by/$', views.show_picture_near_by_page,
         name='pictures_near_by'),
@@ -27,7 +24,7 @@ urlpatterns = [
     url(r'^stories_near_by/$', views.show_story_near_by_page,
         name='stories_near_by'),
     url(r'^search_items_near_by/', views.search_items_near_by,
-         name='search_items_near_by'),
+        name='search_items_near_by'),
     url(r'^$', views.home, name='home'),
     # toggling publish state for story
     url(r'^publish/(?P<story_id>\d+)$', views.publish, name='publish'),

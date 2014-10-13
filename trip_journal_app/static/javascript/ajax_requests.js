@@ -29,7 +29,7 @@ function storyBlocksJson() {
         title = document.getElementById('story_title').innerHTML,
         blocks = [];
 
-    for (i = 0; i < Blocks.length; ++i) {
+    for (i = 0; i < Blocks.length; i++) {
         type = BlockTypes[i];
 	marker = getMarkerLocation(i);
         htmlBlock = document.getElementById('contentarea_' + (Blocks[i]));
@@ -47,7 +47,7 @@ function storyBlocksJson() {
     }
     return {
         'title': title,
-        'blocks': blocks,
+        'blocks': blocks
     };
 }
 

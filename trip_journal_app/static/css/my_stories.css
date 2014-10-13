@@ -1,72 +1,128 @@
-div {
-    /*border: black solid thin;*/
+h3 {
+    font-size: 1.8em;
+    font-weight: normal;
+    margin-left: 5px;
+}
+
+#new_story_link {
+    margin-left: 5px;
+}
+
+/* to avoid spaces between inline blocks */
+#stories {
+    font-size: 0;
+}
+
+#stories div {
+    font-size: 12pt;
 }
 
 .story_block {
     background-color: #F5F5F5;
     vertical-align: top;
-}
-
-.story_block {
     display: inline-block;
-    margin-bottom: 10px;
-    margin-left: 10px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    width: 328px;
+    position: relative;
+    z-index: 0;
 }
 
 .img_block {
-    width: 200px;
-    height: 150px;
+    width: 100%;
+    height: 246px;
     overflow: hidden;
+    background: url("../images/camera.svg") no-repeat center center;
+    background-size: 30%;
 }
 
 .img_block img {
-    width: 200px;
+    width: 100%;
+    position: relative;
 }
 
 .title_block {
-    width: 200px;
+    width: 100%;
     height: 70px;
+    text-align: center;
+    background-color: white;
 }
 
 .title_block p {
     padding: 10px;
     margin: 0px;
+    line-height: 150%;
 }
 
 .title_block a {
     text-decoration: none;
     font-size: 1.1em;
-    color: #AE3C3C;
+    color: #31797d;
 }
 
 .story_likes {
-    color: #B3B3B3;
+    visibility: hidden;
+    position: absolute;
+    top: 30px;
+    left: 145px;
+    color: white;
 }
 
 .story_likes img {
-    width: 15px;
-    padding: 5px 5px 0px 10px;
+    position: relative;
+    top: 4px;
+    width: 23px;
 }
 
 .story_likes p {
     margin: 0;
+    font-size: 25px;
 }
 
-.story_buttons a, input {
+.story_buttons {
+    position: absolute;
+    bottom: 85px;
+    left: 109px;
+    visibility: hidden;
+}
+
+.story_buttons input {
+    margin: 0;
     display: block;
+    cursor: pointer;
     font-size: 1em;
-    font-weight: normal;
+    font-weight: bold;
     text-align: center;
-    height: 30px;
-    background-color: #F2F2F2;
-    width: 100%;
+    height: 40px;
+    width: 110px;
+    background-color: rgba(255, 255, 255, 0);
     border: 0;
-    border-top: thin solid #E6E6E6;
-    text-decoration: none;
+    border-top: 2px solid #E6E6E6;
     text-transform: uppercase;
-    color: gray;
+    color: white;
 }
 
-.story_buttons a:hover, input:hover {
-    background-color: white;
+.story_block:hover .img_block {
+    background-image: none;
+    background-color: rgba(49, 121, 125, 0.8);
+}
+
+.story_block:hover .img_block img {
+    z-index: -1;
+}
+
+.story_block:hover .story_buttons {
+    visibility: visible;
+}
+
+.story_block:hover .story_likes {
+    visibility: visible;
+}
+
+.story_block:hover .title_block {
+    background-color: rgba(49, 121, 125, 0.8);
+}
+
+.story_block:hover .title_block a {
+    color: #e0ffb3;
 }

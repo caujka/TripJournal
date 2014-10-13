@@ -42,7 +42,7 @@ body {
     background-color: white;
 }
 
-#cite_name a:hover {
+#cite_name:hover a {
     color: #31797d;
 }
 

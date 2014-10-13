@@ -7,7 +7,7 @@ var number = 1,
     Images = [];
 
 function deleteImagesFromBlock(blockNumber) {
-    for (var i=0; i < Images.length; ++i) {
+    for (var i=0; i < Images.length; i++) {
         if (Images[i].block === blockNumber) {
             Images.splice(i, 1);
         }
@@ -15,7 +15,7 @@ function deleteImagesFromBlock(blockNumber) {
 }
 
 function swapImagesFromBlock(blockNumber1, blockNumber2) {
-    for (var i=0; i<Images.length; ++i) {
+    for (var i=0; i<Images.length; i++) {
         if (Images[i].block === blockNumber1) {
             Images[i].block = blockNumber2;
         }
@@ -27,7 +27,7 @@ function swapImagesFromBlock(blockNumber1, blockNumber2) {
 
 function addImagesFromTemp() {
     var i;
-    for(i=0; i < Images.length; ++i) {
+    for(i=0; i < Images.length; i++) {
         if (Images[i].state === 'temp') {
             Images[i].state = 'loaded';
             Images[i].block = number;
@@ -74,7 +74,7 @@ function appendBlock(story, blockContent, block_type, saved) {
     container.className = "block_story";
 
     container.innerHTML =
-        '<div contenteditable="true" id="contentarea_' + number + '">' +
+        '<div contenteditable="false" id="contentarea_' + number + '">' +
         blockContent +
         '</div>';
 
@@ -115,6 +115,25 @@ function deleteBlock(itemstr) {
     savePage();
 }
 
+function editBlock(itemstr){
+    var item = parseInt(itemstr),
+        poss = Blocks.indexOf(item),
+        block = document.getElementById("block_" + Blocks[poss]),
+        contentarea = document.getElementById('contentarea_' + Blocks[poss]),
+        keybar = document.getElementById('keybar_' + Blocks[poss]),
+        textarea = "<textarea id='editText' rows='4' cols='90'></textarea>",
+        saveButton = "<input type='button' value='Save' onclick='saveChanges()'>",
+        cancelButton = "<input type='button' value='Cancel' onclick='cancelChanges()'>";
+    contentarea.style.display = 'none';
+    keybar.style.display = 'none';
+    textarea.value = document.getElementsByClassName('description_story')[item-1].innerHTML;
+    block.innerHTML = block.innerHTML + textarea + saveButton + cancelButton;
+    function cancelChanges() {
+        contentarea.style.display = 'block';
+        keybar.style.display = 'block';
+        document.getElementById('block_1').innerHTML = '<p>jdshflksfgkljsfdhlgjsfdng</p>'
+    };
+}
 
 function move_block(itemstr, direction) {
     // direction (-1) - up, (+1) - down
@@ -207,6 +226,7 @@ window.onload = function() {
         treasure_t = document.getElementById('add_treasure_t'),
         //comment_p = document.getElementById('add_comment_p'),
         //treasure_p = document.getElementById('add_treasure_p'),
+        edit = document.getElementById('add_treasure_t'),
         textarea = document.getElementById('textarea'),
         text = document.getElementById('added_text'),
         photo = document.getElementById('added_image'),
@@ -269,7 +289,6 @@ window.onload = function() {
             content = text_block_template(text);
         appendBlock(story_cont, content, "text");
         clear();
-
     }
 
     function save_photo_story() {
@@ -331,6 +350,7 @@ window.onload = function() {
         text_panel.style.display = 'block';
         document.getElementById('textarea').focus();
     };
+
 
     photo.onclick = function() {
         clear();
@@ -442,50 +462,52 @@ function delete_img(id) {
 //Volodya
 var geocoder;
 var markersArray = [];
+
 function initialize() {
     geocoder = new google.maps.Geocoder();
     var mapOptions = {
-    zoom: 14
-};
-    map = new google.maps.Map(document.getElementById('map-canvas'),
-							  mapOptions);
+        zoom: 14
+    };
+    map = new google.maps.Map(
+            document.getElementById('map-canvas'),
+            mapOptions);
     google.maps.event.addListener(map, 'click', function(event) {
-    	placeMarker(event.latLng);
-});
+        placeMarker(event.latLng);
+    });
 
     if(navigator.geolocation) {
-    	navigator.geolocation.getCurrentPosition(function(position) {
-        	var pos = new google.maps.LatLng(position.coords.latitude,
-                                            position.coords.longitude);
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = new google.maps.LatLng(position.coords.latitude,
+                    position.coords.longitude);
 
-    var infowindow = new google.maps.InfoWindow({
-        map: map,
-        position: pos,
-        content: "I'm here"
-    });
+            var infowindow = new google.maps.InfoWindow({
+                map: map,
+                position: pos,
+                content: "I'm here"
+            });
 
-    map.setCenter(pos);
-    }, function() {
-      handleNoGeolocation(true);
-    });
-  } else {
-    // browser doesn't support geolocation
-    heNoGeolocation(false);
-  }
-  var drawingManager = new google.maps.drawing.DrawingManager({
-    drawingControlOptions: {
-      drawingModes: [
-        google.maps.drawing.OverlayType.POLYLINE
-      ]
+            map.setCenter(pos);
+        }, function() {
+            handleNoGeolocation(true);
+        });
+    } else {
+        // browser doesn't support geolocation
+        heNoGeolocation(false);
     }
+    var drawingManager = new google.maps.drawing.DrawingManager({
+        drawingControlOptions: {
+            drawingModes: [
+                google.maps.drawing.OverlayType.POLYLINE
+            ]
+        }
 
-  });
-  drawingManager.setMap(map);
+    });
+    drawingManager.setMap(map);
 
-    for (var i=0; i < temp_positions.length; ++i) {
-	var position = JSON.parse(temp_positions[i].position.replace("u'k'", '"k"').replace("u'B'", '"B"'));
+    for (var i=0; i < temp_positions.length; i++) {
+        var position = JSON.parse(temp_positions[i].position.replace("u'k'", '"k"').replace("u'B'", '"B"'));
         var location = new google.maps.LatLng(position.k, position.B);
-	var marker = new google.maps.Marker({
+        var marker = new google.maps.Marker({
             position: location,
             map: map
         });
@@ -500,19 +522,20 @@ function initialize() {
 }
 
 function handleNoGeolocation(errorFlag) {
-  if (errorFlag) {
-    var content = 'Error: The Geolocation service failed.';
-  } else {
-    var content = 'Error: Your browser doesn\'t support geolocation.';
-  }
+    var content;
+    if (errorFlag) {
+        content = 'Error: The Geolocation service failed.';
+    } else {
+        content = 'Error: Your browser doesn\'t support geolocation.';
+    }
 
-  var options = {
-    map: map,
-    position: new google.maps.LatLng(49.839754, 24.029846),
-    content: content
-  };
-  var infowindow = new google.maps.InfoWindow(options);
-  map.setCenter(options.position);
+    var options = {
+        map: map,
+        position: new google.maps.LatLng(49.839754, 24.029846),
+        content: content
+    };
+    var infowindow = new google.maps.InfoWindow(options);
+    map.setCenter(options.position);
 }
 
 // Add a marker to the map and push to the array.
@@ -521,7 +544,7 @@ function placeMarker(location) {
         position: location,
         map: map
     });
-       
+
     if(current_marker !== -1){
         if(BlockMarkers[current_marker] !== null){
             removeMark(BlockMarkers[current_marker]);
@@ -543,14 +566,14 @@ function setAllMap(map) {
 }
 
 function codeAddress() {
-  var address = document.getElementById('address').value;
-  geocoder.geocode( { 'address': address}, function(results, status) {
-    if (status == google.maps.GeocoderStatus.OK) {
-        map.setCenter(results[0].geometry.location);
-      } else {
-      alert('Geocode was not successful for the following reason: ' + status);
-    }
-  });
+    var address = document.getElementById('address').value;
+    geocoder.geocode( { 'address': address}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            map.setCenter(results[0].geometry.location);
+        } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+        }
+    });
 }
 
 function setactivemarker(itemstr){
@@ -567,23 +590,22 @@ function removeBlockMark(itemstr){
 
 function getMarkerLocation(i){
     if(BlockMarkers[i] !== null){
-	var marker =  markersArray[BlockMarkers[i]];
-	if(marker !== null){
+        var marker =  markersArray[BlockMarkers[i]];
+        if(marker !== null){
             return marker.position;
-	}
+        }
     }
-
     return null;
 }
 
+function centerMap(i) {
+    map.setCenter(markersArray[i].getPosition());
+}
+
+function removeMark(i) {
+    markersArray[i].setMap(null);
+    markersArray[i] = null;
+}
 
 google.maps.event.addDomListener(window, 'load', initialize);
-	function centerMap(i) {
-        map.setCenter(markersArray[i].getPosition());
-	}
 
-google.maps.event.addDomListener(window, 'load', initialize);
-    function removeMark(i) {
-        markersArray[i].setMap(null);
-        markersArray[i] = null;
-    }

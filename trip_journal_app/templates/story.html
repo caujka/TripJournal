@@ -27,7 +27,8 @@
                 <span id="like_story">
                     <span class="likes_count">{{ story.likes_count }}</span>
                     <a class="like_story_link {% if story|is_liked_by:user %}liked{% endif %}"
-                        href="{% url 'like' item_to_like="story" item_id=story.id %}"><span>Like</span></a>
+                       title="like this story"
+                       href="{% url 'like' item_to_like="story" item_id=story.id %}"><span>Like</span></a>
                 </span>
             </p>
         </div>

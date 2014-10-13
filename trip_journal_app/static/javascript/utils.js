@@ -19,7 +19,7 @@ function scrollToElement(elem) {
 function getInsideElement(parentElement, property, propertyName) {
     var children = parentElement.childNodes;
     for (var i = 0; i < children.length; i++) {
-        if (children[i][property] == propertyName) {
+        if (children[i][property] === propertyName) {
             return children[i];
         }
     }

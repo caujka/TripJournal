@@ -47,7 +47,6 @@ function appendBlock(story, blockContent, block_type, saved) {
         buttons = [
             ['top', 'moveup'],
             ['bottom', 'movedown'],
-            ['edit', 'editBlock'],
             ['delete', 'deleteBlock'],
             ['addmarker', 'setactivemarker'],
             ['removemarker', 'removeBlockMark']
@@ -74,7 +73,7 @@ function appendBlock(story, blockContent, block_type, saved) {
     container.className = "block_story";
 
     container.innerHTML =
-        '<div contenteditable="false" id="contentarea_' + number + '">' +
+        '<div onclick="editBlock(' + number + ')" id="contentarea_' + number + '">' +
         blockContent +
         '</div>';
 
@@ -120,19 +119,43 @@ function editBlock(itemstr){
         poss = Blocks.indexOf(item),
         block = document.getElementById("block_" + Blocks[poss]),
         contentarea = document.getElementById('contentarea_' + Blocks[poss]),
-        keybar = document.getElementById('keybar_' + Blocks[poss]),
-        textarea = "<textarea id='editText' rows='4' cols='90'></textarea>",
-        saveButton = "<input type='button' value='Save' onclick='saveChanges()'>",
-        cancelButton = "<input type='button' value='Cancel' onclick='cancelChanges()'>";
+        keybar = document.getElementById('keybar_' + Blocks[poss]);
+    textarea = document.createElement('textarea');
+    textarea.value = document.getElementsByClassName('description_story')[item-1].innerHTML;
+    textarea.rows = 4;
+    textarea.cols = 90;
     contentarea.style.display = 'none';
     keybar.style.display = 'none';
-    textarea.value = document.getElementsByClassName('description_story')[item-1].innerHTML;
-    block.innerHTML = block.innerHTML + textarea + saveButton + cancelButton;
-    function cancelChanges() {
-        contentarea.style.display = 'block';
-        keybar.style.display = 'block';
-        document.getElementById('block_1').innerHTML = '<p>jdshflksfgkljsfdhlgjsfdng</p>'
+    block.appendChild(textarea);
+    textarea.focus();
+    textarea.onkeypress = function(e) {
+        if (e.keyCode === 13) {
+            document.getElementsByClassName('description_story')[item-1].innerHTML = textarea.value;
+            block.removeChild(textarea);
+            contentarea.style.display = 'block';
+            keybar.style.display = 'block';
+            savePage();
+            return false;
+        }
     };
+//    function saveChanges() {
+//        document.getElementsByClassName('description_story')[item-1].innerHTML = textarea.value;
+//        block.removeChild(textarea);
+//        block.removeChild(saveButton);
+//        block.removeChild(cancelButton);
+//        contentarea.style.display = 'block';
+//        keybar.style.display = 'block';
+//        savePage();
+//    }
+//    function cancelChanges() {
+//        contentarea.style.display = 'block';
+//        keybar.style.display = 'block';
+//        //console.log(contentarea);
+//        block.removeChild(textarea);
+//        block.removeChild(saveButton);
+//        block.removeChild(cancelButton);
+//
+//    }
 }
 
 function move_block(itemstr, direction) {

@@ -114,49 +114,32 @@ function deleteBlock(itemstr) {
     savePage();
 }
 
-function editBlock(itemstr){
+function editBlock(itemstr) {
     var item = parseInt(itemstr),
         poss = Blocks.indexOf(item),
         block = document.getElementById("block_" + Blocks[poss]),
         contentarea = document.getElementById('contentarea_' + Blocks[poss]),
         keybar = document.getElementById('keybar_' + Blocks[poss]);
     textarea = document.createElement('textarea');
-    textarea.value = document.getElementsByClassName('description_story')[item-1].innerHTML;
+    textarea.value = document.getElementsByClassName('description_story')[item - 1].innerHTML;
     textarea.rows = 4;
     textarea.cols = 90;
     contentarea.style.display = 'none';
     keybar.style.display = 'none';
     block.appendChild(textarea);
     textarea.focus();
-    textarea.onkeypress = function(e) {
+    textarea.onkeypress = function (e) {
         if (e.keyCode === 13) {
-            document.getElementsByClassName('description_story')[item-1].innerHTML = textarea.value;
+            document.getElementsByClassName('description_story')[item - 1].innerHTML = textarea.value;
             block.removeChild(textarea);
             contentarea.style.display = 'block';
             keybar.style.display = 'block';
             savePage();
             return false;
         }
-    };
-//    function saveChanges() {
-//        document.getElementsByClassName('description_story')[item-1].innerHTML = textarea.value;
-//        block.removeChild(textarea);
-//        block.removeChild(saveButton);
-//        block.removeChild(cancelButton);
-//        contentarea.style.display = 'block';
-//        keybar.style.display = 'block';
-//        savePage();
-//    }
-//    function cancelChanges() {
-//        contentarea.style.display = 'block';
-//        keybar.style.display = 'block';
-//        //console.log(contentarea);
-//        block.removeChild(textarea);
-//        block.removeChild(saveButton);
-//        block.removeChild(cancelButton);
-//
-//    }
+    }
 }
+
 
 function move_block(itemstr, direction) {
     // direction (-1) - up, (+1) - down
@@ -498,34 +481,8 @@ function initialize() {
         placeMarker(event.latLng);
     });
 
-    if(navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = new google.maps.LatLng(position.coords.latitude,
-                    position.coords.longitude);
-
-            var infowindow = new google.maps.InfoWindow({
-                map: map,
-                position: pos,
-                content: "I'm here"
-            });
-
-            map.setCenter(pos);
-        }, function() {
-            handleNoGeolocation(true);
-        });
-    } else {
-        // browser doesn't support geolocation
-        heNoGeolocation(false);
-    }
-    var drawingManager = new google.maps.drawing.DrawingManager({
-        drawingControlOptions: {
-            drawingModes: [
-                google.maps.drawing.OverlayType.POLYLINE
-            ]
-        }
-
-    });
-    drawingManager.setMap(map);
+    centerOnCurrPos(map);
+    addDrawingManager(map);
 
     for (var i=0; i < temp_positions.length; i++) {
         var position = JSON.parse(temp_positions[i].position.replace("u'k'", '"k"').replace("u'B'", '"B"'));
@@ -542,23 +499,6 @@ function initialize() {
         i = markersArray.length - 1;
         BlockMarkers[temp_positions[i].block] = i;
     }
-}
-
-function handleNoGeolocation(errorFlag) {
-    var content;
-    if (errorFlag) {
-        content = 'Error: The Geolocation service failed.';
-    } else {
-        content = 'Error: Your browser doesn\'t support geolocation.';
-    }
-
-    var options = {
-        map: map,
-        position: new google.maps.LatLng(49.839754, 24.029846),
-        content: content
-    };
-    var infowindow = new google.maps.InfoWindow(options);
-    map.setCenter(options.position);
 }
 
 // Add a marker to the map and push to the array.

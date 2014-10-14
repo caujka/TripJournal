@@ -9,16 +9,6 @@ if (typeof String.prototype.endsWith !== 'function') {
     };
 }
 
-function getCookie(name) {
-    var value = '; ' + document.cookie;
-    var parts = value.split('; ' + name + '=');
-    if (parts.length === 2) {
-        return parts.pop().split(';').shift();
-    } else {
-        return undefined;
-    }
-}
-
 function storyIdFromUrl() {
     var currUrl = document.URL.split(['/']);
     return currUrl[currUrl.length - 1];

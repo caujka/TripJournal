@@ -4,16 +4,17 @@
 {% if story_block.type == 'text' %}
 <div class="saved text">
     <p>{{ story_block.content|safe }}</p>
-    <p style="display:none;">{{story_block.marker}}</p>
+    <p class="block_marker">{{story_block.marker}}</p>
 </div>
 {% elif story_block.type == 'img' %}
 <div class="saved img">
     {% if page == 'story' %}
     <img class="story_photo" src="{{ story_block.pic|get_stored_pic_by_size:800 }}">
-    <p style="display:none;">{{story_block.marker}}</p>
+    <p class="block_marker">{{story_block.marker}}</p>
     <p class="like_picture">
         <a class="like_pic_link {% if story_block.pic|is_liked_by:user %}liked{% endif %}"
-           href="{% url 'like' item_to_like="picture" item_id=story_block.pic.id %}">
+           href="{% url 'like' item_to_like="picture" item_id=story_block.pic.id %}"
+           title="like this picture">
         <span>Like</span></a>
         <span class="likes_count">{{ story_block.pic.likes_count }}</span>
     </p>

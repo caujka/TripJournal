@@ -127,14 +127,10 @@ function initialize() {
     };
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
-    markers = collectMarkers();
+    var markers = collectMarkers();
 
     // bounds for all the markers to be seen on the map.
-    var bounds = new google.maps.LatLngBounds();
-    for (i=0; i < markers.length; i++) {
-        bounds.extend(markers[i].marker.getPosition());
-    }
-    map.fitBounds(bounds);
+    setBounds(map, markers.map(function (obj) {return obj.marker;}));
 }
 
 function collectlikeObjects () {

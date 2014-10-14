@@ -123,17 +123,22 @@ function editBlock(itemstr){
         keybar = document.getElementById('keybar_' + Blocks[poss]),
         textarea = "<textarea id='editText' rows='4' cols='90'></textarea>",
         saveButton = "<input type='button' value='Save' onclick='saveChanges()'>",
-        cancelButton = "<input type='button' value='Cancel' onclick='cancelChanges()'>";
+        cancelButton = document.createElement('input');
+    cancelButton.type = 'button';
+    cancelButton.value = 'Cancel';
+    cancelButton.onclick = cancelChanges;
     contentarea.style.display = 'none';
     keybar.style.display = 'none';
     textarea.value = document.getElementsByClassName('description_story')[item-1].innerHTML;
-    block.innerHTML = block.innerHTML + textarea + saveButton + cancelButton;
+    block.innerHTML = block.innerHTML + textarea + saveButton;
+    block.appendChild(cancelButton);
     function cancelChanges() {
         contentarea.style.display = 'block';
         keybar.style.display = 'block';
         document.getElementById('block_1').innerHTML = '<p>jdshflksfgkljsfdhlgjsfdng</p>'
     };
 }
+
 
 function move_block(itemstr, direction) {
     // direction (-1) - up, (+1) - down
@@ -475,34 +480,8 @@ function initialize() {
         placeMarker(event.latLng);
     });
 
-    if(navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = new google.maps.LatLng(position.coords.latitude,
-                    position.coords.longitude);
-
-            var infowindow = new google.maps.InfoWindow({
-                map: map,
-                position: pos,
-                content: "I'm here"
-            });
-
-            map.setCenter(pos);
-        }, function() {
-            handleNoGeolocation(true);
-        });
-    } else {
-        // browser doesn't support geolocation
-        heNoGeolocation(false);
-    }
-    var drawingManager = new google.maps.drawing.DrawingManager({
-        drawingControlOptions: {
-            drawingModes: [
-                google.maps.drawing.OverlayType.POLYLINE
-            ]
-        }
-
-    });
-    drawingManager.setMap(map);
+    centerOnCurrPos(map);
+    addDrawingManager(map);
 
     for (var i=0; i < temp_positions.length; i++) {
         var position = JSON.parse(temp_positions[i].position.replace("u'k'", '"k"').replace("u'B'", '"B"'));
@@ -519,23 +498,6 @@ function initialize() {
         i = markersArray.length - 1;
         BlockMarkers[temp_positions[i].block] = i;
     }
-}
-
-function handleNoGeolocation(errorFlag) {
-    var content;
-    if (errorFlag) {
-        content = 'Error: The Geolocation service failed.';
-    } else {
-        content = 'Error: Your browser doesn\'t support geolocation.';
-    }
-
-    var options = {
-        map: map,
-        position: new google.maps.LatLng(49.839754, 24.029846),
-        content: content
-    };
-    var infowindow = new google.maps.InfoWindow(options);
-    map.setCenter(options.position);
 }
 
 // Add a marker to the map and push to the array.

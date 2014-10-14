@@ -16,3 +16,12 @@ def is_liked_by(obj, user):
 @register.filter(name='login_next')
 def login_next(request):
     return request.GET.get('next', request.path)
+
+
+@register.filter(name='coordinates_data')
+def coordinates_data(block):
+    if block['marker']:
+        return 'data-lat=%s data-lng=%s' % (
+            block['marker']['lat'], block['marker']['lng']
+        )
+    return ''

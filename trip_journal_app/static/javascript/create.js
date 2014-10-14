@@ -200,16 +200,16 @@ function img_block_template(src, img_id) {
 }
 
 function add_saved_blocks() {
-    var i, block, block_text, block_type, marker,
+    var i, block, block_text, block_type,
         blocks = document.getElementsByClassName('saved'),
         blocks_num = blocks.length,
-        story_content = document.getElementById('story_content');
+        story_content = document.getElementById('story_content'),
+        marker = {};
     for (i=0; i < blocks_num; i++) {
         block = blocks[0];
         block_type = block.classList[1];
         if (block_type === 'text') {
             block_text = text_block_template(block.children[0].innerHTML);
-	        marker = block.children[1].innerHTML;
         } else if (block_type === 'img') {
             block_text = img_block_template(
                 block.children[0].innerHTML,
@@ -219,6 +219,13 @@ function add_saved_blocks() {
         }
         block.parentNode.removeChild(block);
         appendBlock(story_content, block_text, block_type, saved=true);
+        if (block.dataset.hasOwnProperty('lat')) {
+	        marker = {
+                'lat': block.dataset.lat,
+                'lng': block.dataset.lng
+            };
+        }
+
 	appendBlockMarker(marker);
     }
 }
@@ -484,8 +491,8 @@ function initialize() {
     addDrawingManager(map);
 
     for (var i=0; i < temp_positions.length; i++) {
-        var position = JSON.parse(temp_positions[i].position.replace("u'k'", '"k"').replace("u'B'", '"B"'));
-        var location = new google.maps.LatLng(position.k, position.B);
+        var position = temp_positions[i].position;
+        var location = new google.maps.LatLng(position.lat, position.lng);
         var marker = new google.maps.Marker({
             position: location,
             map: map
@@ -554,7 +561,11 @@ function getMarkerLocation(i){
     if(BlockMarkers[i] !== null){
         var marker =  markersArray[BlockMarkers[i]];
         if(marker !== null){
-            return marker.position;
+            var pos = marker.getPosition();
+            return {
+                'lat': pos.lat(),
+                'lng': pos.lng()
+            };
         }
     }
     return null;

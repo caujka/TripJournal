@@ -31,7 +31,9 @@ function storyBlocksJson() {
             block.content = htmlBlock.children[0].innerHTML;
         }
         if (type === 'img') {
-            block.id = parseInt(htmlBlock.children[1].innerHTML);
+            block.id = parseInt(
+                getInsideElement(htmlBlock, 'tagName', 'IMG').dataset.dbid
+                );
         }
         blocks.push(block);
     }
@@ -51,11 +53,13 @@ function postImages(storyId){
      */
     function addImageIdFromDB(blockNum) {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            var blockContainer = document.getElementById(
-                    'contentarea_' + blockNum.toString()
+            var imgElement = getInsideElement(
+                    document.getElementById(
+                        'contentarea_' + blockNum.toString()
+                        ), 'tagName', 'IMG'
                     );
             picIdInDB = parseInt(xhr.responseText);
-            blockContainer.children[1].innerHTML = picIdInDB;
+            imgElement.dataset.dbid = picIdInDB;
             postData(true);
         } 
     }

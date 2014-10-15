@@ -138,7 +138,7 @@ function editBlock(itemstr) {
             savePage();
             return false;
         }
-    }
+    };
 }
 
 
@@ -196,8 +196,8 @@ function text_block_template(text) {
 
 function img_block_template(src, img_id) {
     return (
-        '<img src="' + src + '"class="image_story">' +
-        '<p style="display:none;">' + img_id + '</p>'
+        '<img src="' + src + '"class="image_story" data-dbid="' +
+        img_id + '">'
     );
 }
 
@@ -215,9 +215,8 @@ function add_saved_blocks() {
         } else if (block_type === 'img') {
             block_text = img_block_template(
                 block.children[0].innerHTML,
-                block.children[1].innerHTML
+                block.dataset.dbid
             );
-            marker = block.children[2].innerHTML;
         }
         block.parentNode.removeChild(block);
         appendBlock(story_content, block_text, block_type, saved=true);
@@ -406,14 +405,6 @@ window.onload = function() {
     document.getElementById('adds_block_p').onclick = save_photo_story;
     document.getElementById('clear_block_p').onclick = clear;
 
-    // document.getElementById('comment_but_t').onclick = function() {
-    //     comment_t.style.display = 'inline-block';
-    //     comment_t.focus();
-    // };
-    // document.getElementById('treasure_but_t').onclick = function() {
-    //     treasure_t.style.display = 'inline-block';
-    //     treasure_t.focus();
-    // };
 // igor tags -----
 
 tags_view();
@@ -489,7 +480,6 @@ function initialize() {
         placeMarker(event.latLng);
     });
 
-    centerOnCurrPos(map);
     addDrawingManager(map);
 
     for (var i=0; i < temp_positions.length; i++) {
@@ -506,6 +496,12 @@ function initialize() {
         markersArray.push(marker);
         i = markersArray.length - 1;
         BlockMarkers[temp_positions[i].block] = i;
+    }
+
+    if (markersArray.length === 0) {
+        centerOnCurrPos(map);
+    } else {
+        setBounds(map, markersArray);
     }
 }
 

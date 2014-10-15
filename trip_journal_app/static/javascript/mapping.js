@@ -3,7 +3,20 @@ var UNACTIVE_MARKER_WIDTH = 20,
     ACTIVE_MARKER_WIDTH = 25,
     ACTIVE_MARKER_HEIGHT = 40,
     ZOOM_INITIAL = 14,
-    ZOOM_ON_MARKER = 15;
+    ZOOM_ON_MARKER = 15,
+    UNACTIVE_ICON = {
+        url: '../static/images/green_marker.png',
+        scaledSize: new google.maps.Size(
+                UNACTIVE_MARKER_WIDTH,
+                UNACTIVE_MARKER_HEIGHT)
+    },
+
+    ACTIVE_ICON = {
+        url: '../static/images/red_marker.png',
+        scaledSize: new google.maps.Size(
+                ACTIVE_MARKER_WIDTH,
+                ACTIVE_MARKER_HEIGHT)
+    };
 
 /**
  * Sets the map zoom so that all the markers are visible.

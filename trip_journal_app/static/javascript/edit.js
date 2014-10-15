@@ -120,25 +120,26 @@ function editBlock(itemstr) {
         block = document.getElementById("block_" + Blocks[poss]),
         contentarea = document.getElementById('contentarea_' + Blocks[poss]),
         keybar = document.getElementById('keybar_' + Blocks[poss]);
-    console.log(BlockTypes.item)
-    textarea = document.createElement('textarea');
-    textarea.value = document.getElementsByClassName('description_story')[item - 1].innerHTML;
-    textarea.rows = 4;
-    textarea.cols = 90;
-    contentarea.style.display = 'none';
-    keybar.style.display = 'none';
-    block.appendChild(textarea);
-    textarea.focus();
-    textarea.onkeypress = function (e) {
-        if (e.keyCode === 13) {
-            document.getElementsByClassName('description_story')[item - 1].innerHTML = textarea.value;
-            block.removeChild(textarea);
-            contentarea.style.display = 'block';
-            keybar.style.display = 'block';
-            savePage();
-            return false;
-        }
-    };
+    console.log(BlockTypes[poss]);
+    if (BlockTypes[poss] === 'text') {
+        textarea = document.createElement('textarea');
+        textarea.value = document.getElementsByClassName('description_story')[item - 1].innerHTML;
+        textarea.rows = 4;
+        textarea.cols = 90;
+        contentarea.style.display = 'none';
+        keybar.style.display = 'none';
+        block.appendChild(textarea);
+        textarea.focus();
+        textarea.onkeypress = function (e) {
+            if (e.keyCode === 13) {
+                document.getElementsByClassName('description_story')[item - 1].innerHTML = textarea.value;
+                block.removeChild(textarea);
+                contentarea.style.display = 'block';
+                keybar.style.display = 'block';
+                savePage();
+            }
+        };
+    }
 }
 
 

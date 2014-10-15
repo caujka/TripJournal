@@ -76,7 +76,7 @@ ObjectToLike.prototype = {
         function showNewLike() {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 self.likesCount.innerHTML = xhr.responseText;
-                self.likeLink.classList.add("liked");
+                self.likeLink.classList.toggle("liked");
             }
         }
         var xhr = new XMLHttpRequest();

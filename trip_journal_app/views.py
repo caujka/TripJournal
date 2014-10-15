@@ -171,7 +171,10 @@ def like(request, item_id, item_to_like):
         pk=int(item_id)
     )
     user = auth.get_user(request)
-    item.likes.add(user)
+    if item.is_liked_by(user):
+        item.likes.remove(user)
+    else:
+        item.likes.add(user)
     item.save()
     return HttpResponse(item.likes_count())
 

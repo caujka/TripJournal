@@ -36,7 +36,7 @@ function addImagesFromTemp() {
 }
 
 function appendBlockMarker(marker) {
-    if(marker !== 'None'){
+    if (marker.hasOwnProperty('lat') > 0) {
         temp_positions.push({'block' : current_marker, 'position' : marker});
     }
 }
@@ -201,12 +201,12 @@ function img_block_template(src, img_id) {
 }
 
 function add_saved_blocks() {
-    var i, block, block_text, block_type,
+    var i, block, block_text, block_type, marker,
         blocks = document.getElementsByClassName('saved'),
         blocks_num = blocks.length,
-        story_content = document.getElementById('story_content'),
-        marker = {};
+        story_content = document.getElementById('story_content');
     for (i=0; i < blocks_num; i++) {
+        marker = {};
         block = blocks[0];
         block_type = block.classList[1];
         if (block_type === 'text') {
@@ -432,7 +432,6 @@ function tags_add() {
     }
     tag_input.focus();
     tags_view();
-    console.log(tags_arr);
 }
 
 };

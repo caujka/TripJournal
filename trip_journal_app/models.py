@@ -1,11 +1,13 @@
-from django.db import models
 import json
 import os
 import math
+
+from django.db import models
+from django.contrib.auth.models import User
+
 from TripJournal.settings import (IMAGE_SIZES, STORED_IMG_DOMAIN,
                                   IMG_STORAGE, TEMP_DIR)
 from trip_journal_app.utils.resize_image import resize_and_save_pics
-from django.contrib.auth.models import User
 
 
 class Tag(models.Model):
@@ -113,30 +115,38 @@ class Picture(models.Model):
     likes = models.ManyToManyField(User)
     SIZES = IMAGE_SIZES
 
-    def likes_count(self):
-        return self.likes.count()
-
     def __unicode__(self):
         return str(self.id)
 
+    def likes_count(self):
+        '''
+        Returns a number of users that liked this picture.
+        '''
+        return self.likes.count()
+
+    def is_liked_by(self, user):
+        '''
+        Retrun True if the user has liked the picture, Fasle otherwise.
+        '''
+        return self.likes.filter(id=user.id).exists()
+
     def get_stored_pics(self):
         '''
-        Retrun the object Stored picture with the greatest size
-        not bigger than max_accatible_size. If there isn't smaller
-        pictures returns the smallest from available.
+        Retruns the QuerySet of all stored pictures associated
+        with this picture.
         '''
         return Stored_picture.objects.filter(picture=self.id)
 
-    def get_stored_pic_by_size(self, accatible_size):
+    def get_stored_pic_by_size(self, acceptable_size):
         '''
-        Retrun the object Stored picture with the smallest size
-        not smaller than max_accatible_size. If there isn't larger
-        pictures returns the largest from available.
+        Retrun the object Stored_picture with the smallest size
+        not smaller than acceptable_size. If there isn't a larger
+        picture than acceptable_size returns the largest from available.
         '''
         story_pics = Stored_picture.objects.filter(picture=self.id)
-        accetable_pics = story_pics.filter(size__gte=accatible_size)
-        if accetable_pics:
-            pic = accetable_pics.order_by('size').first()
+        acceptable_pics = story_pics.filter(size__gte=acceptable_size)
+        if acceptable_pics:
+            pic = acceptable_pics.order_by('size').first()
             return pic
         return story_pics.order_by('size').last()
 
@@ -173,9 +183,6 @@ class Picture(models.Model):
         req = 'SELECT (POWER(latitude - %f, 2) + POWER(longitude - %f, 2)) as distance, id, latitude, longitude from trip_journal_app_picture WHERE latitude IS NOT NULL AND longitude IS NOT NULL ORDER BY distance;' % (latitude, longitude)
         list_of_pictures = list(Picture.objects.raw(req))
         return list_of_pictures
-
-    def is_liked_by(self, user):
-        return self.likes.filter(id=user.id).exists()
 
 
 class Stored_picture(models.Model):

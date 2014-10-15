@@ -479,7 +479,6 @@ function initialize() {
         placeMarker(event.latLng);
     });
 
-    centerOnCurrPos(map);
     addDrawingManager(map);
 
     for (var i=0; i < temp_positions.length; i++) {
@@ -496,6 +495,12 @@ function initialize() {
         markersArray.push(marker);
         i = markersArray.length - 1;
         BlockMarkers[temp_positions[i].block] = i;
+    }
+
+    if (markersArray.length === 0) {
+        centerOnCurrPos(map);
+    } else {
+        setBounds(map, markersArray);
     }
 }
 

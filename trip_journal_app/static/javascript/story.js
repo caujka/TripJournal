@@ -12,7 +12,7 @@ function BlockAndMarker (blockElement) {
     self.marker = new google.maps.Marker({
         position: coordinatesFromBlock(blockElement),
         map: map,
-        icon: self.unactiveIcon
+        icon: UNACTIVE_ICON
     });
 
     // event listeners for blocks
@@ -39,25 +39,12 @@ function BlockAndMarker (blockElement) {
 
 BlockAndMarker.prototype = {
     constructor: BlockAndMarker,
-    unactiveIcon: {
-        url: '../static/images/green_marker.png',
-        scaledSize: new google.maps.Size(
-                UNACTIVE_MARKER_WIDTH,
-                UNACTIVE_MARKER_HEIGHT)
-    },
-
-    activeIcon: {
-        url: '../static/images/red_marker.png',
-        scaledSize: new google.maps.Size(
-                ACTIVE_MARKER_WIDTH,
-                ACTIVE_MARKER_HEIGHT)
-    },
 
     showActive: function (centerOn) {
         this.block.classList.add('active_marker_block');
-        this.marker.setIcon(this.activeIcon);
+        this.marker.setIcon(ACTIVE_ICON);
         if (centerOn === 'marker') {
-            map.setZoom(14);
+            map.setZoom(ZOOM_INITIAL);
             map.panTo(this.marker.getPosition());
         } else if (centerOn === 'block') {
             scrollToElement(this.block);
@@ -66,7 +53,7 @@ BlockAndMarker.prototype = {
 
     showUnactive: function () {
         this.block.classList.remove('active_marker_block');
-        this.marker.setIcon(this.unactiveIcon);
+        this.marker.setIcon(UNACTIVE_ICON);
     }
 };
 
@@ -109,6 +96,10 @@ function initialize() {
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
     var markers = collectMarkers();
+    if (markers.length === 0) {
+        centerOnCurrPos(map);
+        return;
+    }
 
     // bounds for all the markers to be seen on the map.
     setBounds(map, markers.map(function (obj) {return obj.marker;}));

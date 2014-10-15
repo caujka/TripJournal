@@ -120,6 +120,7 @@ function editBlock(itemstr) {
         block = document.getElementById("block_" + Blocks[poss]),
         contentarea = document.getElementById('contentarea_' + Blocks[poss]),
         keybar = document.getElementById('keybar_' + Blocks[poss]);
+    console.log(BlockTypes.item)
     textarea = document.createElement('textarea');
     textarea.value = document.getElementsByClassName('description_story')[item - 1].innerHTML;
     textarea.rows = 4;

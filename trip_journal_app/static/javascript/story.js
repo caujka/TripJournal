@@ -5,13 +5,7 @@ function BlockAndMarker (blockElement) {
     var self = this;
 
     function coordinatesFromBlock(block) {
-        var markerElement = getInsideElement(
-                block, 'className', 'block_marker'
-            );
-        var position = JSON.parse(
-            markerElement.innerHTML.replace("u'k'", '"k"').replace("u'B'", '"B"')
-        );
-        return new google.maps.LatLng(position.k, position.B);
+        return new google.maps.LatLng(block.dataset.lat, block.dataset.lng);
     }
 
     self.block = blockElement;
@@ -32,7 +26,7 @@ function BlockAndMarker (blockElement) {
 
     // event listeners for markers
     google.maps.event.addListener(self.marker, 'click', function() {
-        map.setZoom(15);
+        map.setZoom(ZOOM_ON_MARKER);
         map.setCenter(self.marker.getPosition());
     });
     google.maps.event.addListener(self.marker, 'mouseover', function() {
@@ -47,12 +41,16 @@ BlockAndMarker.prototype = {
     constructor: BlockAndMarker,
     unactiveIcon: {
         url: '../static/images/green_marker.png',
-        scaledSize: new google.maps.Size(20, 32)
+        scaledSize: new google.maps.Size(
+                UNACTIVE_MARKER_WIDTH,
+                UNACTIVE_MARKER_HEIGHT)
     },
 
     activeIcon: {
         url: '../static/images/red_marker.png',
-        scaledSize: new google.maps.Size(25, 40)
+        scaledSize: new google.maps.Size(
+                ACTIVE_MARKER_WIDTH,
+                ACTIVE_MARKER_HEIGHT)
     },
 
     showActive: function (centerOn) {
@@ -103,27 +101,10 @@ ObjectToLike.prototype = {
     }
 };
 
-function collectMarkers() {
-    var markerElement, blockElement,
-        markers = [],
-        blocks = document.getElementsByClassName('saved');
-
-    for (i = 0; i < blocks.length; i++) {
-        blockElement = blocks[i];
-        markerElement = getInsideElement(
-                blockElement, 'className', 'block_marker'
-            ).innerHTML;
-        if (markerElement !== 'None') {
-            markers.push(new BlockAndMarker(blockElement));
-        }
-    }
-    return markers;
-}
-
 function initialize() {
     geocoder = new google.maps.Geocoder();
     var mapOptions = {
-        zoom: 14
+        zoom: ZOOM_INITIAL
     };
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
@@ -131,6 +112,17 @@ function initialize() {
 
     // bounds for all the markers to be seen on the map.
     setBounds(map, markers.map(function (obj) {return obj.marker;}));
+}
+
+function collectMarkers() {
+    var blocks = [].filter.call(
+            document.getElementsByClassName('saved'), function(block) {
+                return block.dataset.hasOwnProperty('lat');
+            }
+        );
+    return blocks.map(function(block) {
+        return new BlockAndMarker(block);
+    });
 }
 
 function collectlikeObjects () {

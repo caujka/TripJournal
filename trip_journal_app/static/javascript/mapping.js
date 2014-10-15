@@ -1,3 +1,10 @@
+var UNACTIVE_MARKER_WIDTH = 20,
+    UNACTIVE_MARKER_HEIGHT = 32,
+    ACTIVE_MARKER_WIDTH = 25,
+    ACTIVE_MARKER_HEIGHT = 40,
+    ZOOM_INITIAL = 14,
+    ZOOM_ON_MARKER = 15;
+
 /**
  * Sets the map zoom so that all the markers are visible.
  *

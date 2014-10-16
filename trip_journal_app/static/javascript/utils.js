@@ -17,8 +17,16 @@ function scrollToElement(elem) {
 }
 
 function getInsideElement(parentElement, property, propertyName) {
-    var children = parentElement.childNodes;
-    for (var i = 0; i < children.length; i++) {
+    var i,
+    children = parentElement.children;
+    if (property === 'className') {
+        for (i = 0; i < children.length; i++) {
+            if (children[i].classList.contains(propertyName)) {
+                return children[i];
+            }
+        }
+    }
+    for (i = 0; i < children.length; i++) {
         if (children[i][property] === propertyName) {
             return children[i];
         }

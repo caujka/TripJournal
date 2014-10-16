@@ -20,8 +20,8 @@
         </div>
         <div id="menu">
             {% block menu %}
-            <div><a href="{% url 'stories_near_by' %}">stories near by</a></div>
-            <div><a href="{% url 'pictures_near_by' %}">pictures</a></div>
+            <div><a href="{% url 'stories_near_by' %}">stories nearby</a></div>
+            <div><a href="{% url 'pictures_near_by' %}">pictures nearby</a></div>
             {% if user and not user.is_anonymous %}
                 <div><a href="{% url 'user_stories' %}">my stories</a></div>
                 <div>

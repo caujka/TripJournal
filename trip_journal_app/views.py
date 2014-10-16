@@ -83,7 +83,8 @@ def upload_img(request, story_id):
 
 def story(request, story_id):
     if story_id:
-        return story_contents(request, story_id, 'story.html')
+        return story_contents(request, story_id, 'story.html', 
+                                check_published=True)
     else:
         return redirect('/')
 
@@ -185,4 +186,9 @@ def delete(request, story_id):
         return HttpResponse('Unathorized', status=401)
     story.delete()
     return redirect(reverse('user_stories'))
+
+
+def show_authorization_page(request):
+        return render(
+        request, 'authorization_page.html')
 

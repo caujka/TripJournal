@@ -61,5 +61,8 @@ local_settings.py
 # temporal files
 *~
 .idea
+.swp
+
+# scretes for social services
 client_secrets
 

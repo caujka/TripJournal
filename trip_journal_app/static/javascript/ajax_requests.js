@@ -9,16 +9,6 @@ if (typeof String.prototype.endsWith !== 'function') {
     };
 }
 
-function getCookie(name) {
-    var value = '; ' + document.cookie;
-    var parts = value.split('; ' + name + '=');
-    if (parts.length === 2) {
-        return parts.pop().split(';').shift();
-    } else {
-        return undefined;
-    }
-}
-
 function storyIdFromUrl() {
     var currUrl = document.URL.split(['/']);
     return currUrl[currUrl.length - 1];
@@ -26,22 +16,24 @@ function storyIdFromUrl() {
 
 function storyBlocksJson() {
     var i, type, block, blockContent, blockText,
-        title = document.getElementById('story_title').innerHTML,
-        blocks = [];
+    title = document.getElementById('story_title').innerHTML,
+    blocks = [];
 
     for (i = 0; i < Blocks.length; i++) {
         type = BlockTypes[i];
-	marker = getMarkerLocation(i);
+        marker = getMarkerLocation(i);
         htmlBlock = document.getElementById('contentarea_' + (Blocks[i]));
         block = {
             'type': type,
-	    'marker' : marker
+            'marker' : marker
         };
         if (type === 'text') {
             block.content = htmlBlock.children[0].innerHTML;
         }
         if (type === 'img') {
-            block.id = parseInt(htmlBlock.children[1].innerHTML);
+            block.id = parseInt(
+                getInsideElement(htmlBlock, 'tagName', 'IMG').dataset.dbid
+                );
         }
         blocks.push(block);
     }
@@ -53,7 +45,7 @@ function storyBlocksJson() {
 
 function postImages(storyId){
     var i, formData, xhr, imgBlockIndex, img,
-        numberOfImg = Images.length;
+    numberOfImg = Images.length;
 
     /**
      * Sets hidden element with
@@ -61,11 +53,13 @@ function postImages(storyId){
      */
     function addImageIdFromDB(blockNum) {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            var blockContainer = document.getElementById(
-                'contentarea_' + blockNum.toString()
-            );
+            var imgElement = getInsideElement(
+                    document.getElementById(
+                        'contentarea_' + blockNum.toString()
+                        ), 'tagName', 'IMG'
+                    );
             picIdInDB = parseInt(xhr.responseText);
-            blockContainer.children[1].innerHTML = picIdInDB;
+            imgElement.dataset.dbid = picIdInDB;
             postData(true);
         } 
     }
@@ -87,7 +81,7 @@ function postImages(storyId){
 
 function postData(async){
     var xhr = new XMLHttpRequest(),
-        requestBody = JSON.stringify(storyBlocksJson());
+    requestBody = JSON.stringify(storyBlocksJson());
 
     /**
      * Appends story id to page url and urls form publsih panel
@@ -99,8 +93,8 @@ function postData(async){
             var newId = xhr.responseText;
             if (!document.URL.endsWith(newId)) {
                 window.history.pushState(
-                    'new_id', 'Title', '/edit/' + newId
-                );
+                        'new_id', 'Title', '/edit/' + newId
+                        );
                 var publish_panel = document.getElementById('publish_panel');
                 publish_panel.className = 'block';
                 publish_panel.style.display = 'block';

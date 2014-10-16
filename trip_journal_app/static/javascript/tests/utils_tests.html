@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Utils test</title>
+        <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.15.0.css">
+    </head>
+    <body>
+        <div id="qunit"></div>
+        <div id="qunit-fixture">
+            <div id="parent_element">
+                <a href="http://qunitjs.com/" id="a_tag_child">A child</a>
+                <div id="id_child">
+                    <a href="http://qunitjs.com/" id="a_tag_grandchild">A grandchild</a>
+                </div>
+                <div class="class_test confuse_class" id="first_class_child"></div>
+                <div class="class_test" id="second_class_child"></div>
+            </div>
+        </div>
+        <script src="../utils.js"></script>
+        <script src="http://code.jquery.com/qunit/qunit-1.15.0.js"></script>
+        <script src="utils_tests.js"></script>
+    </body>
+</html>

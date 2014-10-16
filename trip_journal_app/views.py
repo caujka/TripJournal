@@ -172,7 +172,10 @@ def like(request, item_id, item_to_like):
         pk=int(item_id)
     )
     user = auth.get_user(request)
-    item.likes.add(user)
+    if item.is_liked_by(user):
+        item.likes.remove(user)
+    else:
+        item.likes.add(user)
     item.save()
     return HttpResponse(item.likes_count())
 
@@ -192,3 +195,15 @@ def show_authorization_page(request):
         return render(
         request, 'authorization_page.html')
 
+
+def stories_by_user(request):
+    stor = csrf(request)
+    if request.method == 'GET':
+        needed_user = str(request.GET.get('needed_user', ''))
+        stories = []
+        if needed_user:
+        	needed_user = User.objects.get(username=needed_user)
+        	stories = Story.objects.filter(user=needed_user)
+        context = {'stories': stories}
+        return render(request, 'stories_by_user.html', context)
+        

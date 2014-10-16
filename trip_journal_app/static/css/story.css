@@ -3,9 +3,9 @@
 }
 #map-canvas-wrapper {
     position: fixed;
+    top: 132px;
     height: 400px;
     width: 390px;
-    margin-top:0px;
     margin-left: 705px;
 }
 

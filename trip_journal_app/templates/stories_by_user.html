@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Stories by needed user{% endblock %}
+
+{% block content %}
+    <h3>Here you can find stories by user you like</h3>
+    <form action="/stories_by_user/" method="get">
+        {% csrf_token %}
+        Enter user's name: <br>
+        <input type="text" name="needed_user" id="needed_user" required><br>
+        <input type="submit" value="Search">
+    </form>
+    {% if stories_list %}
+        <ul>
+        {% for story in stories_list %}
+            <li>
+                <div style="display: inline-block">
+                <div style="width:450px">
+                    <a href="{% url "story" story.story.id %}">{{ story.story.title }}</a>
+                </div>
+                <div style="width:50px">{{ story.story.user }}</div>
+                <div style="width:150px">{{ story.story.date_publish|date }}</div>
+                </div>
+            </li>
+        {% endfor %}
+        </ul>
+
+        <div align="center">
+        <span>
+            {% if stories_list.has_previous %}
+                <a href="?page={{ stories_list.previous_page_number }}">Prev</a>
+            {% endif %}
+
+            <span>
+                {{ stories_list.number }} of {{ stories_list.paginator.num_pages }}
+            </span>
+
+            {% if stories_list.has_next %}
+                <a href="?page={{ stories_list.next_page_number }}">Next</a>
+            {% endif %}
+        </span>
+        </div>
+    {% endif %}
+
+{% endblock %}

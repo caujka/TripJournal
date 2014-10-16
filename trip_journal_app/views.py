@@ -189,3 +189,16 @@ def delete(request, story_id):
     story.delete()
     return redirect(reverse('user_stories'))
 
+
+def stories_by_user(request):
+    stor = csrf(request)
+    if request.method == 'GET':
+        needed_user = str(request.GET.get('needed_user', ''))
+        stories = []
+        if needed_user:
+        	needed_user = User.objects.get(username=needed_user)
+        	stories = Story.objects.filter(user=needed_user)
+        context = {'stories': stories}
+        return render(request, 'stories_by_user.html', context)
+
+

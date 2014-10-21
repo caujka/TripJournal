@@ -34,7 +34,7 @@ urlpatterns = [
     url(r'^pagination/', views.make_paging_for_items_search,
         name='make_paging_for_items_search'),
     # get all tags
-    url(r'^get_story_tags/', views.get_story_tags, name='tags_story'),
+    url(r'^get_story_tags/$', views.get_story_tags, name='tags_story'),
     # put teg to DB
     url(r'^put_tag/$', views.put_tag, name='curent_tag'),
     url(r'^authorization_page/', views.show_authorization_page, 

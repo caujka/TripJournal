@@ -132,12 +132,9 @@ function getStoryTags() {
     xhr.onstatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var tags_arr = xhr.responseText;
-            return tags_arr;
         }
     }
-    xhr.open('GET', '/get_story_tags/', async);
-
-    alert(story_id);
+    xhr.open('GET', '/get_story_tags/', true);
     xhr.send(story_id);
 }
 
@@ -149,6 +146,8 @@ function jsonTagStory(tag_name) {
 }
 
 function putTag(tag_name) {
+
+    alert('putTag 1');
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '/put_tag/', true);
     xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
@@ -156,7 +155,7 @@ function putTag(tag_name) {
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
 
-            alert('putTag');
+            alert('putTag 2');
             tag_input.value = '';
         }
     }

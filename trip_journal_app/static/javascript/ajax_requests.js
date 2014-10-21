@@ -32,7 +32,7 @@ function storyBlocksJson() {
     for (i = 0; i < Blocks.length; i++) {
         type = BlockTypes[i];
 	marker = getMarkerLocation(i);
-        htmlBlock = document.getElementById('contentarea_' + (Blocks[i]));
+        htmlBlock = document .getElementById('contentarea_' + (Blocks[i]));
         block = {
             'type': type,
 	    'marker' : marker
@@ -85,6 +85,8 @@ function postImages(storyId){
     }
 }
 
+
+
 function postData(async){
     var xhr = new XMLHttpRequest(),
         requestBody = JSON.stringify(storyBlocksJson());
@@ -109,6 +111,7 @@ function postData(async){
             }
         }
     }
+
     xhr.onreadystatechange = addStoryIdToUrls;
     xhr.open('POST', '/save/' + storyIdFromUrl(), async);
     xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
@@ -125,4 +128,41 @@ function savePage() {
     } else {
         postData(true);
     }
+}
+
+function getTags() {
+    var xhr = new XMLHttpRequest();
+    story_id = storyIdFromUrl();
+    xhr.onstatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            tags_arr = xhr.responseText;
+        }
+    }
+    xhr.open('GET', '/get_story_tags/', async);
+    xhr.send(story_id);
+}
+
+function jsonTagStory(tag_name) {
+    var block = {};
+    block.story_id = storyIdFromUrl();
+    block.tag_name = tag_name;
+    return block;
+}
+
+function putTag(tag_name) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/put_tag/', true);
+    xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+    xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');
+    xhr.onreadystatechange = function() {
+        console.log(xhr.status, xhr.readyState);
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            tags_arr.push(tag_name);
+            tags_view();
+        }
+    }
+    savePage();
+    request_body = JSON.stringify(jsonTagStory(tag_name));
+    alert(request_body);
+    xhr.send(request_body);
 }

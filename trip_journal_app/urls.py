@@ -36,5 +36,9 @@ urlpatterns = [
     url(r'^delete/(?P<story_id>\d+)$', views.delete, name='delete'),
     url(r'^pagination/', views.make_paging_for_items_search,
         name='make_paging_for_items_search'),
+    # get all tags
+    url(r'^get_story_tags/', views.get_story_tags, name='tags_story'),
+    # put teg to DB
+    url(r'^put_tag/$', views.put_tag, name='curent_tag'),
 ]
 

@@ -383,17 +383,17 @@ window.onload = function() {
     //     treasure_t.focus();
     // };
 // igor tags -----
-
 tags_view();
 
 var tag_add = document.getElementById('tag_add');
 tag_add.onclick = tags_add;
+// tag_input.oninput = getTags;
 
 function tags_add() {
     var tag_input = document.getElementById('tag_input');
     var reg = /^[а-яa-z0-9іїє]+$/i;
     if (tag_input.value.search(reg) >= 0) {
-        var ref = true;
+        /*var ref = true;
         for(var i = 0; i < tags_arr.length; i++){
             if(tag_input.value === tags_arr[i]) {
                 ref = false;
@@ -404,7 +404,9 @@ function tags_add() {
             tag_input.value = '';
         } else {
             alert('\"'+tag_input.value+'\" is in tag\'s list');
-        }
+        }*/
+
+        putTag(tag_input.value);
     } else {
             alert('input a-z, а-я, 0-9');
     }

@@ -124,15 +124,20 @@ function savePage() {
     }
 }
 
-function getTags() {
+function getStoryTags() {
+
+    alert('getStoryTags');
     var xhr = new XMLHttpRequest();
     story_id = storyIdFromUrl();
     xhr.onstatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            tags_arr = xhr.responseText;
+            var tags_arr = xhr.responseText;
+            return tags_arr;
         }
     }
     xhr.open('GET', '/get_story_tags/', async);
+
+    alert(story_id);
     xhr.send(story_id);
 }
 
@@ -149,14 +154,13 @@ function putTag(tag_name) {
     xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
     xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');
     xhr.onreadystatechange = function() {
-        console.log(xhr.status, xhr.readyState);
         if (xhr.readyState === 4 && xhr.status === 200) {
-            tags_arr.push(tag_name);
-            tags_view();
+
+            alert('putTag');
+            tag_input.value = '';
         }
     }
     savePage();
     request_body = JSON.stringify(jsonTagStory(tag_name));
-    alert(request_body);
     xhr.send(request_body);
 }

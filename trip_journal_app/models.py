@@ -170,7 +170,10 @@ class Picture(models.Model):
 
     @classmethod
     def get_sorted_picture_list(cls, latitude, longitude):
-        req = 'SELECT (POWER(latitude - %f, 2) + POWER(longitude - %f, 2)) as distance, id, latitude, longitude from trip_journal_app_picture WHERE latitude IS NOT NULL AND longitude IS NOT NULL ORDER BY distance;' % (latitude, longitude)
+        req = 'SELECT (POWER(latitude - %f, 2) + POWER(longitude - %f, 2)) ' \
+              'as distance, id, latitude, longitude from trip_journal_app_picture ' \
+              'WHERE latitude IS NOT NULL AND longitude IS NOT NULL ORDER BY distance;' \
+              % (latitude, longitude)
         list_of_pictures = list(Picture.objects.raw(req))
         return list_of_pictures
 

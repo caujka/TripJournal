@@ -11,7 +11,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
 
-from trip_journal_app.models import Story, Picture
+from trip_journal_app.models import Story, Picture, Map_artifact
 from trip_journal_app.forms import UploadFileForm
 from trip_journal_app.utils.story_utils import story_contents
 
@@ -86,6 +86,25 @@ def story(request, story_id):
         return story_contents(request, story_id, 'story.html')
     else:
         return redirect('/')
+
+@login_required
+@require_POST
+def artifact(request, story_id):
+    if request.is_ajax():
+        user = auth.get_user(request)
+        if story_id:
+            story = get_object_or_404(Story, pk=int(story_id))
+            if user != story.user:
+                return HttpResponse('Unauthorized', status=401)
+        else:
+            art = Map_artifact.objects.create(story=story)
+            art.user = auth.get_user(request)
+
+        request_body = json.loads(request.body)
+        art.text = json.dumps(request_body['blocks'], ensure_ascii=False)
+        story.date_publish = datetime.datetime.now()
+        story.save()
+        return HttpResponse(story.id)
 
 
 @login_required

@@ -21,5 +21,9 @@
     <p>{{ story_block.pic|get_stored_pic_by_size:800 }}</p>
     {% endif %}
 </div>
+{% elif story_block.type == 'artifact' %}
+<div class="saved artifact" {{story_block|coordinates_data}}>
+    <p>{{ story_block.content|safe }}</p>
+</div>
 {% endif %}
 {% endfor %}

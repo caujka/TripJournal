@@ -35,6 +35,9 @@ function storyBlocksJson() {
                 getInsideElement(htmlBlock, 'tagName', 'IMG').dataset.dbid
                 );
         }
+        if (type === 'artifact') {
+            block.content = htmlBlock.children[0].innerHTML;
+        }
         blocks.push(block);
     }
     return {

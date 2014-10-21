@@ -1,134 +1,134 @@
-window.onload = function() {
-    add_markers();
-
-    var likes = likeObjectsArray();
-    for (var i = 0; i < likes.length; i++) {
-        ( function (i) {
-            likes[i].likeLink.addEventListener('click', function(e){
-                e.preventDefault();
-                likeRequest(likes[i]);
-        }, 'false');
-        })(i);
-    }
-}
-
 var map;
 var geocoder;
-var markers = [];
 
-function getCookie(name) {
-    var value = '; ' + document.cookie;
-    var parts = value.split('; ' + name + '=');
-    if (parts.length === 2) {
-        return parts.pop().split(';').shift();
-    } else {
-        return undefined;
+function BlockAndMarker (blockElement) {
+    var self = this;
+
+    function coordinatesFromBlock(block) {
+        return new google.maps.LatLng(block.dataset.lat, block.dataset.lng);
     }
+
+    self.block = blockElement;
+    self.marker = new google.maps.Marker({
+        position: coordinatesFromBlock(blockElement),
+        map: map,
+        icon: UNACTIVE_ICON
+    });
+
+    // event listeners for blocks
+    self.block.addEventListener('mouseover', function(){
+        self.showActive('marker');
+    }, 'false');
+
+    self.block.addEventListener('mouseout', function() {
+        self.showUnactive();
+    }, 'false');
+
+    // event listeners for markers
+    google.maps.event.addListener(self.marker, 'click', function() {
+        map.setZoom(ZOOM_ON_MARKER);
+        map.setCenter(self.marker.getPosition());
+    });
+    google.maps.event.addListener(self.marker, 'mouseover', function() {
+        self.showActive('block');
+    });
+    google.maps.event.addListener(self.marker, 'mouseout', function() {
+        self.showUnactive();
+    });
 }
 
-function add_markers() {
-    var marker;
-    var blocks = document.getElementsByClassName('saved');
+BlockAndMarker.prototype = {
+    constructor: BlockAndMarker,
 
-    for (i = 0; i < blocks.length; i++) {
-        block = blocks[i];
-        marker = block.children[1].innerHTML;
-        appendBlockMarker(marker);
+    showActive: function (centerOn) {
+        this.block.classList.add('active_marker_block');
+        this.marker.setIcon(ACTIVE_ICON);
+        if (centerOn === 'marker') {
+            map.setZoom(ZOOM_INITIAL);
+            map.panTo(this.marker.getPosition());
+        } else if (centerOn === 'block') {
+            scrollToElement(this.block);
+        }
+    },
+
+    showUnactive: function () {
+        this.block.classList.remove('active_marker_block');
+        this.marker.setIcon(UNACTIVE_ICON);
     }
+};
+
+function ObjectToLike(element) {
+    var self = this;
+    this.likesCount = getInsideElement(element, 'className', 'likes_count');
+    this.likeLink = getInsideElement(element, 'tagName', 'A');
+    this.url = this.likeLink.getAttribute('href');
+    this.likeLink.addEventListener('click', function(e){
+        e.preventDefault();
+        self.likeRequest();
+    }, 'false');
 }
 
-function appendBlockMarker(marker) {
-    markers.push(marker);
-}
+ObjectToLike.prototype = {
+    constructor: ObjectToLike,
+
+    likeRequest: function () {
+        var self = this;
+        function showNewLike() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                self.likesCount.innerHTML = xhr.responseText;
+                self.likeLink.classList.toggle("liked");
+            }
+        }
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', self.url);
+        xhr.onreadystatechange = showNewLike;
+        xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+        xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');
+        xhr.send();
+    }
+};
 
 function initialize() {
     geocoder = new google.maps.Geocoder();
     var mapOptions = {
-        zoom: 14
+        zoom: ZOOM_INITIAL
     };
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-                var pos = new google.maps.LatLng(position.coords.latitude,
-                    position.coords.longitude);
-                map.setCenter(pos);
-            },
-            function() {
-                handleNoGeolocation(true);
-            });
-    } else {
-        // browser doesn't support geolocation
-        heNoGeolocation(false);
+    var markers = collectMarkers();
+    if (markers.length === 0) {
+        centerOnCurrPos(map);
+        return;
     }
 
-    for (var i = 0; i < markers.length; ++i) {
-        var position = JSON.parse(markers[i].replace("u'k'", '"k"').replace("u'B'", '"B"'));
-        var location = new google.maps.LatLng(position.k, position.B);
-	placeMarker(location);
-	map.setCenter(location);
-    }
+    // bounds for all the markers to be seen on the map.
+    setBounds(map, markers.map(function (obj) {return obj.marker;}));
 }
 
-
-function placeMarker(location) {
-    var marker = new google.maps.Marker({
-        position: location,
-        map: map
+function collectMarkers() {
+    var blocks = [].filter.call(
+            document.getElementsByClassName('saved'), function(block) {
+                return block.dataset.hasOwnProperty('lat');
+            }
+        );
+    return blocks.map(function(block) {
+        return new BlockAndMarker(block);
     });
 }
-google.maps.event.addDomListener(window, 'load', initialize);
 
-function centerMap(pos) {
-    map.setCenter(pos);
-}
-
-function likeObjectsArray () {
+function collectlikeObjects () {
     var likes = [].slice.call(
             document.getElementsByClassName('like_picture')
         );
     likes.push(document.getElementById('like_story'));
-    var likesObjects = [];
-    for (var i = 0; i < likes.length; i++) {
-        console.log(likes[i]);
-        likesObjects.push(formObjectToLike(likes[i]));
-    }
-    return likesObjects;
+    return likes.map(function (element) {
+        return new ObjectToLike(element);
+    });
 }
 
-function formObjectToLike(element) {
-    var objToLike = {},
-        children = element.childNodes;
-    for (var i = 0; i < children.length; i++) {
-        if (children[i].className === "likes_count") {
-            objToLike.likesCount = children[i];
-        }
-        else if (children[i].tagName === 'A') {
-            objToLike.url = children[i].getAttribute("href");
-            objToLike.likeLink = children[i];
-        }
-    }
-    return objToLike;
-}
+google.maps.event.addDomListener(window, 'load', initialize);
 
-/*
-* Sends like POST request to picture or story url with id of that item.
-* When the response is returned adds 'liked' class to corresponding heart.
-* objToLike should have the following properties: url, element that contains
-* like count and link element to which class "liked" should be added.
-* */
-function likeRequest(objToLike) {
-    function showNewLike() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            var likesCount = xhr.responseText;
-            objToLike.likesCount.innerHTML = likesCount;
-            objToLike.likeLink.classList.add("liked");
-        }
-    }
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', objToLike.url);
-    xhr.onreadystatechange = showNewLike;
-    xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-    xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');
-    xhr.send();
-}
+window.onload = function() {
+    collectlikeObjects();
+};
+

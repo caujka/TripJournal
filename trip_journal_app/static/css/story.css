@@ -3,9 +3,9 @@
 }
 #map-canvas-wrapper {
     position: fixed;
+    top: 132px;
     height: 400px;
     width: 390px;
-    margin-top:0px;
     margin-left: 705px;
 }
 
@@ -146,3 +146,8 @@ div.saved.img {
     color: #31797D;
 }
 
+.active_marker_block {
+    -webkit-box-shadow: 0px 0px 5px 2px rgba(97,199,145,0.75);
+    -moz-box-shadow: 0px 0px 5px 2px rgba(97,199,145,0.75);
+    box-shadow: 0px 0px 5px 2px rgba(97,199,145,0.75);
+}

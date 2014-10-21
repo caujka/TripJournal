@@ -82,7 +82,8 @@ def upload_img(request, story_id):
 
 def story(request, story_id):
     if story_id:
-        return story_contents(request, story_id, 'story.html')
+        return story_contents(request, story_id, 'story.html', 
+                                check_published=True)
     else:
         return redirect('/')
 
@@ -144,11 +145,19 @@ def search_items_near_by(request):
 def make_paging_for_items_search(request):
     sess_key = request.COOKIES['pagination']
     sess = SessionStore(session_key=sess_key)
-    list_of_items = sess['items_list']
+    list_of_items = sess['items_list']  
     if list_of_items['item_type'] == 'pictures':
-        paginator = Paginator(list_of_items['items'], 10)
+        if not list_of_items['items']:
+            messages.info(request, 'No items found')
+            return redirect('/pictures_near_by/')
+        else:
+            paginator = Paginator(list_of_items['items'], 10)
     elif list_of_items['item_type'] == 'stories':
-        paginator = Paginator(list_of_items['items'], 2)
+        if not list_of_items['items']:
+            messages.info(request, 'No items found')
+            return redirect('/stories_near_by/')
+        else:    
+            paginator = Paginator(list_of_items['items'], 2)
     page = request.GET.get('page')
     try:
         items = paginator.page(page)
@@ -165,9 +174,15 @@ def make_paging_for_items_search(request):
 @login_required
 @require_POST
 def like(request, item_id, item_to_like):
-    item = get_object_or_404(globals()[item_to_like], pk=int(item_id))
+    item = get_object_or_404(
+        globals()[item_to_like.capitalize()],
+        pk=int(item_id)
+    )
     user = auth.get_user(request)
-    item.likes.add(user)
+    if item.is_liked_by(user):
+        item.likes.remove(user)
+    else:
+        item.likes.add(user)
     item.save()
     return HttpResponse(item.likes_count())
 
@@ -219,3 +234,19 @@ def put_tag(request):
         return HttpResponse(status=200)
 
 
+def show_authorization_page(request):
+        return render(
+        request, 'authorization_page.html')
+
+
+def stories_by_user(request):
+    stor = csrf(request)
+    if request.method == 'GET':
+        needed_user = str(request.GET.get('needed_user', ''))
+        stories = []
+        if needed_user:
+        	needed_user = User.objects.get(username=needed_user)
+        	stories = Story.objects.filter(user=needed_user)
+        context = {'stories': stories}
+        return render(request, 'stories_by_user.html', context)
+        

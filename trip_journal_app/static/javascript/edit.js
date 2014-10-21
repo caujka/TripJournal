@@ -36,7 +36,7 @@ function addImagesFromTemp() {
 }
 
 function appendBlockMarker(marker) {
-    if(marker !== 'None'){
+    if (marker.hasOwnProperty('lat') > 0) {
         temp_positions.push({'block' : current_marker, 'position' : marker});
     }
 }
@@ -47,7 +47,6 @@ function appendBlock(story, blockContent, block_type, saved) {
         buttons = [
             ['top', 'moveup'],
             ['bottom', 'movedown'],
-            ['edit', 'editBlock'],
             ['delete', 'deleteBlock'],
             ['addmarker', 'setactivemarker'],
             ['removemarker', 'removeBlockMark']
@@ -74,7 +73,7 @@ function appendBlock(story, blockContent, block_type, saved) {
     container.className = "block_story";
 
     container.innerHTML =
-        '<div contenteditable="true" id="contentarea_' + number + '">' +
+        '<div onclick="editBlock(' + number + ')" id="contentarea_' + number + '">' +
         blockContent +
         '</div>';
 
@@ -115,9 +114,34 @@ function deleteBlock(itemstr) {
     savePage();
 }
 
-function editBlock(itemstr){
-    var item = parseInt(itemstr);
+function editBlock(itemstr) {
+    var item = parseInt(itemstr),
+        poss = Blocks.indexOf(item),
+        block = document.getElementById("block_" + Blocks[poss]),
+        contentarea = document.getElementById('contentarea_' + Blocks[poss]),
+        keybar = document.getElementById('keybar_' + Blocks[poss]);
+    console.log(BlockTypes[poss]);
+    if (BlockTypes[poss] === 'text') {
+        textarea = document.createElement('textarea');
+        textarea.value = document.getElementsByClassName('description_story')[item - 1].innerHTML;
+        textarea.rows = 4;
+        textarea.cols = 90;
+        contentarea.style.display = 'none';
+        keybar.style.display = 'none';
+        block.appendChild(textarea);
+        textarea.focus();
+        textarea.onkeypress = function (e) {
+            if (e.keyCode === 13) {
+                document.getElementsByClassName('description_story')[item - 1].innerHTML = textarea.value;
+                block.removeChild(textarea);
+                contentarea.style.display = 'block';
+                keybar.style.display = 'block';
+                savePage();
+            }
+        };
+    }
 }
+
 
 function move_block(itemstr, direction) {
     // direction (-1) - up, (+1) - down
@@ -173,8 +197,8 @@ function text_block_template(text) {
 
 function img_block_template(src, img_id) {
     return (
-        '<img src="' + src + '"class="image_story">' +
-        '<p style="display:none;">' + img_id + '</p>'
+        '<img src="' + src + '"class="image_story" data-dbid="' +
+        img_id + '">'
     );
 }
 
@@ -184,20 +208,26 @@ function add_saved_blocks() {
         blocks_num = blocks.length,
         story_content = document.getElementById('story_content');
     for (i=0; i < blocks_num; i++) {
+        marker = {};
         block = blocks[0];
         block_type = block.classList[1];
         if (block_type === 'text') {
             block_text = text_block_template(block.children[0].innerHTML);
-	        marker = block.children[1].innerHTML;
         } else if (block_type === 'img') {
             block_text = img_block_template(
                 block.children[0].innerHTML,
-                block.children[1].innerHTML
+                block.dataset.dbid
             );
-            marker = block.children[2].innerHTML;
         }
         block.parentNode.removeChild(block);
         appendBlock(story_content, block_text, block_type, saved=true);
+        if (block.dataset.hasOwnProperty('lat')) {
+	        marker = {
+                'lat': block.dataset.lat,
+                'lng': block.dataset.lng
+            };
+        }
+
 	appendBlockMarker(marker);
     }
 }
@@ -210,6 +240,7 @@ window.onload = function() {
         treasure_t = document.getElementById('add_treasure_t'),
         //comment_p = document.getElementById('add_comment_p'),
         //treasure_p = document.getElementById('add_treasure_p'),
+        edit = document.getElementById('add_treasure_t'),
         textarea = document.getElementById('textarea'),
         text = document.getElementById('added_text'),
         photo = document.getElementById('added_image'),
@@ -334,6 +365,7 @@ window.onload = function() {
         document.getElementById('textarea').focus();
     };
 
+
     photo.onclick = function() {
         clear();
         this.style.background = '#8ed41f';
@@ -374,14 +406,6 @@ window.onload = function() {
     document.getElementById('adds_block_p').onclick = save_photo_story;
     document.getElementById('clear_block_p').onclick = clear;
 
-    // document.getElementById('comment_but_t').onclick = function() {
-    //     comment_t.style.display = 'inline-block';
-    //     comment_t.focus();
-    // };
-    // document.getElementById('treasure_but_t').onclick = function() {
-    //     treasure_t.style.display = 'inline-block';
-    //     treasure_t.focus();
-    // };
 // igor tags -----
 tags_view();
 
@@ -412,7 +436,6 @@ function tags_add() {
     }
     tag_input.focus();
     tags_view();
-    console.log(tags_arr);
 }
 
 };
@@ -446,50 +469,25 @@ function delete_img(id) {
 //Volodya
 var geocoder;
 var markersArray = [];
+
 function initialize() {
     geocoder = new google.maps.Geocoder();
     var mapOptions = {
-    zoom: 14
-};
-    map = new google.maps.Map(document.getElementById('map-canvas'),
-							  mapOptions);
+        zoom: 14
+    };
+    map = new google.maps.Map(
+            document.getElementById('map-canvas'),
+            mapOptions);
     google.maps.event.addListener(map, 'click', function(event) {
-    	placeMarker(event.latLng);
-});
-
-    if(navigator.geolocation) {
-    	navigator.geolocation.getCurrentPosition(function(position) {
-        	var pos = new google.maps.LatLng(position.coords.latitude,
-                                            position.coords.longitude);
-
-    var infowindow = new google.maps.InfoWindow({
-        map: map,
-        position: pos,
-        content: "I'm here"
+        placeMarker(event.latLng);
     });
 
-    map.setCenter(pos);
-    }, function() {
-      handleNoGeolocation(true);
-    });
-  } else {
-    // browser doesn't support geolocation
-    heNoGeolocation(false);
-  }
-  var drawingManager = new google.maps.drawing.DrawingManager({
-    drawingControlOptions: {
-      drawingModes: [
-        google.maps.drawing.OverlayType.POLYLINE
-      ]
-    }
-
-  });
-  drawingManager.setMap(map);
+    addDrawingManager(map);
 
     for (var i=0; i < temp_positions.length; i++) {
-	var position = JSON.parse(temp_positions[i].position.replace("u'k'", '"k"').replace("u'B'", '"B"'));
-        var location = new google.maps.LatLng(position.k, position.B);
-	var marker = new google.maps.Marker({
+        var position = temp_positions[i].position;
+        var location = new google.maps.LatLng(position.lat, position.lng);
+        var marker = new google.maps.Marker({
             position: location,
             map: map
         });
@@ -501,22 +499,12 @@ function initialize() {
         i = markersArray.length - 1;
         BlockMarkers[temp_positions[i].block] = i;
     }
-}
 
-function handleNoGeolocation(errorFlag) {
-  if (errorFlag) {
-    var content = 'Error: The Geolocation service failed.';
-  } else {
-    var content = 'Error: Your browser doesn\'t support geolocation.';
-  }
-
-  var options = {
-    map: map,
-    position: new google.maps.LatLng(49.839754, 24.029846),
-    content: content
-  };
-  var infowindow = new google.maps.InfoWindow(options);
-  map.setCenter(options.position);
+    if (markersArray.length === 0) {
+        centerOnCurrPos(map);
+    } else {
+        setBounds(map, markersArray);
+    }
 }
 
 // Add a marker to the map and push to the array.
@@ -525,7 +513,7 @@ function placeMarker(location) {
         position: location,
         map: map
     });
-       
+
     if(current_marker !== -1){
         if(BlockMarkers[current_marker] !== null){
             removeMark(BlockMarkers[current_marker]);
@@ -547,14 +535,14 @@ function setAllMap(map) {
 }
 
 function codeAddress() {
-  var address = document.getElementById('address').value;
-  geocoder.geocode( { 'address': address}, function(results, status) {
-    if (status == google.maps.GeocoderStatus.OK) {
-        map.setCenter(results[0].geometry.location);
-      } else {
-      alert('Geocode was not successful for the following reason: ' + status);
-    }
-  });
+    var address = document.getElementById('address').value;
+    geocoder.geocode( { 'address': address}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            map.setCenter(results[0].geometry.location);
+        } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+        }
+    });
 }
 
 function setactivemarker(itemstr){
@@ -571,23 +559,26 @@ function removeBlockMark(itemstr){
 
 function getMarkerLocation(i){
     if(BlockMarkers[i] !== null){
-	var marker =  markersArray[BlockMarkers[i]];
-	if(marker !== null){
-            return marker.position;
-	}
+        var marker =  markersArray[BlockMarkers[i]];
+        if(marker !== null){
+            var pos = marker.getPosition();
+            return {
+                'lat': pos.lat(),
+                'lng': pos.lng()
+            };
+        }
     }
-
     return null;
 }
 
+function centerMap(i) {
+    map.setCenter(markersArray[i].getPosition());
+}
+
+function removeMark(i) {
+    markersArray[i].setMap(null);
+    markersArray[i] = null;
+}
 
 google.maps.event.addDomListener(window, 'load', initialize);
-	function centerMap(i) {
-        map.setCenter(markersArray[i].getPosition());
-	}
 
-google.maps.event.addDomListener(window, 'load', initialize);
-    function removeMark(i) {
-        markersArray[i].setMap(null);
-        markersArray[i] = null;
-    }

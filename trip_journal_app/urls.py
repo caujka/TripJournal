@@ -14,14 +14,9 @@ urlpatterns = [
     url(r'^story/(?P<story_id>\d*)$', views.story, name='story'),
     # list of user stories
     url(r'^my_stories/$', views.user_stories, name='user_stories'),
-    # add likes to stories
-    url(r'^story/like/(?P<item_id>\d+)/$', views.like,
-        {'item_to_like': 'Story'},
-        name='like_story'),
-    # add likes to pictures
-    url(r'^picture/like/(?P<item_id>\d+)/$', views.like,
-        {'item_to_like': 'Picture'},
-        name='like_picture'),
+    # add likes to stories and pictures
+    url(r'^(?P<item_to_like>story|picture)/like/(?P<item_id>\d+)/$',
+        views.like, name='like'),
     # list of near by pictures
     url(r'^pictures_near_by/$', views.show_picture_near_by_page,
         name='pictures_near_by'),
@@ -31,6 +26,8 @@ urlpatterns = [
     url(r'^search_items_near_by/', views.search_items_near_by,
         name='search_items_near_by'),
     url(r'^$', views.home, name='home'),
+    # list of stories by needed user
+    url(r'^stories_by_user/$', views.stories_by_user, name='stories_by_user'),
     # toggling publish state for story
     url(r'^publish/(?P<story_id>\d+)$', views.publish, name='publish'),
     url(r'^delete/(?P<story_id>\d+)$', views.delete, name='delete'),
@@ -40,5 +37,7 @@ urlpatterns = [
     url(r'^get_story_tags/', views.get_story_tags, name='tags_story'),
     # put teg to DB
     url(r'^put_tag/$', views.put_tag, name='curent_tag'),
+    url(r'^authorization_page/', views.show_authorization_page, 
+        name='show_authorization_page'),
 ]
 

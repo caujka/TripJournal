@@ -81,6 +81,7 @@ class Story(models.Model):
                 'join trip_journal_app_story '
                 'on trip_journal_app_picture.story_id=trip_journal_app_story.id '
                 'WHERE latitude IS NOT NULL AND longitude IS NOT NULL '
+                'AND trip_journal_app_story.published=1 '
                 'group by story_id order by distance;' % (latitude, longitude))
         list_of_pictures = list(Story.objects.raw(req))
         return list_of_pictures

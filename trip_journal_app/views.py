@@ -146,11 +146,19 @@ def search_items_near_by(request):
 def make_paging_for_items_search(request):
     sess_key = request.COOKIES['pagination']
     sess = SessionStore(session_key=sess_key)
-    list_of_items = sess['items_list']
+    list_of_items = sess['items_list']  
     if list_of_items['item_type'] == 'pictures':
-        paginator = Paginator(list_of_items['items'], 10)
+        if not list_of_items['items']:
+            messages.info(request, 'No items found')
+            return redirect('/pictures_near_by/')
+        else:
+            paginator = Paginator(list_of_items['items'], 10)
     elif list_of_items['item_type'] == 'stories':
-        paginator = Paginator(list_of_items['items'], 2)
+        if not list_of_items['items']:
+            messages.info(request, 'No items found')
+            return redirect('/stories_near_by/')
+        else:    
+            paginator = Paginator(list_of_items['items'], 2)
     page = request.GET.get('page')
     try:
         items = paginator.page(page)

@@ -60,10 +60,15 @@ body {
     padding: 8px;
     border: #31797d solid 2px;
     border-right: white solid 2px;
+    color: white;
+    font-weight: 500;
+    text-decoration: none;
 }
 
 #menu div:last-of-type {
     border-right:  #31797d solid 2px;
+    padding: 0;
+    vertical-align: middle;
 }
 
 #menu div a {
@@ -100,4 +105,10 @@ body {
     background-size: 23px 23px;
 }
 
-
+#menu div .login_image {
+    margin-right: 5px;
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+    padding: 0;
+}

@@ -670,6 +670,7 @@ function centerMap(i) {
 function removeMark(i) {
     markersArray[i].setMap(null);
     markersArray[i] = null;
+    savePage();
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);

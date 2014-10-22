@@ -198,22 +198,25 @@ def delete(request, story_id):
     return redirect(reverse('user_stories'))
 
 
-def get_all_tags(request):
+def delete_story_tag(request):
     """
-    Get all_tags
+    Delete teg in story tags
     """
     if request.is_ajax():
-        all_tags = Tag.objects.all()
-        return HttpResponse(all_tags.name)
+        story_id = request.GET.get('Story_id')
+        story = Story.objects.get(pk=story_id)
+        return HttpResponse(','.join(str(x) for x in story.tags.all()))
 
-def get_story_tags(request, story_id):
+
+def get_story_tags(request):
     """
     Get tags from story
     """
     if request.is_ajax():
-        story_tags = Story.objects.filter(pk=story_id)
-        list_tags = Tag.objects.filter(pk=story_tags)
-        return HttpResponse(list_tags.name)
+        story_id = request.GET.get('Story_id')
+        story = Story.objects.get(pk=story_id)
+        return HttpResponse(','.join(str(x) for x in story.tags.all()))
+
 
 @login_required
 @require_POST
@@ -223,11 +226,13 @@ def put_tag(request):
     """
     if request.is_ajax():
         request_body = json.loads(request.body)
-        tag = Tag.objects.filter(name=request_body['tag_name'])
-        if not tag:
+        tags = Tag.objects.filter(name=request_body['tag_name'])
+        if not tags:
             tag = Tag()
             tag.name = request_body['tag_name']
             tag.save()
+        else:
+            tag = tags[0]
         story = Story.objects.get(pk = int(request_body['story_id']))
         story.tags.add(tag)
         story.save()

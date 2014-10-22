@@ -33,7 +33,8 @@
         </div>
         {% endif %}
 
-        <!-- igor tag -->
+        <h2 id="story_title" contenteditable="true">{{ story.title }}</h2>
+
         {% block tags %}
         <div id="tags_list">
             <div id="button_list"></div>
@@ -43,9 +44,6 @@
             </div>
         </div>
         {% endblock %}
-        <!-- end igor tag -->
-
-        <h2 id="story_title" contenteditable="true">{{ story.title }}</h2>
 
         {% include 'story_content.html' with page="edit" %}
     </div>

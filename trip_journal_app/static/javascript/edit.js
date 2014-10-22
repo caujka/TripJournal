@@ -406,46 +406,38 @@ window.onload = function() {
     document.getElementById('adds_block_p').onclick = save_photo_story;
     document.getElementById('clear_block_p').onclick = clear;
 
-// igor tags -----
-// getStoryTags();
 
+getStoryTags();
 var tag_input = document.getElementById('tag_input');
 tag_input.onchange = tags_add;
-// tag_input.oninput = getTags;
-
 var tag_add = document.getElementById('tag_add');
 tag_add.onclick = tags_add;
 
+
 function tags_add() {
-    console.log('tags_add 1');
-    var reg = /^[а-яa-z0-9іїє]+$/i;
+    var reg = /^[а-яa-z0-9іїє\s]+$/i;
     if (tag_input.value.search(reg) >= 0) {
         putTag(tag_input.value);
     } else {
         alert('input a-z, а-я, 0-9');
     }
     tag_input.focus();
-    tags_view();
 }
 
 };
 
-
-function tags_view(){
-
-    alert('tags_view 1');
-    // getStoryTags();
-    // for (var i = 0; i < tags_arr.length; i++) {
-    //     button_list.innerHTML += '<div class="tags_button">'+tags_arr[i]+
-    //     ' <span class="tags_delete" onclick="tag_delete('+i+')">x</span></div>'
-    // }
+function tags_view(tags_arr){
+    console.log(tags_arr);
+    button_list.innerHTML = '';
+    for (var i = 0; i < tags_arr.length; i++) {
+        button_list.innerHTML += '<div class="tags_button">'+tags_arr[i]+
+        ' <span class="tags_delete" onclick="tag_delete('+i+')">x</span></div>'
+    }
 }
 
 function tag_delete(i) {
-    tags_view();
 }
 
-// end tags -----
 
 function delete_img(id) {
     if(id) {

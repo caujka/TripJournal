@@ -124,20 +124,6 @@ function savePage() {
     }
 }
 
-function getStoryTags() {
-
-    alert('getStoryTags');
-    var xhr = new XMLHttpRequest();
-    story_id = storyIdFromUrl();
-    xhr.onstatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            var tags_arr = xhr.responseText;
-        }
-    }
-    xhr.open('GET', '/get_story_tags/', true);
-    xhr.send(story_id);
-}
-
 function jsonTagStory(tag_name) {
     var block = {};
     block.story_id = storyIdFromUrl();
@@ -146,20 +132,51 @@ function jsonTagStory(tag_name) {
 }
 
 function putTag(tag_name) {
-
-    alert('putTag 1');
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '/put_tag/', true);
     xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
     xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
-
-            alert('putTag 2');
             tag_input.value = '';
+            getStoryTags();
         }
     }
     savePage();
     request_body = JSON.stringify(jsonTagStory(tag_name));
     xhr.send(request_body);
+}
+
+function getStoryTags() {
+    var xhr = new XMLHttpRequest();
+    story_id = storyIdFromUrl();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var str = xhr.responseText;
+            var tags_arr = str.split(',');
+            tags_view(tags_arr);
+        }
+    }
+    params = 'Story_id=' + encodeURIComponent(story_id);
+    xhr.open('GET', '/get_story_tags/?'+params, true);
+    xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+    xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');
+    xhr.send();
+}
+
+function deleteStoryTags() {
+    var xhr = new XMLHttpRequest();
+    story_id = storyIdFromUrl();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var str = xhr.responseText;
+            var tags_arr = str.split(',');
+            tags_view(tags_arr);
+        }
+    }
+    params = 'Story_id=' + encodeURIComponent(story_id);
+    xhr.open('GET', '/delete_story_tag/?'+params, true);
+    xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+    xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');
+    xhr.send();
 }

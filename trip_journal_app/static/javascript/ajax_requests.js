@@ -163,7 +163,6 @@ function getStoryTags() {
     }
     params = 'Story_id=' + story_id;
     xhr.open('GET', '/get_story_tags/?'+params, true);
-    xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
     xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');
     xhr.send();
     }
@@ -179,7 +178,6 @@ function deleteStoryTags(i) {
     }
     params = 'Story_id=' + encodeURIComponent(story_id) + '&Tag_position=' + i;
     xhr.open('GET', '/delete_story_tag/?'+params, true);
-    xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
     xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');
     xhr.send();
 }

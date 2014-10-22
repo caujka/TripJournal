@@ -34,8 +34,6 @@
             </p>
         </div>
         {% include "story_content.html" with page="story" %}
-        <div></div>
-
         <div id="user_buttons">
             {% if user == story.user %}
                 <form action="{% url 'edit' story.id%}">

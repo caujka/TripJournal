@@ -521,7 +521,6 @@ function tags_add() {
 }
 
 function tags_view(tags_arr){
-    console.log(tags_arr);
     button_list.innerHTML = '';
     for (var i = 0; i < tags_arr.length; i++) {
         button_list.innerHTML += '<div class="tags_button">'+tags_arr[i]+

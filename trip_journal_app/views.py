@@ -219,7 +219,7 @@ def get_story_tags(request):
     if request.is_ajax():
         story_id = request.GET.get('Story_id')
         story = Story.objects.get(pk=story_id)
-        return HttpResponse(','.join(str(x) for x in story.tags.all()))
+        return HttpResponse({','.join(str(x) for x in story.tags.all())})
 
 
 @login_required

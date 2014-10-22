@@ -157,7 +157,7 @@ def make_paging_for_items_search(request):
         if not list_of_items['items']:
             messages.info(request, 'No items found')
             return redirect('/stories_near_by/')
-        else:    
+        else:
             paginator = Paginator(list_of_items['items'], 2)
     page = request.GET.get('page')
     try:

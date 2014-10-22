@@ -38,7 +38,7 @@ function addImagesFromTemp() {
 }
 
 function appendBlockMarker(marker) {
-    if(marker !== 'None'){
+    if (marker.hasOwnProperty('lat') > 0) {
         temp_positions.push({'block' : current_marker, 'position' : marker});
     }
 }
@@ -266,12 +266,12 @@ function img_block_template(src, img_id) {
 }
 
 function add_saved_blocks() {
-    var i, block, block_text, block_type,
+    var i, block, block_text, block_type, marker,
         blocks = document.getElementsByClassName('saved'),
         blocks_num = blocks.length,
-        story_content = document.getElementById('story_content'),
-        marker = {};
+        story_content = document.getElementById('story_content');
     for (i=0; i < blocks_num; i++) {
+        marker = {};
         block = blocks[0];
         block_type = block.classList[1];
         if (block_type === 'text') {
@@ -500,43 +500,28 @@ window.onload = function() {
     document.getElementById('adds_block_a').onclick = save_artifact_story;
     document.getElementById('clear_block_a').onclick = clear;
 
-// igor tags -----
 
-tags_view();
-
+getStoryTags();
+var tag_input = document.getElementById('tag_input');
+tag_input.onchange = tags_add;
 var tag_add = document.getElementById('tag_add');
 tag_add.onclick = tags_add;
 
+
 function tags_add() {
-    var tag_input = document.getElementById('tag_input');
-    var reg = /^[а-яa-z0-9іїє]+$/i;
+    var reg = /^[а-яa-z0-9іїє\s]+$/i;
     if (tag_input.value.search(reg) >= 0) {
-        var ref = true;
-        for(var i = 0; i < tags_arr.length; i++){
-            if(tag_input.value === tags_arr[i]) {
-                ref = false;
-            }
-        }
-        if (ref) {
-            tags_arr.push(tag_input.value.toLowerCase());
-            tag_input.value = '';
-        } else {
-            alert('\"'+tag_input.value+'\" is in tag\'s list');
-        }
+        putTag(tag_input.value);
     } else {
-            alert('input a-z, а-я, 0-9');
+        alert('input a-z, а-я, 0-9');
     }
     tag_input.focus();
-    tags_view();
-    console.log(tags_arr);
 }
 
 };
 
-var tags_arr = new Array();
-
-function tags_view(){
-    var button_list = document.getElementById('button_list');
+function tags_view(tags_arr){
+    console.log(tags_arr);
     button_list.innerHTML = '';
     for (var i = 0; i < tags_arr.length; i++) {
         button_list.innerHTML += '<div class="tags_button">'+tags_arr[i]+
@@ -545,11 +530,8 @@ function tags_view(){
 }
 
 function tag_delete(i) {
-    tags_arr.splice(i, 1);
-    tags_view();
 }
 
-// end tags -----
 
 function delete_img(id) {
     if(id) {

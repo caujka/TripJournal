@@ -8,13 +8,13 @@ from django.http import HttpResponse
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.sessions.backends.db import SessionStore
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.views.decorators.http import require_POST
 
-from trip_journal_app.models import Story, Picture, Map_artifact
+from trip_journal_app.models import Story, Picture, Tag, Map_artifact
+
 from trip_journal_app.forms import UploadFileForm
 from trip_journal_app.utils.story_utils import story_contents
-
 
 def home(request):
     """
@@ -83,7 +83,8 @@ def upload_img(request, story_id):
 
 def story(request, story_id):
     if story_id:
-        return story_contents(request, story_id, 'story.html')
+        return story_contents(request, story_id, 'story.html', 
+                                check_published=True)
     else:
         return redirect('/')
 
@@ -144,11 +145,19 @@ def search_items_near_by(request):
 def make_paging_for_items_search(request):
     sess_key = request.COOKIES['pagination']
     sess = SessionStore(session_key=sess_key)
-    list_of_items = sess['items_list']
+    list_of_items = sess['items_list']  
     if list_of_items['item_type'] == 'pictures':
-        paginator = Paginator(list_of_items['items'], 10)
+        if not list_of_items['items']:
+            messages.info(request, 'No items found')
+            return redirect('/pictures_near_by/')
+        else:
+            paginator = Paginator(list_of_items['items'], 10)
     elif list_of_items['item_type'] == 'stories':
-        paginator = Paginator(list_of_items['items'], 2)
+        if not list_of_items['items']:
+            messages.info(request, 'No items found')
+            return redirect('/stories_near_by/')
+        else:
+            paginator = Paginator(list_of_items['items'], 2)
     page = request.GET.get('page')
     try:
         items = paginator.page(page)
@@ -188,3 +197,61 @@ def delete(request, story_id):
     story.delete()
     return redirect(reverse('user_stories'))
 
+
+def delete_story_tag(request):
+    """
+    Delete teg in story tags
+    """
+    if request.is_ajax():
+        story_id = request.GET.get('Story_id')
+        story = Story.objects.get(pk=story_id)
+        return HttpResponse(','.join(str(x) for x in story.tags.all()))
+
+
+def get_story_tags(request):
+    """
+    Get tags from story
+    """
+    if request.is_ajax():
+        story_id = request.GET.get('Story_id')
+        story = Story.objects.get(pk=story_id)
+        return HttpResponse(','.join(str(x) for x in story.tags.all()))
+
+
+@login_required
+@require_POST
+def put_tag(request):
+    """
+    Put curent tag to DB
+    """
+    if request.is_ajax():
+        request_body = json.loads(request.body)
+        tags = Tag.objects.filter(name=request_body['tag_name'])
+        if not tags:
+            tag = Tag()
+            tag.name = request_body['tag_name']
+            tag.save()
+        else:
+            tag = tags[0]
+        story = Story.objects.get(pk = int(request_body['story_id']))
+        story.tags.add(tag)
+        story.save()
+        return HttpResponse(status=200)
+
+
+def show_authorization_page(request):
+        return render(
+        request, 'authorization_page.html')
+
+
+def stories_by_user(request):
+    stor = csrf(request)
+    if request.method == 'GET':
+        needed_user = str(request.GET.get('needed_user', ''))
+        stories = []
+        if needed_user:
+            needed_user = User.objects.get(username=needed_user)
+            stories = Story.objects.filter(user=needed_user)
+        context = {'stories': stories}
+        return render(request, 'stories_by_user.html', context)
+        

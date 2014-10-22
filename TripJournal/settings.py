@@ -100,7 +100,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # login url is main page for now
-LOGIN_URL = '/'
+LOGIN_URL = '/authorization_page/'
 LOGIN_REDIRECT_URL = '/'
 
 # sizes in which to store pictures

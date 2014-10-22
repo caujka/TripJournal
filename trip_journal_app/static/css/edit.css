@@ -32,7 +32,7 @@ main{
 .add_block:hover{
     background-color: #8ED41F;
 }
-.key_panel{
+.key_panel, .key_panel_artifact{
     width: 215px;
     height: 25px;
     border: 1px solid #aaa;

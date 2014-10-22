@@ -4,8 +4,8 @@ var number = 1,
     Blocks = [],
     BlockTypes = [],
     BlockMarkers = [],
-    Images = [];
-    typeOfMarker = 0; // simple marker, 1 - custom marker
+    Images = [],
+    typeOfMarker = 0, // simple marker, 1 - custom marker
     editBlockStatus = 0;
 
 function deleteImagesFromBlock(blockNumber) {
@@ -43,7 +43,7 @@ function appendBlockMarker(marker) {
     }
 }
 
-function appendBlock(story, blockContent, block_type, saved, itemstr) {
+function appendBlock(story, blockContent, block_type, saved) {
     var container = document.createElement('div'),
         keybar = document.createElement('div'),
         buttons = [
@@ -53,6 +53,7 @@ function appendBlock(story, blockContent, block_type, saved, itemstr) {
             ['addmarker', 'setactivemarker'],
             ['removemarker', 'removeBlockMark']
         ];
+
     function create_button(button_name_and_func) {
         var button_name = button_name_and_func[0],
             button_func = button_name_and_func[1],
@@ -89,7 +90,7 @@ function appendBlock(story, blockContent, block_type, saved, itemstr) {
     Blocks.push(number);
     BlockMarkers.push(null);
     BlockTypes.push(block_type);
-	if (block_type === 'img') {
+	if (block_type == 'img') {
         addImagesFromTemp(number);
     }
     
@@ -110,7 +111,7 @@ function appendBlockArtifact(story, blockContent, block_type, saved, itemstr) {
             ['addmarkerArtifact', 'setactivemarkerArtifact'],
             ['removemarker', 'removeBlockMark']
         ];
-    function create_button(button_name_and_func) {
+function create_button(button_name_and_func) {
         var button_name = button_name_and_func[0],
             button_func = button_name_and_func[1],
             button = document.createElement('button');
@@ -280,11 +281,16 @@ function add_saved_blocks() {
                 block.children[0].innerHTML,
                 block.dataset.dbid
             );
-        } else if (block_type === 'artifact') {
+        }
+        else if (block_type === 'artifact') {
             block_text = text_block_template(block.children[0].innerHTML);
         }
         block.parentNode.removeChild(block);
-        appendBlock(story_content, block_text, block_type, saved=true);
+        if (block_type === 'text' || block_type === 'img') {
+            appendBlock(story_content, block_text, block_type, saved = true);
+        }else if (block_type === 'artifact') {
+            appendBlockArtifact(story_content, block_text, block_type, saved = true);
+        }
         if (block.dataset.hasOwnProperty('lat')) {
 	        marker = {
                 'lat': block.dataset.lat,
@@ -375,6 +381,7 @@ window.onload = function() {
     }
 
     function save_artifact_story() {
+        typeOfMarker = 1;
         story_cont.style.display = 'block';
         var text = escape_html_tags(textarea_artifact.value),
             content = text_block_template(text);
@@ -602,7 +609,7 @@ function placeMarker(location, itemstr) {
         map: map,
         icon: {url: '../static/images/artifact_marker.png'}
     });
-9    } else {
+    } else {
         var marker = new google.maps.Marker({
         position: location,
         map: map

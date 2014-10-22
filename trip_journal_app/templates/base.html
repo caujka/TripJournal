@@ -29,7 +29,7 @@
                 </div>
             {% else %}
                 <div>
-                    Sign in:
+                    sign in:
                     <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request|login_next }}">
                         <div class='login_image'><img src="{% static "images/Google_Plus_logo.png"%}"></div>
                     </a>

@@ -8,13 +8,12 @@ from django.http import HttpResponse
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.sessions.backends.db import SessionStore
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.views.decorators.http import require_POST
 
-from trip_journal_app.models import Story, Picture
+from trip_journal_app.models import Story, Picture, Tag
 from trip_journal_app.forms import UploadFileForm
 from trip_journal_app.utils.story_utils import story_contents
-
 
 def home(request):
     """
@@ -197,6 +196,47 @@ def delete(request, story_id):
         return HttpResponse('Unathorized', status=401)
     story.delete()
     return redirect(reverse('user_stories'))
+
+
+def delete_story_tag(request):
+    """
+    Delete teg in story tags
+    """
+    if request.is_ajax():
+        story_id = request.GET.get('Story_id')
+        story = Story.objects.get(pk=story_id)
+        return HttpResponse(','.join(str(x) for x in story.tags.all()))
+
+
+def get_story_tags(request):
+    """
+    Get tags from story
+    """
+    if request.is_ajax():
+        story_id = request.GET.get('Story_id')
+        story = Story.objects.get(pk=story_id)
+        return HttpResponse(','.join(str(x) for x in story.tags.all()))
+
+
+@login_required
+@require_POST
+def put_tag(request):
+    """
+    Put curent tag to DB
+    """
+    if request.is_ajax():
+        request_body = json.loads(request.body)
+        tags = Tag.objects.filter(name=request_body['tag_name'])
+        if not tags:
+            tag = Tag()
+            tag.name = request_body['tag_name']
+            tag.save()
+        else:
+            tag = tags[0]
+        story = Story.objects.get(pk = int(request_body['story_id']))
+        story.tags.add(tag)
+        story.save()
+        return HttpResponse(status=200)
 
 
 def show_authorization_page(request):

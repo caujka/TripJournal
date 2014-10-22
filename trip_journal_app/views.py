@@ -202,10 +202,14 @@ def delete_story_tag(request):
     """
     Delete teg in story tags
     """
+    print 'delete story igor 1', request
     if request.is_ajax():
         story_id = request.GET.get('Story_id')
+        tag_poz = request.GET.get('Tag_position')
+        print 'delete story igor 2', story_id, tag_poz
         story = Story.objects.get(pk=story_id)
-        return HttpResponse(','.join(str(x) for x in story.tags.all()))
+        story.tags.all()[int(tag_poz)].delete()
+        return HttpResponse(status=200)
 
 
 def get_story_tags(request):

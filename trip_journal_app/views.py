@@ -11,7 +11,8 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.views.decorators.http import require_POST
 
-from trip_journal_app.models import Story, Picture, Tag
+from trip_journal_app.models import Story, Picture, Tag, Map_artifact
+
 from trip_journal_app.forms import UploadFileForm
 from trip_journal_app.utils.story_utils import story_contents
 
@@ -87,7 +88,6 @@ def story(request, story_id):
     else:
         return redirect('/')
 
-
 @login_required
 @ensure_csrf_cookie
 def edit(request, story_id):
@@ -156,7 +156,7 @@ def make_paging_for_items_search(request):
         if not list_of_items['items']:
             messages.info(request, 'No items found')
             return redirect('/stories_near_by/')
-        else:    
+        else:
             paginator = Paginator(list_of_items['items'], 2)
     page = request.GET.get('page')
     try:
@@ -254,8 +254,8 @@ def stories_by_user(request):
         needed_user = str(request.GET.get('needed_user', ''))
         stories = []
         if needed_user:
-        	needed_user = User.objects.get(username=needed_user)
-        	stories = Story.objects.filter(user=needed_user)
+            needed_user = User.objects.get(username=needed_user)
+            stories = Story.objects.filter(user=needed_user)
         context = {'stories': stories}
         return render(request, 'stories_by_user.html', context)
         

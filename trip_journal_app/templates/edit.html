@@ -73,19 +73,21 @@
 
         </div>
 
-
-        <div id="video_panel" class="block hide">
-            <div id="file">
-                <input id="type_file" type="file" class="add_file clear_cont" name="img">
-            </div>
-            <div id="photo_cont" class="">
-            </div>
+    <div id="text_panel" class="block hide" >
+            <textarea id="textarea" name="text" class="element_story" placeholder="+ Text to story"></textarea>
             <br>
+            <button id="adds_block_t" class="button_2 adds_block">+</button>
+            <button id="clear_block_t" class="button_2 delete_block">-</button>
 
-            <button id="adds_block_p" class="button_2 adds_block">+</button>
-            <button id="clear_block_p" class="button_2 delete_block">-</button>
         </div>
-	   
+
+        <div id="artifact_panel" class="block hide">
+            <textarea id="textarea_artifact" name="artifact" class="element_story" placeholder="Add artifact"></textarea>
+            <br>
+            <button id="adds_block_a" class="button_2 adds_block">+</button>
+            <button id="clear_block_a" class="button_2 delete_block">-</button>
+        </div>
+
 
         <div id="add_panel" class="block">
             <div id="added_text" class="add_block">
@@ -94,9 +96,10 @@
             <div id="added_image" class="add_block">
                 <span class="block_title">image</span>
             </div>
-            <div id="added_video" class="add_block">
-                <span class="block_title">video</span>
+            <div id="added_artifact" class="add_block">
+                <span class="block_title">artifact</span>
             </div>
+
         </div>
  
         {% if story.id %}

@@ -72,40 +72,27 @@ class Story(models.Model):
 
     @classmethod
     def get_sorted_stories_list(cls, latitude, longitude):
-        req = ('select (POWER(trip_journal_app_picture.latitude - %f, 2) + '
-                'POWER(trip_journal_app_picture.longitude - %f, 2)) as '
-                'distance, trip_journal_app_story.id, trip_journal_app_picture.story_id, '
-                'trip_journal_app_story.title, '
-                'trip_journal_app_story.date_publish, trip_journal_app_story.user_id ' 
-                'FROM trip_journal_app_picture ' 
-                'join trip_journal_app_story '
-                'on trip_journal_app_picture.story_id=trip_journal_app_story.id '
-                'WHERE latitude IS NOT NULL AND longitude IS NOT NULL '
-                'AND trip_journal_app_story.published=1 '
-                'group by story_id order by distance;' % (latitude, longitude))
-        list_of_pictures = list(Story.objects.raw(req))
-        return list_of_pictures
-
-#        stories = cls.objects.all()
-#        list_of_stories = []
-#        for st in stories:
-#            coordinates = []
-#            distance = []
-#            pictures = Picture.objects.filter(story_id=st.id)
-#            artifacts = Map_artifact.objects.filter(story_id=st.id)
-#            for picture in pictures:
-#                if picture.latitude and picture.longitude:
-#                    coordinates.append([float(picture.latitude), float(picture.longitude)])
-#            for artifact in artifacts:
-#                if artifact.latitude and artifact.longitude:
-#                    coordinates.append([float(artifact.latitude), float(artifact.longitude)])
-#            if coordinates:
-#               for coordinate in coordinates:
-#                    dist = math.sqrt((latitude - coordinate[0])**2 + (longitude - coordinate[1])**2)
-#                    distance.append(dist)
-#                list_of_stories.append({'story': st, 'distance': min(distance)})
-#        list_of_stories.sort(key = lambda k: k['distance'])
-#        return list_of_stories
+        stories = cls.objects.all()
+        list_of_stories = []
+        for st in stories:
+            if st.published:    
+                coordinates = []
+                distance = []
+                pictures = Picture.objects.filter(story_id=st.id)
+                artifacts = Map_artifact.objects.filter(story_id=st.id)
+                for picture in pictures:
+                    if picture.latitude and picture.longitude:
+                        coordinates.append([float(picture.latitude), float(picture.longitude)])
+                for artifact in artifacts:
+                    if artifact.latitude and artifact.longitude:
+                        coordinates.append([float(artifact.latitude), float(artifact.longitude)])
+                if coordinates:
+                    for coordinate in coordinates:
+                        dist = math.sqrt((latitude - coordinate[0])**2 + (longitude - coordinate[1])**2)
+                        distance.append(dist)
+                    list_of_stories.append({'story': st, 'distance': min(distance)})
+        list_of_stories.sort(key = lambda k: k['distance'])
+        return list_of_stories
 
     def likes_count(self):
         return self.likes.count()

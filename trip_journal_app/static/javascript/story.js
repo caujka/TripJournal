@@ -9,11 +9,19 @@ function BlockAndMarker (blockElement) {
     }
 
     self.block = blockElement;
-    self.marker = new google.maps.Marker({
-        position: coordinatesFromBlock(blockElement),
-        map: map,
-        icon: UNACTIVE_ICON
-    });
+    if (self.block.classList[1] === 'text' || self.block.classList[1] === 'img') {
+        self.marker = new google.maps.Marker({
+            position: coordinatesFromBlock(blockElement),
+            map: map,
+            icon: UNACTIVE_ICON
+        });
+    }else if (this.block.classList[1] === 'artifact'){
+        self.marker = new google.maps.Marker({
+            position: coordinatesFromBlock(blockElement),
+            map: map,
+            icon: ARTIFACT_ICON_SMALL
+        });
+    }
 
     // event listeners for blocks
     self.block.addEventListener('mouseover', function(){
@@ -41,19 +49,37 @@ BlockAndMarker.prototype = {
     constructor: BlockAndMarker,
 
     showActive: function (centerOn) {
-        this.block.classList.add('active_marker_block');
-        this.marker.setIcon(ACTIVE_ICON);
-        if (centerOn === 'marker') {
-            map.setZoom(ZOOM_INITIAL);
-            map.panTo(this.marker.getPosition());
-        } else if (centerOn === 'block') {
-            scrollToElement(this.block);
+        if (this.block.classList[1] === 'text' || this.block.classList[1] === 'img') {
+            this.block.classList.add('active_marker_block');
+            this.marker.setIcon(ACTIVE_ICON);
+            console.log(this.block.classList);
+            if (centerOn === 'marker') {
+                map.setZoom(ZOOM_INITIAL);
+                map.panTo(this.marker.getPosition());
+            } else if (centerOn === 'block') {
+                scrollToElement(this.block);
+            }
+        }else if (this.block.classList[1] === 'artifact'){
+            this.block.classList.add('active_marker_block');
+            this.marker.setIcon(ARTIFACT_ICON_BIG);
+            console.log(this.block.classList);
+            if (centerOn === 'marker') {
+                map.setZoom(ZOOM_INITIAL);
+                map.panTo(this.marker.getPosition());
+            } else if (centerOn === 'block') {
+                scrollToElement(this.block);
+            }
         }
     },
 
     showUnactive: function () {
-        this.block.classList.remove('active_marker_block');
-        this.marker.setIcon(UNACTIVE_ICON);
+        if (this.block.classList[1] === 'text' || this.block.classList[1] === 'img') {
+            this.block.classList.remove('active_marker_block');
+            this.marker.setIcon(UNACTIVE_ICON);
+        } else if (this.block.classList[1] === 'artifact'){
+            this.block.classList.remove('active_marker_block');
+            this.marker.setIcon(ARTIFACT_ICON_SMALL);
+        }
     }
 };
 

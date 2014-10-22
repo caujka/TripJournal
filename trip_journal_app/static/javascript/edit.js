@@ -4,7 +4,9 @@ var number = 1,
     Blocks = [],
     BlockTypes = [],
     BlockMarkers = [],
-    Images = [];
+    Images = [],
+    typeOfMarker = 0, // simple marker, 1 - custom marker
+    editBlockStatus = 0;
 
 function deleteImagesFromBlock(blockNumber) {
     for (var i=0; i < Images.length; i++) {
@@ -99,6 +101,63 @@ function appendBlock(story, blockContent, block_type, saved) {
     }
 }
 
+function appendBlockArtifact(story, blockContent, block_type, saved, itemstr) {
+    var container = document.createElement('div'),
+        keybar = document.createElement('div'),
+        buttons = [
+            ['top', 'moveup'],
+            ['bottom', 'movedown'],
+            ['delete', 'deleteBlock'],
+            ['addmarkerArtifact', 'setactivemarkerArtifact'],
+            ['removemarker', 'removeBlockMark']
+        ];
+function create_button(button_name_and_func) {
+        var button_name = button_name_and_func[0],
+            button_func = button_name_and_func[1],
+            button = document.createElement('button');
+        button.setAttribute('onClick', button_func + "('" + number + "')");
+        button.id = button_name;
+        keybar.appendChild(button);
+    }
+
+    container.setAttribute(
+        'onMouseOver',
+        "change_button_visibility('" + number + "', \"visible\")"
+    );
+    container.setAttribute(
+        'onMouseOut',
+        "change_button_visibility('" + number + "', \"hidden\")"
+    );
+    container.id = "block_" + number;
+    container.className = "block_story";
+
+    container.innerHTML =
+        '<div onclick="editBlock(' + number + ')" id="contentarea_' + number + '">' +
+        blockContent +
+        '</div>';
+
+    keybar.id = "keybar_" + number;
+    keybar.className = "key_panel";
+
+    buttons.forEach(create_button);
+
+    container.appendChild(keybar);
+    story.appendChild(container);
+
+    Blocks.push(number);
+    BlockMarkers.push(null);
+    BlockTypes.push(block_type);
+	if (block_type === 'img') {
+        addImagesFromTemp(number);
+    }
+
+    current_marker = Blocks.length - 1;
+    number++;
+    if (!saved) {
+        savePage();
+    }
+}
+
 function deleteBlock(itemstr) {
     var item = parseInt(itemstr),
         poss = Blocks.indexOf(item),
@@ -121,24 +180,28 @@ function editBlock(itemstr) {
         contentarea = document.getElementById('contentarea_' + Blocks[poss]),
         keybar = document.getElementById('keybar_' + Blocks[poss]);
     console.log(BlockTypes[poss]);
-    if (BlockTypes[poss] === 'text') {
-        textarea = document.createElement('textarea');
-        textarea.value = document.getElementsByClassName('description_story')[item - 1].innerHTML;
-        textarea.rows = 4;
-        textarea.cols = 90;
-        contentarea.style.display = 'none';
-        keybar.style.display = 'none';
-        block.appendChild(textarea);
-        textarea.focus();
-        textarea.onkeypress = function (e) {
-            if (e.keyCode === 13) {
-                document.getElementsByClassName('description_story')[item - 1].innerHTML = textarea.value;
-                block.removeChild(textarea);
-                contentarea.style.display = 'block';
-                keybar.style.display = 'block';
-                savePage();
-            }
-        };
+    if (editBlockStatus === 0) {
+        editBlockStatus = 1;
+        if (BlockTypes[poss] === 'text' || BlockTypes[poss] === 'artifact') {
+            textarea = document.createElement('textarea');
+            textarea.value = document.getElementsByClassName('description_story')[poss].innerHTML;
+            textarea.rows = 4;
+            textarea.cols = 90;
+            contentarea.style.display = 'none';
+            keybar.style.display = 'none';
+            block.appendChild(textarea);
+            textarea.focus();
+            textarea.onkeypress = function (e) {
+                if (e.keyCode === 13) {
+                    document.getElementsByClassName('description_story')[poss].innerHTML = textarea.value;
+                    block.removeChild(textarea);
+                    contentarea.style.display = 'block';
+                    keybar.style.display = 'block';
+                    savePage();
+                    editBlockStatus = 0;
+                }
+            };
+        }
     }
 }
 
@@ -219,8 +282,15 @@ function add_saved_blocks() {
                 block.dataset.dbid
             );
         }
+        else if (block_type === 'artifact') {
+            block_text = text_block_template(block.children[0].innerHTML);
+        }
         block.parentNode.removeChild(block);
-        appendBlock(story_content, block_text, block_type, saved=true);
+        if (block_type === 'text' || block_type === 'img') {
+            appendBlock(story_content, block_text, block_type, saved = true);
+        }else if (block_type === 'artifact') {
+            appendBlockArtifact(story_content, block_text, block_type, saved = true);
+        }
         if (block.dataset.hasOwnProperty('lat')) {
 	        marker = {
                 'lat': block.dataset.lat,
@@ -250,6 +320,9 @@ window.onload = function() {
         video_panel = document.getElementById('video_panel'),
         publish_panel = document.getElementById('publish_panel'),
         title = document.getElementById('title'),
+        textarea_artifact = document.getElementById('textarea_artifact'),
+        text_artifact = document.getElementById('added_artifact'),
+        artifact_panel = document.getElementById('artifact_panel'),
 
         fileSelect = document.getElementById('type_file');
         form = document.getElementById('file-form'),
@@ -292,18 +365,36 @@ window.onload = function() {
             arr_3[i].style.display = 'none';
         }
         textarea.value = '';
+        textarea_artifact.value = '';
         photo_cont.innerHTML = '';
         photo_cont.style.display = 'none';
         clearImagesFromTemp();
     }
 
     function save_text_story() {
+        typeOfMarker = 0;
         story_cont.style.display = 'block';
         var text = escape_html_tags(textarea.value),
             content = text_block_template(text);
         appendBlock(story_cont, content, "text");
         clear();
     }
+
+    function save_artifact_story() {
+        typeOfMarker = 1;
+        story_cont.style.display = 'block';
+        var text = escape_html_tags(textarea_artifact.value),
+            content = text_block_template(text);
+        appendBlockArtifact(story_cont, content, "artifact");
+        clear();
+    }
+
+        textarea_artifact.onkeypress = function(e) {
+        if (e.keyCode === 13) {
+            save_artifact_story();
+            return false;
+        }
+    };
 
     function save_photo_story() {
         var i,
@@ -372,11 +463,12 @@ window.onload = function() {
         photo_panel.style.display = 'block';
     };
 
-    video.onclick = function() {
+    text_artifact.onclick = function() {
         clear();
         this.style.background = '#8ed41f';
-        video_panel.style.display = 'block';
-    };
+        artifact_panel.style.display = 'block';
+        document.getElementById('textarea_artifact').focus();
+    }
 
     fileSelect.onchange = add_img;
 
@@ -405,6 +497,8 @@ window.onload = function() {
     document.getElementById('clear_block_t').onclick = clear;
     document.getElementById('adds_block_p').onclick = save_photo_story;
     document.getElementById('clear_block_p').onclick = clear;
+    document.getElementById('adds_block_a').onclick = save_artifact_story;
+    document.getElementById('clear_block_a').onclick = clear;
 
 
 var tag_input = document.getElementById('tag_input');
@@ -490,13 +584,23 @@ function initialize() {
 }
 
 // Add a marker to the map and push to the array.
-function placeMarker(location) {
-    var marker = new google.maps.Marker({
+function placeMarker(location, itemstr) {
+    var item = parseInt(itemstr);
+    if (typeOfMarker === 1) {
+        var marker = new google.maps.Marker({
+        position: location,
+        map: map,
+        icon: {url: '../static/images/artifact_marker.png'}
+    });
+    } else {
+        var marker = new google.maps.Marker({
         position: location,
         map: map
     });
+    }
 
-    if(current_marker !== -1){
+
+    if(current_marker !== -1) {
         if(BlockMarkers[current_marker] !== null){
             removeMark(BlockMarkers[current_marker]);
         }
@@ -528,6 +632,13 @@ function codeAddress() {
 }
 
 function setactivemarker(itemstr){
+    typeOfMarker = 0
+    var item = parseInt(itemstr);
+    current_marker = Blocks.indexOf(item);
+}
+
+function setactivemarkerArtifact(itemstr){
+    typeOfMarker = 1;
     var item = parseInt(itemstr);
     current_marker = Blocks.indexOf(item);
 }

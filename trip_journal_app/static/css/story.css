@@ -77,6 +77,11 @@ div.saved.img {
     padding: 8px 5px 8px 10px;
 }
 
+.saved.artifact p {
+    margin: 0;
+    padding: 8px 5px 8px 10px;
+}
+
 .like_picture {
     position: absolute;
     bottom: 3px;

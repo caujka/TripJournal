@@ -32,7 +32,7 @@ main{
 .add_block:hover{
     background-color: #8ED41F;
 }
-.key_panel{
+.key_panel, .key_panel_artifact{
     width: 215px;
     height: 25px;
     border: 1px solid #aaa;
@@ -182,13 +182,13 @@ main{
 #comment_but_t,#treasure_but_t,#comment_but_p,#treasure_but_p{
     position: relative;
 }
-#title_panel,#text_panel,#photo_panel,#video_panel,#add_panel,#publish_panel{
+#title_panel,#text_panel,#photo_panel,#video_panel,#add_panel,#publish_panel, #artifact_panel{
     display: none;
 }
 #add_comment_t,#add_treasure_t,#add_comment_p,#add_treasure_p{
     display: none;
 }
-#bottom, #edit, #delete, #top,#addmarker,#removemarker{
+#bottom, #edit, #delete, #top,#addmarker,#removemarker,#addmarkerArtifact{
     display: inline-block;
     width: 25px;
     height: 25px;
@@ -218,6 +218,10 @@ main{
 #addmarker{
     bottom: 0px;
     background:  url("../images/marker.png") no-repeat;
+}
+#addmarkerArtifact{
+    bottom: 0px;
+    background:  url("../images/artifact_marker.png") no-repeat;
 }
 #removemarker{
     bottom: 0px;

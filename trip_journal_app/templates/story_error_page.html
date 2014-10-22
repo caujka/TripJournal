@@ -1,0 +1,21 @@
+<html>
+    <head>
+        {% load staticfiles %}
+        {% load trip_journal_extras %}
+        <meta charset="UTF-8">
+        <title>Authorization</title>
+        <link rel="stylesheet" href="{% static "css/authorization.css"%}">
+        <link href='http://fonts.googleapis.com/css?family=Ubuntu:400,300,500,400italic&subset=latin,cyrillic-ext' rel='stylesheet' type='text/css'>
+    </head>
+    <body>
+        <div id="header">
+            <div id='cite_name'>
+                <p><a href={% url 'home' %}>Trip Journal</a></p>
+            </div>
+        </div>
+        <div id="content">
+            This story doesn't exist or isn't published yet. Sorry.
+            <br>
+        </div>
+    </body>
+</html>

@@ -407,12 +407,14 @@ window.onload = function() {
     document.getElementById('clear_block_p').onclick = clear;
 
 
-getStoryTags();
 var tag_input = document.getElementById('tag_input');
 tag_input.onchange = tags_add;
 var tag_add = document.getElementById('tag_add');
 tag_add.onclick = tags_add;
 
+
+};
+getStoryTags();
 
 function tags_add() {
     var reg = /^[а-яa-z0-9іїє\s]+$/i;
@@ -424,8 +426,6 @@ function tags_add() {
     tag_input.focus();
 }
 
-};
-
 function tags_view(tags_arr){
     console.log(tags_arr);
     button_list.innerHTML = '';
@@ -436,6 +436,7 @@ function tags_view(tags_arr){
 }
 
 function tag_delete(i) {
+    deleteStoryTags(i);
 }
 
 

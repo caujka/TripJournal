@@ -148,33 +148,33 @@ function putTag(tag_name) {
 }
 
 function getStoryTags() {
-    var xhr = new XMLHttpRequest();
     story_id = storyIdFromUrl();
-    xhr.onreadystatechange = function() {
+    if(story_id) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var str = xhr.responseText;
             var tags_arr = str.split(',');
             tags_view(tags_arr);
         }
     }
-    params = 'Story_id=' + encodeURIComponent(story_id);
+    params = 'Story_id=' + story_id;
     xhr.open('GET', '/get_story_tags/?'+params, true);
     xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
     xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');
     xhr.send();
+    }
 }
 
-function deleteStoryTags() {
+function deleteStoryTags(i) {
     var xhr = new XMLHttpRequest();
     story_id = storyIdFromUrl();
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            var str = xhr.responseText;
-            var tags_arr = str.split(',');
-            tags_view(tags_arr);
+            getStoryTags();
         }
     }
-    params = 'Story_id=' + encodeURIComponent(story_id);
+    params = 'Story_id=' + encodeURIComponent(story_id) + '&Tag_position=' + i;
     xhr.open('GET', '/delete_story_tag/?'+params, true);
     xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
     xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');

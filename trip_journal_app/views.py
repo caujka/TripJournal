@@ -4,14 +4,14 @@ import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.sessions.backends.db import SessionStore
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.views.decorators.http import require_POST
 
-from trip_journal_app.models import Story, Picture, Tag, Map_artifact
+from trip_journal_app.models import Story, Picture, Tag, Map_artifact, Comment
 
 from trip_journal_app.forms import UploadFileForm
 from trip_journal_app.utils.story_utils import story_contents
@@ -265,4 +265,19 @@ def stories_by_user(request):
             stories = Story.objects.filter(user=needed_user)
         context = {'stories': stories}
         return render(request, 'stories_by_user.html', context)
+
+@login_required
+#@require_POST
+@ensure_csrf_cookie
+def add_comment(request,story_id):
+    """Add a new comment."""
+    if request.POST["text"]:
+        comment = Comment()
+        author = auth.get_user(request)
+        comment.user_id = author.id
+        comment.story_id = story_id
+        comment.text = request.POST["text"]
+        comment.save()
+    return HttpResponseRedirect('story')
+    #return redirect(reverse('story'))
        

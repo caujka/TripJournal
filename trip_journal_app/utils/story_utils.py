@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.contrib import messages, auth
 
-from trip_journal_app.models import Story
+from trip_journal_app.models import Story, Comment
 
 
 def story_contents(request, story_id, template, 
@@ -14,6 +14,7 @@ def story_contents(request, story_id, template,
     if story_id:
         try:
             story = Story.objects.get(pk=int(story_id))
+            comments = Comment.objects.filter(story_id=story_id)
             if check_user:
                 if user != story.user:
                     messages.info(request, 'Edit your own stories!')
@@ -34,6 +35,7 @@ def story_contents(request, story_id, template,
         'story_blocks': story_blocks,
         'story': story,
         'user': user,
+        'comments':comments,
     }
     return render(request, template, context)
 

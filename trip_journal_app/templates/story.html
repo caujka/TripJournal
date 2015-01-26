@@ -46,4 +46,24 @@
     </div>
 
     </main>
+    <!-- Comments  -->
+    {% if comments %}
+    <p>Comments:</p>
+    {% endif %}
+
+    {% for comment in comments %}
+    <div class="comment">
+        <div class="time">{{ comment.time }} | {{ comment.user }}</div>
+        <div class="body">{{ comment.text|linebreaks }}</div>
+    </div>
+    {% endfor %}
+
+    <div >Add a comment</div>
+    <!-- Comment form  -->
+    <form action="{% url 'add_comment' story.id %}" method="POST">{% csrf_token %}
+        <div>
+            <p><textarea name="text" cols="40" rows="3"></textarea></p>
+        </div>
+        <div id="submit"><input type="submit" value="Submit"></div>
+    </form>
     {% endblock %}

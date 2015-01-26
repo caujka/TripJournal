@@ -10,11 +10,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sessions.backends.db import SessionStore
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.views.decorators.http import require_POST
+from notifications.models import Notification
+from notifications import notify
 
 from trip_journal_app.models import Story, Picture, Tag, Map_artifact, Comment
 
 from trip_journal_app.forms import UploadFileForm
 from trip_journal_app.utils.story_utils import story_contents
+
 
 def home(request):
     """
@@ -278,6 +281,6 @@ def add_comment(request,story_id):
         comment.story_id = story_id
         comment.text = request.POST["text"]
         comment.save()
+        comment.notify(story_id)
     return HttpResponseRedirect('story')
-    #return redirect(reverse('story'))
-       
+           

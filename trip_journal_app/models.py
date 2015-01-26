@@ -4,6 +4,8 @@ import math
 
 from django.db import models
 from django.contrib.auth.models import User
+from notifications.models import Notification
+from notifications import notify
 
 from TripJournal.settings import (IMAGE_SIZES, STORED_IMG_DOMAIN,
                                   IMG_STORAGE, TEMP_DIR)
@@ -217,6 +219,22 @@ class Comment(models.Model):
     def __unicode__(self):
         return self.text
 
+    def notify(self,story_id):
+        author = Story.objects.get(pk=story_id).user
+        if self.user != author:
+            notify.send(self.user,
+                        recipient=author,
+                        verb="Your story was commented"
+                        )
+        comments = Comment.objects.filter(story_id=story_id)
+        commenters = {comment.user for comment in comments}
+        if self.user in commenters:
+            commenters.remove(self.user)
+        for user in commenters:
+            notify.send(self.user,
+                        recipient=user,
+                        verb="The story which you'd commented was commented"
+                        )
 
 class Map_artifact(models.Model):
     text = models.TextField()

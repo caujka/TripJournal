@@ -282,5 +282,6 @@ def add_comment(request,story_id):
         comment.text = request.POST["text"]
         comment.save()
         comment.notify(story_id)
-    return HttpResponseRedirect('story')
+    return HttpResponseRedirect('/story/{id}'.format(id=story_id))
+
            

@@ -1,6 +1,4 @@
-import notifications
-
-from django.conf.urls import url,include
+from django.conf.urls import url
 
 from trip_journal_app import views
 
@@ -44,6 +42,7 @@ urlpatterns = [
     url(r'^authorization_page/', views.show_authorization_page, 
         name='show_authorization_page'),
     url(r'^story/comment/(?P<story_id>\d*)/$',views.add_comment, name='add_comment'),
-    url('^inbox/notifications/', include(notifications.urls)),
+    url(r'^user_messages/$', views.user_messages, name='user_messages'),
+    url(r'^mark_as_read/$', views.mark_as_read, name='mark_as_read'),
 ]
 

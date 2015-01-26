@@ -227,7 +227,7 @@ class Comment(models.Model):
                         verb="Your story was commented"
                         )
         comments = Comment.objects.filter(story_id=story_id)
-        commenters = {comment.user for comment in comments}
+        commenters = {comment.user for comment in comments if comment.user != author}
         if self.user in commenters:
             commenters.remove(self.user)
         for user in commenters:

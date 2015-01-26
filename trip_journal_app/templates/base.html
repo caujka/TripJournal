@@ -3,6 +3,7 @@
     <head>
         {% load staticfiles %}
         {% load trip_journal_extras %}
+        {% load notifications_tags %}
         <meta charset="UTF-8">
         <title>{% block title %}{% endblock %}</title>
         {% block css %}
@@ -20,6 +21,8 @@
         </div>
         <div id="menu">
             {% block menu %}
+            {% notifications_unread as unread_count %}
+            <div><a href="{% url 'user_messages' %}">messages {{unread_count}} </a></div>
             <div><a href="{% url 'stories_near_by' %}">stories nearby</a></div>
             <div><a href="{% url 'pictures_near_by' %}">pictures nearby</a></div>
             {% if user and not user.is_anonymous %}

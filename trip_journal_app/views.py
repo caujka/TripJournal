@@ -270,7 +270,6 @@ def stories_by_user(request):
         return render(request, 'stories_by_user.html', context)
 
 @login_required
-#@require_POST
 @ensure_csrf_cookie
 def add_comment(request,story_id):
     """Add a new comment."""
@@ -284,4 +283,15 @@ def add_comment(request,story_id):
         comment.notify(story_id)
     return HttpResponseRedirect('/story/{id}'.format(id=story_id))
 
+@login_required
+def user_messages(request):
+    user = auth.get_user(request)
+    notifications = user.notifications.order_by('-timestamp')
+    context = {'user': user, 'notifications':notifications}
+    return render(request,'user_messages.html',context)
+
+@login_required
+def mark_as_read(request):
+    request.user.notifications.unread().mark_all_as_read()
+    return HttpResponseRedirect('/user_messages/')
            

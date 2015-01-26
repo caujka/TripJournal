@@ -396,7 +396,7 @@ window.onload = function() {
         }
     };
 
-    function save_photo_story() {
+    function save_photo_story(){           
         var i,
             arr = document.getElementsByClassName(number),
             content = '';
@@ -406,7 +406,32 @@ window.onload = function() {
         }
         appendBlock(story_cont, content, "img");
         clear();
+        
+        $('#type_file').fileExif(setMarkerFromImageExifData);
     }
+    // put marker if image has GPS coordinates in Exif data
+    function setMarkerFromImageExifData(exifData){           
+          if(exifData.GPSLatitude && exifData.GPSLongitude){
+              var lat=ConvertDMSToDD(exifData.GPSLatitude);
+              var lng=ConvertDMSToDD(exifData.GPSLongitude);                      
+              var myLatlng = new google.maps.LatLng(lat, lng);
+              var countBlock=document.getElementsByClassName("block_story").length                     
+              setactivemarker(countBlock);
+              placeMarker(myLatlng, countBlock);
+              map.setCenter(myLatlng);
+            }
+        }
+    //convert from degrees, minutes, seconds to decimal degrees coordinates
+      function ConvertDMSToDD(dms) {
+        var dmsArray=dms.toString().split(",");
+        var degrees=+dmsArray[0];
+        var minutes=+dmsArray[1];
+        var seconds=+dmsArray[2];
+        var dd = degrees + minutes/60 + seconds/(60*60);
+        return dd;   
+      }
+
+
 
     function add_img() {
         var i, URL, imageUrl, id, file, imageData,

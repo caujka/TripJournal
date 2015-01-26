@@ -265,4 +265,4 @@ def stories_by_user(request):
             stories = Story.objects.filter(user=needed_user)
         context = {'stories': stories}
         return render(request, 'stories_by_user.html', context)
-        
+       

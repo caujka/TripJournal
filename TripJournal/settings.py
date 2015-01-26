@@ -14,9 +14,9 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # local settings
-import TripJournal.local_settings as local_settings
+#import TripJournal.local_settings as local_settings
 
-from utils import client_key_and_secret
+#from utils import client_key_and_secret
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -47,9 +47,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'debug_toolbar',
+    #'debug_toolbar',
     'trip_journal_app',
     'social.apps.django_app.default',
+    'notifications',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -75,8 +76,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'TripJournal',
-        'USER': local_settings.db_user,
-        'PASSWORD': local_settings.db_password,
+        #'USER': local_settings.db_user,
+        #'PASSWORD': local_settings.db_password,
+        'USER': 'root',
+        'PASSWORD': 'problema',
     }
 }
 
@@ -122,16 +125,21 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-CLIENT_SECRETS_DIR = os.path.join(BASE_DIR, 'TripJournal', 'client_secrets')
+#CLIENT_SECRETS_DIR = os.path.join(BASE_DIR, 'TripJournal', 'client_secrets')
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY, SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = (
-    client_key_and_secret(CLIENT_SECRETS_DIR, 'google')
-)
-SOCIAL_AUTH_FACEBOOK_KEY, SOCIAL_AUTH_FACEBOOK_SECRET = (
-    client_key_and_secret(CLIENT_SECRETS_DIR, 'facebook')
-)
-SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET = (
-    client_key_and_secret(CLIENT_SECRETS_DIR, 'vk')
-)
+# SOCIAL_AUTH_GOOGLE_OAUTH2_KEY, SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = (
+#     client_key_and_secret(CLIENT_SECRETS_DIR, 'google')
+# )
+# SOCIAL_AUTH_FACEBOOK_KEY, SOCIAL_AUTH_FACEBOOK_SECRET = (
+#     client_key_and_secret(CLIENT_SECRETS_DIR, 'facebook')
+# )
+# SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET = (
+#     client_key_and_secret(CLIENT_SECRETS_DIR, 'vk')
+# )
+
+SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET = "4702461", "fyPKj9nnpr9pClaNxmPi"
+SOCIAL_AUTH_FACEBOOK_KEY, SOCIAL_AUTH_FACEBOOK_SECRET = "1565703510313353", "414f2851061b582aaafdc3fb06353c71"
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY, SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "160159626117-8rks5ggm63eu7gn2d68takig48r1ce1v.apps.googleusercontent.com",\
+"4AsJi3M-C-hyKgoQHIw2DtdX"
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'

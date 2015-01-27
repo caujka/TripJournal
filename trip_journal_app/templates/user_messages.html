@@ -8,21 +8,11 @@
         <div >
             <div ><a href="{% url 'mark_as_read' %}">Mark all as read</a></div>
             <table >
-                <thead>
-                    <tr>
-                        <th>Timestamp</th>
-                        <th>Actor</th>
-                        <th>Verb</th>
-                        
-                    </tr>
-                </thead>
                 <tbody>
                     {% for notification in notifications %}
                     <tr {% if notification.unread%} style="background-color:#FFFF85" {%endif%}>
                         <td>{{ notification.timestamp|date:"D d M Y H:i" }}</td>
-                        <td>{{ notification.actor|default:"" }}</td>
-                        <td>{{ notification.verb|default:"" }}</td>
-                        
+                        <td>{{ notification.verb|default:"" }}</td>                        
                     </tr>
                     {% endfor %}
                 </tbody>

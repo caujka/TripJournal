@@ -1,0 +1,299 @@
+body{
+    background-color: #131;
+    margin: 0;
+    padding: 0;
+}
+
+#content {
+    width: 1200px;
+    margin: auto;
+}
+
+main{
+    padding: 0;
+    width: 800px;
+    text-align: center;
+    position: relative;
+    top: 5px;
+}
+
+.add_block {
+    width: 100px;
+    background-color: #80B098;
+    height: 22px;
+    text-align: center;
+    border: 1px solid #aaa;
+    margin: 2px;
+    padding: 10px;
+    display: inline-block;
+    cursor: crosshair;
+    position: relative;
+}
+.add_block:hover{
+    background-color: #8ED41F;
+}
+.key_panel, .key_panel_artifact{
+    width: 215px;
+    height: 25px;
+    border: 1px solid #aaa;
+    margin-left:540px;
+    
+}
+.block_title{
+    text-transform: uppercase;
+    color: #FFFFCC;
+}
+.clear{
+    clear: both;
+}
+.block{
+    padding: 5px;
+    margin: 2px;
+    background: #fff;
+    position: relative;
+}
+.add_panel{
+    text-align: center;
+}
+
+
+#publish_panel form {
+    display: inline-block;
+}
+
+.button {
+    display: inline-block;
+    text-transform: uppercase;
+}
+
+.button:active,.button_2:active,.button_4:active{
+    background: #f00;
+}
+.add_file{
+    display: inline-block;
+    width: 642px;
+    height: 100px;
+    cursor: crosshair;
+    opacity: 0;
+}
+#file{
+    height: 100px;
+    width: 642px;
+    background: url("../images/plus-sign.png") 290px 25px no-repeat #ddd;
+    margin: 2px;
+    margin-left: 72px;
+}
+.text_story,.element_story{
+    width: 614px;
+    padding: 12px;
+    outline: none;
+    margin: 5px;
+    border: 2px solid #ddd;
+}
+.element_story{
+    height: 70px;
+    display: inline-block;
+}
+.button_2{
+    font-size: 16px;
+    font-weight: bold;
+    padding: 4px 9px;
+    background: #fff;
+    border: 1px solid #83a054;
+    color: #83a054;
+    outline: none;
+}
+#add_title,.adds_block{
+    position: absolute;
+    bottom: 5px;
+    right: 40px;
+}
+.delete_block{
+    position: absolute;
+    bottom: 5px;
+    right: 12px;
+    margin-left: 35px;
+}
+.img_block{
+    float: left;
+    position: relative;
+    margin: 2px;
+}
+.button_3{
+    position: absolute;
+    right: 2px;
+    top: 2px;
+}
+.img_story{
+    height: 100px;
+}
+#photo_cont{
+    width: 614px;
+    padding: 12px;
+    outline: none;
+    margin: 5px;
+    border: 2px solid #ddd;
+   
+    position: relative;
+}
+
+.block_story{
+    border: 1px solid #aaa;
+    margin: 5px;
+    text-align: left;
+    padding: 10px;
+    position: relative;
+}
+.image_story{
+    width: 756px;
+}
+.button_4{
+    position: absolute;
+    background: #fff;
+    outline: none;
+    border: 1px solid #83a054;
+    color: #83a054;
+}
+#delete_block{
+    right: 7px;
+    bottom: 7px;
+}
+#edit_block{
+    right: 30px;
+    bottom: 7px;
+}
+#bottom{
+    width: 58px;
+    right: 9px;
+    bottom: 28px;
+}
+#top{
+    width: 58px;
+    right: 9px;
+    bottom: 49px;
+}
+.comments,.treasure{
+    width: 650px;
+    font-size: 12px;
+}
+.block_story h3{
+    margin-left: 50px;
+}
+#comment_but_t,#treasure_but_t,#comment_but_p,#treasure_but_p{
+    position: relative;
+}
+#title_panel,#text_panel,#photo_panel,#video_panel,#add_panel,#publish_panel, #artifact_panel{
+   
+}
+#add_comment_t,#add_treasure_t,#add_comment_p,#add_treasure_p{
+    
+}
+#bottom, #edit, #delete, #top,#addmarker,#removemarker,#addmarkerArtifact{
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    margin-right:10px;
+    border: none;
+}
+#content_panel{
+    position: absolute;
+    top: 0;
+}
+#bottom{
+    background:  url("../images/arrow-down.png") no-repeat;
+}
+#top{
+    top: 0px;
+    background:  url("../images/arrow-up.png") no-repeat;
+}
+
+#edit{
+    bottom: 0px;
+    background:  url("../images/edit.png") no-repeat;
+}
+#delete{
+    bottom: 0px;
+    background:  url("../images/delete.png") no-repeat;
+}
+#addmarker{
+    bottom: 0px;
+    background:  url("../images/marker.png") no-repeat;
+}
+#addmarkerArtifact{
+    bottom: 0px;
+    background:  url("../images/artifact_marker.png") no-repeat;
+}
+#removemarker{
+    bottom: 0px;
+    background:  url("../images/deletemarker.png") no-repeat;
+}
+#map-canvas-wrapper {
+    position: fixed;
+    top: 70px;
+    height: 400px;
+    width: 390px;
+    margin-left: 805px;
+}
+
+#map-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+#panel {
+    width: 100%;
+    padding: 4px;
+    border: 1px solid #999;
+    text-align: left;
+}
+
+/*igor tag*/
+
+#tags_list{
+    text-align: left;
+    padding: 5px 70px;
+}
+.tags_button{
+    padding: 2px 5px;
+    margin: 1px;
+    border: 1px solid #ccc;
+    display: inline-block;
+}
+.tags_delete{
+    color: #daa;
+    display: inline-block;
+    padding: 2px 4px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+}
+#tag_add{
+    position: absolute;
+    color: #aca;
+    font-weight: bold;
+    font-size: 30px;
+    cursor: pointer;
+    display: inline-block;
+    right: 5px;
+    top: -4px;
+}
+#tag_input{
+    border: 1px solid #ccc;
+    display: inline-block;
+    height: 23px;
+    width: 120px;
+    margin: 1px;
+    outline: none;
+    padding: 2px 25px 2px 2px;
+    vertical-align: top;
+}
+#tag_input_block, #button_list{
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+}
+/*end igor tag*/
+p.description_story {
+    margin-top: 2px;
+}
+

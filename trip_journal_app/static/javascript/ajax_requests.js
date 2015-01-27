@@ -83,11 +83,10 @@ function postImages(storyId){
 }
 
 
-
+/////////////////////////////need
 function postData(async){
     var xhr = new XMLHttpRequest(),
     requestBody = JSON.stringify(storyBlocksJson());
-
     /**
      * Appends story id to page url and urls form publsih panel
      * and makes publish panel visble
@@ -116,7 +115,7 @@ function postData(async){
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     xhr.send(requestBody);
 }
-
+///////////////////////////////////////////
 
 function savePage() {
     if (storyIdFromUrl().length === 0) postData(false);

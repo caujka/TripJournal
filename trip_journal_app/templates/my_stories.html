@@ -9,6 +9,7 @@
 {% block content %}
     <h3>Your stories:</h3>
     <p id="new_story_link"><a href="{% url "edit" '' %}">Create new story</a></p>
+    <p id="new_story_link"><a href="{% url "editVova" '' %}">Vova edit</a></p>
 
     <div id="stories">
         {% for story in stories %}

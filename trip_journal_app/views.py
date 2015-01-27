@@ -103,6 +103,14 @@ def edit(request, story_id):
     '''
     return story_contents(request, story_id, 'edit.html', check_user=True)
 
+@login_required
+@ensure_csrf_cookie
+def editVova(request, story_id):
+    '''
+    Edit page view.
+    '''
+    return story_contents(request, story_id, 'editVova.html', check_user=True)
+
 
 @login_required
 def user_stories(request):

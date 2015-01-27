@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+    {% load staticfiles %}
+    {% load trip_journal_extras %}
+    {% block title %}Edit story{% endblock %}
+    {% block css %}
+        <link rel="stylesheet" href="{% static "css/base.css"%}">
+        <link rel="stylesheet" href="{% static "css/edit.css" %}">
+    {% endblock %}
+    {% block scripts %}
+        <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false&libraries=drawing">
+</script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+        <script type="text/javascript" src="{% static "javascript/jquery.exif.js" %}"></script>
+        <script type="text/javascript" src="{% static "javascript/utils.js"%}"></script>
+        <script type="text/javascript" src="{% static "javascript/mapping.js" %}"></script>
+        <script type="text/javascript" src="{% static "javascript/ajax_requestsVova.js" %}"></script>
+        <script type="text/javascript" src="{% static "javascript/editVova.js" %}"></script>
+    {% endblock %}
+    {% block content %}
+    <div id="map-canvas-wrapper">
+        <div id="panel">
+            <input id="address" type="textbox" value="">
+            <input type="button" value="Знайти" onclick="codeAddress()">
+        </div>
+        <div id="map-canvas"></div>
+    </div>
+
+    <main>
+    <div id="story_content" class="block">
+        {% if not story.title %}
+        <div id="title_panel" class="block hide">
+            <input id="title" type="text" name="title_story" class="text_story" placeholder="+ Title of story">
+            <button id="add_title" class="button_2">+</button>
+        </div>
+        {% endif %}
+
+        <h2 id="story_title" contenteditable="true">{{ story.title }}</h2>
+
+        {% block tags %}
+        <div id="tags_list">
+            <div id="button_list"></div>
+            <div id="tag_input_block">
+                <input type="text" id="tag_input" placeholder=" + Tags">
+                <span id="tag_add">+</span>
+            </div>
+        </div>
+        {% endblock %}
+
+        {% include 'story_content.html' with page="edit" %}
+    </div>
+
+        <div id="text_panel" class="block hide" >
+            <textarea id="textarea" name="text" class="element_story" placeholder="+ Text to story"></textarea>
+            <br>
+            <button id="adds_block_t" class="button_2 adds_block">+</button>
+            <button id="clear_block_t" class="button_2 delete_block">-</button>
+
+        </div>
+
+
+        <div id="photo_panel" class="block hide">
+            <div id="file">
+                <form id="file-form">
+	             <input id="type_file" type="file" class="add_file" name="img" multiple>
+                </form>
+            </div>
+
+            <div id="photo_cont" class="">
+            </div>
+            <br>
+
+            <button id="adds_block_p" class="button_2 adds_block">+</button>
+            <button id="clear_block_p" class="button_2 delete_block">-</button>
+
+        </div>
+
+    <div id="text_panel" class="block hide" >
+            <textarea id="textarea" name="text" class="element_story" placeholder="+ Text to story"></textarea>
+            <br>
+            <button id="adds_block_t" class="button_2 adds_block">+</button>
+            <button id="clear_block_t" class="button_2 delete_block">-</button>
+
+        </div>
+
+        <div id="artifact_panel" class="block hide">
+            <textarea id="textarea_artifact" name="artifact" class="element_story" placeholder="Add artifact"></textarea>
+            <br>
+            <button id="adds_block_a" class="button_2 adds_block">+</button>
+            <button id="clear_block_a" class="button_2 delete_block">-</button>
+        </div>
+
+
+        <div id="add_panel" class="block">
+            <div id="added_text" class="add_block">
+                <span class="block_title">text</span>
+            </div>
+            <div id="added_image" class="add_block">
+                <span class="block_title">image</span>
+            </div>
+            <div id="added_artifact" class="add_block">
+                <span class="block_title">artifact</span>
+            </div>
+
+        </div>
+ 
+        {% if story.id %}
+        <div id="publish_panel" class="block">
+           <form id="view_form" action="{% url "story" story.id %}">
+                <input type="submit" value="view" class="button" id="view">
+            </form>
+            {% include 'toggle_publish_buttons.html' with story_id=story.id %}
+        {% else %}
+        <div id="publish_panel" class="invisible">
+           <form id="view_form" action="{% url "story" "0" %}">
+                <input type="submit" value='view' class="button" id="view">
+            </form>
+            {% include 'toggle_publish_buttons.html' with story_id=0 %}
+        {% endif %}
+        </div>
+    </main>
+    {% endblock %}

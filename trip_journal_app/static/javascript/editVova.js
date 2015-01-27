@@ -1,18 +1,24 @@
 
 window.onload=function(){
-        first=document.getElementById("content")
-        first.addEventListener("click", mainClick, false)
+    first=document.getElementsByTagName("main")[0]
+    first.addEventListener("click", mainClick, false)
 }
 
-//основна функція яка шукае елемент по якому клікнули і виконує функцію
+//основна хендлер в якому задаеться яка функція визиваеться при якому кліку
 function mainClick(e){
-        var event = e || window.event;
-        var target = event.target || event.srcElement;
-        while(target.id!="content"){           
+    var event = e || window.event;
+    var target = event.target || event.srcElement;
+        while(target.id!="content"){
+            if(target.id){               
                 switch(target.id){
                     case "added_artifact": alert("green"); return;
-                    case "added_image": alert("red"); return;           
-            }            
+                    case "added_image": alert("red"); return;
+                }
+            }else{
+                switch(target.className){
+                    case "block_title": alert("className"); return;                  
+                }
+            }                                  
             target=target.parentNode;           
         }           
 }

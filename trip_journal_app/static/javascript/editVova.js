@@ -63,6 +63,7 @@ var added_artifact=document.getElementById("added_artifact")
 
 //показує панель артефакта
 function showArtifactPanel(){
+    clear()
     this.style.background = '#8ed41f';
     artifact_panel.style.display = 'block';
     document.getElementById('textarea_artifact').focus();
@@ -72,7 +73,8 @@ var added_image=document.getElementById("added_image")
     addEvent(added_image, "click", showImagePanel)
 
 //показує панель фото
-function showImagePanel(){    
+function showImagePanel(){
+    clear()  
     this.style.background = '#8ed41f';
     photo_panel.style.display = 'block';    
 }
@@ -82,21 +84,27 @@ var added_text=document.getElementById("added_text")
 
 //показує панель текста
 function showTextPanel(){
+    clear()
     this.style.background = '#8ed41f';
     text_panel.style.display = 'block';
     document.getElementById('textarea').focus();  
 }
 
 //функція вертає всі панелі текста, фото, артефакта в початковий стан
+var textarea = document.getElementById('textarea')
+var textarea_artifact = document.getElementById('textarea_artifact')
+var photo_cont = document.getElementById('photo_cont')
+
 function clear() {
-        var paneslButton = document.getElementsByClassName('add_block'),
-            panels = document.getElementsByClassName('hide'),
-            arr_3 = document.getElementsByClassName('clear_cont')
-        for (i = 0; i <panelsButton.length; i++) {
-            panelsButton.style.background = "#80B098";
+        var arr_1 = document.getElementsByClassName('add_block'),
+            arr_2 = document.getElementsByClassName('hide'),
+            arr_3 = document.getElementsByClassName('clear_cont'),
+            i;
+        for (i = 0; i < arr_1.length; i++) {
+            arr_1[i].style.background = "#80B098";
         }
-        for (i = 0; i < panels.length; i++) {
-            panels.style.display = 'none';
+        for (i = 0; i < arr_2.length; i++) {
+            arr_2[i].style.display = 'none';
         }
         for (i = 0; i < arr_3.length; i++) {
             arr_3[i].value = '';
@@ -106,8 +114,8 @@ function clear() {
         textarea_artifact.value = '';
         photo_cont.innerHTML = '';
         photo_cont.style.display = 'none';
-        clearImagesFromTemp();
-}
+       // clearImagesFromTemp();
+    }
 
 
 }

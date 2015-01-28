@@ -1,5 +1,5 @@
 body{
-    background-color: #131;
+    background-color: #474;
     margin: 0;
     padding: 0;
 }
@@ -182,8 +182,8 @@ main{
 #comment_but_t,#treasure_but_t,#comment_but_p,#treasure_but_p{
     position: relative;
 }
-#title_panel,#text_panel,#photo_panel,#video_panel,#add_panel,#publish_panel, #artifact_panel{
-   
+#title_panel,#text_panel,#photo_panel,#video_panel, #artifact_panel{
+   display: none;
 }
 #add_comment_t,#add_treasure_t,#add_comment_p,#add_treasure_p{
     

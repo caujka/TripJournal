@@ -59,11 +59,55 @@ function storyIdFromUrl(){
 }
 
 var added_artifact=document.getElementById("added_artifact")
-    addEvent(added_artifact, "click", function(){alert("gogo")})
+    addEvent(added_artifact, "click", showArtifactPanel)
 
+//показує панель артефакта
+function showArtifactPanel(){
+    this.style.background = '#8ed41f';
+    artifact_panel.style.display = 'block';
+    document.getElementById('textarea_artifact').focus();
+}
 
+var added_image=document.getElementById("added_image")
+    addEvent(added_image, "click", showImagePanel)
 
+//показує панель фото
+function showImagePanel(){    
+    this.style.background = '#8ed41f';
+    photo_panel.style.display = 'block';    
+}
 
+var added_text=document.getElementById("added_text")
+    addEvent(added_text, "click", showTextPanel)
+
+//показує панель текста
+function showTextPanel(){
+    this.style.background = '#8ed41f';
+    text_panel.style.display = 'block';
+    document.getElementById('textarea').focus();  
+}
+
+//функція вертає всі панелі текста, фото, артефакта в початковий стан
+function clear() {
+        var paneslButton = document.getElementsByClassName('add_block'),
+            panels = document.getElementsByClassName('hide'),
+            arr_3 = document.getElementsByClassName('clear_cont')
+        for (i = 0; i <panelsButton.length; i++) {
+            panelsButton.style.background = "#80B098";
+        }
+        for (i = 0; i < panels.length; i++) {
+            panels.style.display = 'none';
+        }
+        for (i = 0; i < arr_3.length; i++) {
+            arr_3[i].value = '';
+            arr_3[i].style.display = 'none';
+        }
+        textarea.value = '';
+        textarea_artifact.value = '';
+        photo_cont.innerHTML = '';
+        photo_cont.style.display = 'none';
+        clearImagesFromTemp();
+}
 
 
 }

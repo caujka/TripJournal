@@ -221,10 +221,12 @@ class Comment(models.Model):
 
     def notify(self,story_id):
         author = Story.objects.get(pk=story_id).user
+        story = Story.objects.get(pk=story_id)
         if self.user != author:
             notify.send(self.user,
                         recipient=author,
-                        verb="Your story was commented"
+                        verb="Your story was commented",
+                        target=story,
                         )
         comments = Comment.objects.filter(story_id=story_id)
         commenters = {comment.user for comment in comments if comment.user != author}
@@ -233,7 +235,8 @@ class Comment(models.Model):
         for user in commenters:
             notify.send(self.user,
                         recipient=user,
-                        verb="The story which you'd commented was commented"
+                        verb="The story which you'd commented was commented",
+                        target=story,
                         )
 
 class Map_artifact(models.Model):

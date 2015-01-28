@@ -11,7 +11,7 @@
                 <tbody>
                     {% for notification in notifications %}
                     <tr {% if notification.unread%} style="background-color:#FFFF85" {%endif%}>
-                        <td>{{ notification.timestamp|date:"D d M Y H:i" }}</td>
+                        <td>{{ notification.timesince }}</td>
                         <td>
                             <a href="{%url 'story' notification.target.id %}" onclick= "{{ notification.mark_as_read }}">{{ notification.verb|default:"" }}
                             </a>

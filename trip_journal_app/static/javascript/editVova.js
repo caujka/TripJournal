@@ -126,12 +126,11 @@ var plus=document.getElementById("adds_block_t")
 ////////////////////////////////////////////////////////////////////////////
 var story_cont = document.getElementById('story_content')
 
-function save_text_story(){
-       // typeOfMarker = 0;
+function save_text_story(){       
         story_cont.style.display = 'block';
-        var text = escape_html_tags(textarea.value)
-            content = text_block_template(text);
-            appendBlock(story_cont, content, "text");
+    var text = escape_html_tags(textarea.value)
+        content = text_block_template(text);
+        appendBlock(story_cont, content, "text");
         clear();
         
     }
@@ -148,68 +147,31 @@ function text_block_template(text) {
 }
 
 
-number=1
 function appendBlock(story, blockContent, block_type){
-    var container = document.createElement('div'),
-        keybar = document.createElement('div'),
-        buttons = [
-            ['top', 'moveup'],
-            ['bottom', 'movedown'],
-            ['delete', 'deleteBlock'],
-            ['addmarker', 'setactivemarker'],
-            ['removemarker', 'removeBlockMark']
-        ];
-
-    function create_button(button_name_and_func) {
-        var button_name = button_name_and_func[0],
-            button_func = button_name_and_func[1],
-            button = document.createElement('button');
-        button.setAttribute('onClick', button_func + "('" + number + "')");
-        button.id = button_name;
-        keybar.appendChild(button);
-    }
-
-    container.setAttribute(
-        'onMouseOver',
-        "change_button_visibility('" + number + "', \"visible\")"
-    );
-    container.setAttribute(
-        'onMouseOut',
-        "change_button_visibility('" + number + "', \"hidden\")"
-    );
-    container.id = "block_" + number;
-    container.className = "block_story";
-
-    container.innerHTML =
-        '<div onclick="editBlock(' + number + ')" id="contentarea_' + number + '">' +
-        blockContent +
-        '</div>';
-
-    keybar.id = "keybar_" + number;
-    keybar.className = "key_panel";
-
-    buttons.forEach(create_button);
-
-    container.appendChild(keybar);
-    story.appendChild(container);
-
-//    Blocks.push(number);
-//    BlockMarkers.push(null);
-//   BlockTypes.push(block_type);
- //   if (block_type == 'img') {
- //       addImagesFromTemp(number);
- //   }
-    
-//    current_marker = Blocks.length - 1;
-//    number++;
-//    if (!saved) {
-//        savePage();
-    
+    var container = document.createElement('div');
+        container.className = "block_story";
+        story.appendChild(container)
+        container.innerHTML =blockContent
+    var keybar = document.createElement('div')
+        keybar.className = "key_panel"
+        container.appendChild(keybar);
+    var buttons= ['top','bottom','delete','addmarker','removemarker'];
+        for(i=0;i<buttons.length;i++){
+            var button=document.createElement('button');
+                button.className=buttons[i];
+                keybar.appendChild(button);
+        }    
 }
+
+
+
 
  var fileSelect = document.getElementById('type_file');
      Images = [];
      fileSelect.onchange = add_img;
+
+number=1
+
 function add_img() {       
         var i, URL, imageUrl, id, file, imageData,
             files = fileSelect.files;

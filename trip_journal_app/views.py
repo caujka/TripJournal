@@ -11,7 +11,9 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.views.decorators.http import require_POST
 
-from trip_journal_app.models import Story, Picture, Tag, Map_artifact
+from django.contrib.auth.models import User
+
+from trip_journal_app.models import Story, Picture, Tag, Map_artifact, Subscriptions
 
 from trip_journal_app.forms import UploadFileForm
 from trip_journal_app.utils.story_utils import story_contents
@@ -82,6 +84,8 @@ def upload_img(request, story_id):
 
 
 def story(request, story_id):
+    subss = Subscriptions
+
     if story_id:
         return story_contents(request, story_id, 'story.html', 
                                 check_published=True)
@@ -122,6 +126,13 @@ def show_picture_near_by_page(request):
     """
     return render(
         request, 'items_near_by.html', {'item_type': 'pictures'})
+
+def show_my_profile_page(request):
+    """
+    Shows a profile page
+    """
+    return render(
+        request, 'my_profile.html', {'item_type': 'pictures'})
 
 
 def search_items_near_by(request):
@@ -258,4 +269,17 @@ def stories_by_user(request):
             stories = Story.objects.filter(user=needed_user)
         context = {'stories': stories}
         return render(request, 'stories_by_user.html', context)
-        
+
+@login_required
+@require_POST
+def make_subscription_or_unsubscribe(request, subscribe_on):
+    user = auth.get_user(request)
+    author = User.objects.get(id = int(subscribe_on))
+
+    if Subscriptions.objects.filter(subscriber=user.id, subscription=author.id):
+        Subscriptions.objects.filter(subscriber=user.id, subscription=author.id).delete()
+        return HttpResponse(status=200)
+    else:
+        subs = Subscriptions(subscriber=user, subscription=author)
+        subs.save()
+        return HttpResponse(status=200)

@@ -6,6 +6,13 @@ html, body {
 body {
     font-family: "Ubuntu", Helvetica, Arial, sans-serif;
 }
+html {
+    background: url("../images/cover1.jpg") no-repeat center center fixed #619C7E;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+}
 
 #header {
     position: fixed;
@@ -112,16 +119,38 @@ body {
     vertical-align: middle;
     padding: 0;
 }
-
-/* ==================================
-    Subscribe buttons
-   ================================== */
-.subscribe-btn {
-    background-color: #ccc;
-    padding: 3px 15px;
-    border: none;
-    border-radius: 8px;
+.col1 {width: 20%}
+.col2 {width: 80%}
+.col1, .col2 {
+    margin: 0;
+    color: #fff;
+    float: left;
 }
-.subscribe-btn:hover {
-    cursor: pointer;
+
+#ava {
+    width: 185px;
+    height: 185px;
+    background-color: #fff;
+    border-radius: 15px;
+    margin: 10px 0 0 10px;
+}
+
+h2, h3, p {
+    margin: 10px 0 0 10px;
+}
+
+.clickme {
+    display: block;
+    background-color: #3498db;
+    padding: 10px;
+    margin: 10px 0 0 10px;
+    text-decoration: none;
+    border-radius: 8px;
+    border: none;
+    color: #fff;
+    text-align: center;
+
+}
+.clickme:hover {
+    background-color: #2980b9;
 }

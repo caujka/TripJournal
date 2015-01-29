@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load trip_journal_extras %}
+{% block title %}My profile{% endblock %}
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static "css/my_profile.css" %}">
+{% endblock %}
+
+{% block content %}
+<div class="col1">
+    <div id="ava"></div>
+    <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+    <h3>24 likes</h3>
+    <h3>69 votes</h3>
+    <h3>4 notifications</h3>
+    <a href="#" class="clickme">FEED</a>
+</div>
+<div class="col2">
+    <h2>Some text/info about person</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pharetra dui tortor, in rhoncus eros pellentesque sed. Nullam ultricies pretium interdum. Maecenas finibus diam quis quam facilisis congue. Donec auctor mattis aliquet. Vestibulum a dictum sem.</p>
+</div>
+{% endblock %}

@@ -154,7 +154,19 @@ function collectlikeObjects () {
 
 google.maps.event.addDomListener(window, 'load', initialize);
 
+//makes subscription or unsubscribe
+function subscribe_or_unsubscribe() {
+    var button = document.getElementById("subscribe");
+    var url = button.getAttribute("value");
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+    xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+    xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');        
+    xhr.send();
+};
+
 window.onload = function() {
     collectlikeObjects();
 };
-

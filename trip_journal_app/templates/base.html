@@ -24,6 +24,7 @@
             <div><a href="{% url 'pictures_near_by' %}">pictures nearby</a></div>
             {% if user and not user.is_anonymous %}
                 <div><a href="{% url 'user_stories' %}">my stories</a></div>
+                <div><a href="{% url 'my_profile_page' %}">my profile</a></div>
                 <div>
                     <a href="{% url 'auth:logout' %}?next={% url 'home' %}">logout {{ user.username }}</a>
                 </div>
@@ -42,7 +43,6 @@
                 </div>
             {% endif %}
             {% endblock %}
-
         </div>
         <div id="messages">
             {% block messages %}

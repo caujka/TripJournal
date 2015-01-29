@@ -16,7 +16,6 @@ class Tag(models.Model):
     def __unicode__(self):
         return self.name
 
-
 class Story(models.Model):
     title = models.CharField(max_length=300)
     date_travel = models.DateField()
@@ -228,3 +227,10 @@ class Map_artifact(models.Model):
     def __unicode__(self):
         return self.name
 
+class Subscriptions(models.Model):
+    """ Subcriptions list """
+    subscriber = models.ForeignKey(User)
+    subscription = models.ForeignKey(User, related_name = "subscription")
+
+    def __unicode__(self):
+        return self.subscription

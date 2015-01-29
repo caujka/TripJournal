@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.contrib import messages, auth
 
-from trip_journal_app.models import Story
+from trip_journal_app.models import Story, Subscriptions
 
 
 def story_contents(request, story_id, template, 
@@ -10,6 +10,9 @@ def story_contents(request, story_id, template,
     story_blocks = {}
     story = Story()
     user = auth.get_user(request)
+    #get author of the story, then return is_subscribed
+    author = Story.objects.get(id=story_id).user_id
+    is_subscribed = Subscriptions.objects.filter(subscriber=user.id, subscription=author)
     # if story_id exists renders its content to story.html page
     if story_id:
         try:
@@ -31,9 +34,9 @@ def story_contents(request, story_id, template,
             messages.info(request, msg)
             return redirect('/my_stories/')
     context = {
+        'is_subscribed': is_subscribed,
         'story_blocks': story_blocks,
         'story': story,
         'user': user,
     }
     return render(request, template, context)
-

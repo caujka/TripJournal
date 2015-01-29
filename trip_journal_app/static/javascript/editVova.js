@@ -128,9 +128,8 @@ var story_cont = document.getElementById('story_content')
 
 function save_text_story(){       
         story_cont.style.display = 'block';
-    var text = escape_html_tags(textarea.value)
-        content = text_block_template(text);
-        appendBlock(story_cont, content, "text");
+    var text = escape_html_tags(textarea.value)        
+        appendBlock(text, "text");
         clear();
         
     }
@@ -139,18 +138,11 @@ function escape_html_tags(str) {
     return str.replace(/>/g, '&gt;').replace(/</g, '&lt;');
 }
 
-function text_block_template(text) {
-    return (
-        '<p class="description_story">' +
-        text + '</p>'
-    );
-}
 
-
-function appendBlock(story, blockContent, block_type){
+function appendBlock(blockContent, block_type){
     var container = document.createElement('div');
         container.className = "block_story";
-        story.appendChild(container)
+        story_cont.appendChild(container)
         container.innerHTML =blockContent
     var keybar = document.createElement('div')
         keybar.className = "key_panel"
@@ -207,7 +199,7 @@ function save_photo_story() {
         for (i = 0; i < arr.length; i++) {
             content += img_block_template(arr[i].src);
         }
-        appendBlock(story_cont, content, "img");
+        appendBlock(content, "img");
         clear();
     }
 

@@ -422,7 +422,7 @@ window.onload = function() {
             }
         }
     //convert from degrees, minutes, seconds to decimal degrees coordinates
-      function ConvertDMSToDD(dms) {
+      function ConvertDMSToDD(dms){
         var dmsArray=dms.toString().split(",");
         var degrees=+dmsArray[0];
         var minutes=+dmsArray[1];

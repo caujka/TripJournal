@@ -117,5 +117,94 @@ function clear() {
        // clearImagesFromTemp();
     }
 
+///////////////////////////////////////////////////////////////////////////////////////
+var plus=document.getElementById("adds_block_t")
+    plus.onclick=function(){
+         save_text_story();     
+    }
+
+////////////////////////////////////////////////////////////////////////////
+var story_cont = document.getElementById('story_content')
+
+function save_text_story(){
+       // typeOfMarker = 0;
+        story_cont.style.display = 'block';
+        var text = escape_html_tags(textarea.value)
+            content = text_block_template(text);
+            appendBlock(story_cont, content, "text");
+        clear();
+        
+    }
+
+function escape_html_tags(str) {
+    return str.replace(/>/g, '&gt;').replace(/</g, '&lt;');
+}
+
+function text_block_template(text) {
+    return (
+        '<p class="description_story">' +
+        text + '</p>'
+    );
+}
+number=1
+function appendBlock(story, blockContent, block_type){
+    var container = document.createElement('div'),
+        keybar = document.createElement('div'),
+        buttons = [
+            ['top', 'moveup'],
+            ['bottom', 'movedown'],
+            ['delete', 'deleteBlock'],
+            ['addmarker', 'setactivemarker'],
+            ['removemarker', 'removeBlockMark']
+        ];
+
+    function create_button(button_name_and_func) {
+        var button_name = button_name_and_func[0],
+            button_func = button_name_and_func[1],
+            button = document.createElement('button');
+        button.setAttribute('onClick', button_func + "('" + number + "')");
+        button.id = button_name;
+        keybar.appendChild(button);
+    }
+
+    container.setAttribute(
+        'onMouseOver',
+        "change_button_visibility('" + number + "', \"visible\")"
+    );
+    container.setAttribute(
+        'onMouseOut',
+        "change_button_visibility('" + number + "', \"hidden\")"
+    );
+    container.id = "block_" + number;
+    container.className = "block_story";
+
+    container.innerHTML =
+        '<div onclick="editBlock(' + number + ')" id="contentarea_' + number + '">' +
+        blockContent +
+        '</div>';
+
+    keybar.id = "keybar_" + number;
+    keybar.className = "key_panel";
+
+    buttons.forEach(create_button);
+
+    container.appendChild(keybar);
+    story.appendChild(container);
+
+//    Blocks.push(number);
+//    BlockMarkers.push(null);
+//   BlockTypes.push(block_type);
+ //   if (block_type == 'img') {
+ //       addImagesFromTemp(number);
+ //   }
+    
+//    current_marker = Blocks.length - 1;
+//    number++;
+//    if (!saved) {
+//        savePage();
+    
+}
+
+
 
 }

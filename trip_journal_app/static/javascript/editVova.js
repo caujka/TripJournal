@@ -204,7 +204,35 @@ function appendBlock(story, blockContent, block_type){
 //        savePage();
     
 }
-
-
+ var fileSelect = document.getElementById('type_file');
+     Images = [];
+     fileSelect.onchange = add_img;
+function add_img() {
+        alert("add img")
+        var i, URL, imageUrl, id, file, imageData,
+            files = fileSelect.files;
+        if (files.length > 0) {
+            for (i = 0; i < files.length; i++) {
+                file = files[i];
+                if (!file.type.match('image.*')) {
+                    continue;
+                }
+                imageData = {image : file, state : 'temp', block : -1};
+                Images.push(imageData);
+                URL = window.URL;
+                if (URL) {
+                    imageUrl = URL.createObjectURL(files[i]);
+                    id = 'story_' + number + '_' + files[i].name.substr(0, files[i].name.indexOf('.'));
+                    document.getElementById('photo_cont').innerHTML +=
+                    '<div id="' + id + '" class="img_block">' +
+                    '<img src="' + imageUrl + '" class="img_story ' + number + '">' +
+                    '<button onclick="delete_img(\'' + id + '\')" id="' + id + '_d" class="button_3">x</button>' +
+                    '</div>';
+                }
+            }
+        document.getElementById('photo_cont').style.display = 'inline-block';
+        alert("add_img2")
+        }
+    }
 
 }

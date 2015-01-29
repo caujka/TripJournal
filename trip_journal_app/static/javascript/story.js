@@ -161,6 +161,11 @@ function subscribe_or_unsubscribe() {
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+                button.classList.toggle("unsubscribe");
+            }
+    };
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
     xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
     xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');        

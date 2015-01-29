@@ -10,13 +10,11 @@ def story_contents(request, story_id, template,
     story_blocks = {}
     story = Story()
     user = auth.get_user(request)
-    #get author of the story, then return is_subscribed
-    author = Story.objects.get(id=story_id).user_id
-    is_subscribed = Subscriptions.objects.filter(subscriber=user.id, subscription=author)
     # if story_id exists renders its content to story.html page
     if story_id:
         try:
             story = Story.objects.get(pk=int(story_id))
+            is_subscribed = Subscriptions.objects.filter(subscriber=user.id, subscription=story.user_id)
             if check_user:
                 if user != story.user:
                     messages.info(request, 'Edit your own stories!')

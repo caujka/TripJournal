@@ -1,9 +1,6 @@
 //Скріпт ,що буде виконуватись після загрузки DOM
 window.onload=function(){
 
-var main=document.getElementsByTagName("main")[0];
- //   first.addEventListener("click", mainClick, false)
-
 //назначаємо функції addEvent, removeEvent в залежності від того чи  підтримує браузер addEventListener (для IE<9 використовуєм attachEvent)
 var addEvent, removeEvent;   
     if (document.addEventListener) { 
@@ -26,27 +23,31 @@ var addEvent, removeEvent;
 function mainClick(e){
     var event = e || window.event;
     var target = event.target || event.srcElement;
-        while(target.id!="content"){
+        while(target.id!="story_content"){
             if(target.id){               
                 switch(target.id){
-                  //  case "added_artifact": alert("green"); return;
-                 //   case "added_image": alert("red"); return;
+                //    case "added_artifact": alert(indexOfClickedBlock(target)); return;
+                //    case "added_image": alert("red"); return;
                 }
             }else{
                 switch(target.className){
-                  //  case "block_title": alert("className"); return;                  
+                    case "block_story": alert(indexOfClickedBlock(target)); return;                  
                 }
             }                                  
             target=target.parentNode;           
         }           
 }
+var story_cont = document.getElementById('story_content')
+addEvent(story_cont, "click", mainClick)
+
+
 
 //функція вертає індекс блока по якому клікнули
 function indexOfClickedBlock(element){
-    while (element.className!="my"){
+    while (element.className!="block_story"){
         element=element.parentNode;
     }
-    var my=document.getElementsByClassName("my")
+    var my=document.getElementsByClassName("block_story")
         for(var i=0; i<my.length; i++){
             if(my[i]==element) return i          
         } 
@@ -117,28 +118,23 @@ function clear() {
        // clearImagesFromTemp();
     }
 
-///////////////////////////////////////////////////////////////////////////////////////
 var plus=document.getElementById("adds_block_t")
-    plus.onclick=function(){
-         save_text_story();     
-    }
+    addEvent(plus, "click", save_text_story)
+    
 
-////////////////////////////////////////////////////////////////////////////
-var story_cont = document.getElementById('story_content')
+
 
 function save_text_story(){       
         story_cont.style.display = 'block';
     var text = escape_html_tags(textarea.value)        
         appendBlock(text, "text");
-        clear();
-        
+        clear();       
     }
 
 function escape_html_tags(str) {
     return str.replace(/>/g, '&gt;').replace(/</g, '&lt;');
 }
-
-
+//додає блок заданорго типу ("text","img","artifact")
 function appendBlock(blockContent, block_type){
     var container = document.createElement('div');
         container.className = "block_story";
@@ -211,7 +207,7 @@ function img_block_template(src, img_id) {
 }
 var plusIm=document.getElementById("adds_block_p")
     plusIm.onclick=function(){
-        alert("save_image")
+        
         save_photo_story()
         savePage()  
     }

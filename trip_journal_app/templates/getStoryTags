@@ -13,8 +13,8 @@
         <script type="text/javascript" src="{% static "javascript/jquery.exif.js" %}"></script>
         <script type="text/javascript" src="{% static "javascript/utils.js"%}"></script>
         <script type="text/javascript" src="{% static "javascript/mapping.js" %}"></script>
-        <script type="text/javascript" src="{% static "javascript/ajax_requests.js" %}"></script>
-        <script type="text/javascript" src="{% static "javascript/edit.js" %}"></script>
+        <script type="text/javascript" src="{% static "javascript/ajax_requestsVova.js" %}"></script>
+        <script type="text/javascript" src="{% static "javascript/editVova.js" %}"></script>
     {% endblock %}
     {% block content %}
     <div id="map-canvas-wrapper">

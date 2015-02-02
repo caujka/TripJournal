@@ -77,7 +77,7 @@ class Story(models.Model):
         stories = cls.objects.all()
         list_of_stories = []
         for st in stories:
-            if st.published:    
+            if st.published:
                 coordinates = []
                 distance = []
                 pictures = Picture.objects.filter(story_id=st.id)
@@ -219,7 +219,7 @@ class Comment(models.Model):
     def __unicode__(self):
         return self.text
 
-    def notify(self,story_id):
+    def notify(self, story_id):
         author = Story.objects.get(pk=story_id).user
         story = Story.objects.get(pk=story_id)
         if self.user != author:
@@ -249,3 +249,18 @@ class Map_artifact(models.Model):
     def __unicode__(self):
         return self.name
 
+class Notification_ban(models.Model):
+    user = models.ForeignKey(User)
+    banned_user = models.ForeignKey(User, related_name="banned_user", null=True)
+    banned_story = models.ForeignKey(Story, related_name="banned_story", null=True)
+
+    def __unicode__(self):
+        return self.user
+
+
+class UserNotify(models.Model):
+    user = models.ForeignKey(User, unique=True)
+    notification_off = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.user

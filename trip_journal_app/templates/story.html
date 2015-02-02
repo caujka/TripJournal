@@ -25,8 +25,8 @@
                 by
                 <span id="author">{{ story.user }}</span>
                 <!-- Subscribe button -->
-                <button id="subscribe" onclick="subscribe_or_unsubscribe()" 
-                        value="{% url 'subscribe' subscribe_on=story.user_id %}" 
+                <button onclick="subscribe_or_unsubscribe()" 
+                        value="{% url 'subscribe' subscribe_on=story.user_id %}"
                         class="subscribe-btn {% if is_subscribed %}unsubscribe{% endif %}"> 
                     <span class="sibscribe-span">subscribe</span>
                     <span class="unsibscribe-span">unsubscribe</span>

@@ -156,14 +156,20 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 //makes subscription or unsubscribe
 function subscribe_or_unsubscribe() {
-    var button = document.getElementById("subscribe");
+    var button = document.getElementsByClassName("subscribe-btn")[0];
     var url = button.getAttribute("value");
+    console.log(url)
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
-                button.classList.toggle("unsubscribe");
+                if (xhr.responseText === "subscribed") {
+                    button.classList.add("unsubscribe")
+                }
+                else {
+                    button.classList.remove("unsubscribe")
+                }
             }
     };
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')

@@ -18,6 +18,7 @@ from trip_journal_app.models import Story, Picture, Tag, Map_artifact, Subscript
 from trip_journal_app.forms import UploadFileForm
 from trip_journal_app.utils.story_utils import story_contents
 
+
 def home(request):
     """
     Home page view.
@@ -84,13 +85,12 @@ def upload_img(request, story_id):
 
 
 def story(request, story_id):
-    subss = Subscriptions
-
     if story_id:
-        return story_contents(request, story_id, 'story.html', 
-                                check_published=True)
+        return story_contents(request, story_id, 'story.html',
+                              check_published=True)
     else:
         return redirect('/')
+
 
 @login_required
 @ensure_csrf_cookie
@@ -127,12 +127,27 @@ def show_picture_near_by_page(request):
     return render(
         request, 'items_near_by.html', {'item_type': 'pictures'})
 
-def show_my_profile_page(request):
+
+def my_news(request):
     """
-    Shows a profile page
+    Shows a page with latest publications of my subscriptions
     """
-    return render(
-        request, 'my_profile.html', {'item_type': 'pictures'})
+    user = auth.get_user(request)
+    user_subscriptions = Subscriptions.objects.filter(subscriber=user)
+    exception = None
+    stories = []
+
+    if user_subscriptions:
+        for subscription in user_subscriptions:
+            for story in Story.objects.filter(user=subscription.subscription):
+                stories.append(story)
+        if not stories:
+            exception = "No stories"
+    else:
+        exception = "You have no subscriptions"
+
+    context = {'stories': stories, 'exception': exception}
+    return render(request, 'my_news.html', context)
 
 
 def search_items_near_by(request):
@@ -140,13 +155,13 @@ def search_items_near_by(request):
         x = float(request.GET.get('latitude', ''))
         y = float(request.GET.get('longitude', ''))
         sess = SessionStore()
-        if request.GET.get('item_type','') == u'pictures':
+        if request.GET.get('item_type', '') == u'pictures':
             sess['items_list'] = {'item_type': 'pictures',
-                                'items': Picture.get_sorted_picture_list(x, y)}
+                                  'items': Picture.get_sorted_picture_list(x, y)}
             sess.save()
-        elif request.GET.get('item_type','') == u'stories':
+        elif request.GET.get('item_type', '') == u'stories':
             sess['items_list'] = {'item_type': 'stories',
-                                'items': Story.get_sorted_stories_list(x, y)}
+                                  'items': Story.get_sorted_stories_list(x, y)}
             sess.save()
         response = redirect('/pagination/')
         response.set_cookie('pagination', sess.session_key)
@@ -156,7 +171,7 @@ def search_items_near_by(request):
 def make_paging_for_items_search(request):
     sess_key = request.COOKIES['pagination']
     sess = SessionStore(session_key=sess_key)
-    list_of_items = sess['items_list']  
+    list_of_items = sess['items_list']
     if list_of_items['item_type'] == 'pictures':
         if not list_of_items['items']:
             messages.info(request, 'No items found')
@@ -179,7 +194,7 @@ def make_paging_for_items_search(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         items = paginator.page(paginator.num_pages)
     return render(request, 'items_near_by.html', {'items_list': items,
-                'item_type': list_of_items['item_type']})
+                                                  'item_type': list_of_items['item_type']})
 
 
 @login_required
@@ -248,14 +263,14 @@ def put_tag(request):
             tag.save()
         else:
             tag = tags[0]
-        story = Story.objects.get(pk = int(request_body['story_id']))
+        story = Story.objects.get(pk=int(request_body['story_id']))
         story.tags.add(tag)
         story.save()
         return HttpResponse(status=200)
 
 
 def show_authorization_page(request):
-        return render(
+    return render(
         request, 'authorization_page.html')
 
 
@@ -270,16 +285,23 @@ def stories_by_user(request):
         context = {'stories': stories}
         return render(request, 'stories_by_user.html', context)
 
+
 @login_required
 @require_POST
 def make_subscription_or_unsubscribe(request, subscribe_on):
     user = auth.get_user(request)
-    author = User.objects.get(id = int(subscribe_on))
+    author = User.objects.get(id=int(subscribe_on))
 
     if Subscriptions.objects.filter(subscriber=user.id, subscription=author.id):
         Subscriptions.objects.filter(subscriber=user.id, subscription=author.id).delete()
         return HttpResponse(status=200)
     else:
-        subs = Subscriptions(subscriber=user, subscription=author)
-        subs.save()
-        return HttpResponse(status=200)
+        Subscriptions(subscriber=user, subscription=author).save()
+        return HttpResponse('subscribed', status=200)
+
+
+def rss_20(request):
+    date = datetime.datetime.now().date()
+    stories = Story.objects.filter(published=True)
+    context = {'stories': stories, 'date': date}
+    return render(request, 'rss20.xml', context, content_type="application/xhtml+xml")

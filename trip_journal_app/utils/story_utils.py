@@ -10,6 +10,7 @@ def story_contents(request, story_id, template,
     story_blocks = {}
     story = Story()
     user = auth.get_user(request)
+    is_subscribed = None
     # if story_id exists renders its content to story.html page
     if story_id:
         try:

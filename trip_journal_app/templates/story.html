@@ -46,6 +46,9 @@
     </div>
 
     </main>
+    <div >
+        <a href="{% url 'toggle_story_notifications' story.id %}">{%if is_notified%}Dis{%else%}En{%endif%}able notifications for this story</a>
+    </div>
     <!-- Comments  -->
     {% if comments %}
     <p>Comments:</p>
@@ -57,7 +60,6 @@
         <div class="body">{{ comment.text|linebreaks }}</div>
     </div>
     {% endfor %}
-
     <div >Add a comment</div>
     <!-- Comment form  -->
     <form action="{% url 'add_comment' story.id %}" method="POST">{% csrf_token %}

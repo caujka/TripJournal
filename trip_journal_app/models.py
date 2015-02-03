@@ -112,7 +112,9 @@ class Story(models.Model):
 
     def notify(self, user):
         not_notify = UserNotify.objects.filter(notification_off=True)
-        if user != self.user and not not_notify.filter(user=self.user).exists():
+        banned_stories = Notification_ban.objects.filter(banned_story=self)
+        if self.user != user and not not_notify.filter(user=user).exists() and \
+            not banned_stories.filter(user=user).exists():
             notify.send(user,
                         recipient=self.user,
                         verb="{user.username} liked your story".format(user=user),
@@ -201,7 +203,9 @@ class Picture(models.Model):
 
     def notify(self, user):
         not_notify = UserNotify.objects.filter(notification_off=True)
-        if user != self.story.user and not not_notify.filter(user=self.story.user).exists():
+        banned_stories = Notification_ban.objects.filter(banned_story=self)
+        if self.user != user and not not_notify.filter(user=user).exists() and \
+            not banned_stories.filter(user=user).exists():
             notify.send(user,
                         recipient=self.story.user,
                         verb="{user.username} liked your picture".format(user),
@@ -241,12 +245,14 @@ class Comment(models.Model):
         author = Story.objects.get(pk=story_id).user
         story = Story.objects.get(pk=story_id)
         not_notify = UserNotify.objects.filter(notification_off=True)
-        if self.user != author and not not_notify.filter(user=author).exists():
-            notify.send(self.user,
-                        recipient=author,
-                        verb="Your story was commented",
-                        target=story,
-                        )
+        banned_stories = Notification_ban.objects.filter(banned_story=story)
+        if self.user != author and not not_notify.filter(user=author).exists() and \
+            not banned_stories.filter(user=author).exists():
+                notify.send(self.user,
+                            recipient=author,
+                            verb="Your story was commented",
+                            target=story,
+                            )
         comments = Comment.objects.filter(story_id=story_id)
         commenters = {comment.user for comment in comments if comment.user != author}
         if self.user in commenters:
@@ -275,7 +281,7 @@ class Notification_ban(models.Model):
     banned_story = models.ForeignKey(Story, related_name="banned_story", null=True)
 
     def __unicode__(self):
-        return self.user
+        return self.user.username
 
 
 class UserNotify(models.Model):

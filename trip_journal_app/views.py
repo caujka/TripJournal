@@ -13,7 +13,7 @@ from django.views.decorators.http import require_POST
 from notifications.models import Notification
 from notifications import notify
 
-from trip_journal_app.models import Story, Picture, Tag, Map_artifact, Comment, UserNotify
+from trip_journal_app.models import Story, Picture, Tag, Map_artifact, Comment, UserNotify, Notification_ban
 
 from trip_journal_app.forms import UploadFileForm
 from trip_journal_app.utils.story_utils import story_contents
@@ -270,6 +270,7 @@ def stories_by_user(request):
         context = {'stories': stories}
         return render(request, 'stories_by_user.html', context)
 
+
 @login_required
 @ensure_csrf_cookie
 def add_comment(request, story_id):
@@ -282,6 +283,7 @@ def add_comment(request, story_id):
         comment.save()
         comment.notify(story_id)
     return HttpResponseRedirect('/story/{id}'.format(id=story_id))
+
 
 @login_required
 def user_messages(request):
@@ -296,10 +298,12 @@ def user_messages(request):
                'is_notified': is_notified}
     return render(request, 'user_messages.html', context)
 
+
 @login_required
 def mark_as_read(request):
     request.user.notifications.unread().mark_all_as_read()
     return HttpResponseRedirect('/user_messages/')
+
 
 @login_required
 def toggle_notifications(request):
@@ -311,9 +315,19 @@ def toggle_notifications(request):
         notify_off.save()
         return HttpResponseRedirect('/user_messages/')
     if is_notified:
-        user_notify = UserNotify.objects.get(user=user)
-        user_notify.notification_off = True
+        user_notify = UserNotify.objects.get(user=user, notification_off=True)
         user_notify.save()
     else:
         UserNotify.objects.get(user=user).delete()
     return HttpResponseRedirect('/user_messages/')
+
+
+@login_required
+def toggle_story_notifications(request, story_id):
+    user = auth.get_user(request)
+    if Notification_ban.objects.filter(user=user, banned_story_id=story_id).exists():
+        Notification_ban.objects.filter(user=user, banned_story_id=story_id).delete()
+    else:
+        ban = Notification_ban(user=user, banned_story_id=story_id)
+        ban.save()
+    return HttpResponseRedirect('/story/{id}'.format(id=story_id))

@@ -46,5 +46,8 @@ urlpatterns = [
     url(r'^user_messages/$', views.user_messages, name='user_messages'),
     url(r'^mark_as_read/$', views.mark_as_read, name='mark_as_read'),
     url(r'^toggle_notifications/$', views.toggle_notifications,
-        name='toggle_notifications')
+        name='toggle_notifications'),
+    url(r'^toggle_story_notifications/(?P<story_id>\d*)$',
+        views.toggle_story_notifications,
+        name='toggle_story_notifications'),
 ]

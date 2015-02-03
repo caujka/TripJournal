@@ -193,6 +193,7 @@ def like(request, item_id, item_to_like):
         item.likes.remove(user)
     else:
         item.likes.add(user)
+        item.notify(user=user)
     item.save()
     return HttpResponse(item.likes_count())
 
@@ -316,4 +317,3 @@ def toggle_notifications(request):
     else:
         UserNotify.objects.get(user=user).delete()
     return HttpResponseRedirect('/user_messages/')
-    

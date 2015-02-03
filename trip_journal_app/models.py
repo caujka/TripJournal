@@ -110,6 +110,15 @@ class Story(models.Model):
         return next((block for block in self.get_text_with_pic_objects()
                     if block['type'] == 'img'), None)
 
+    def notify(self, user):
+        not_notify = UserNotify.objects.filter(notification_off=True)
+        if user != self.user and not not_notify.filter(user=self.user).exists():
+            notify.send(user,
+                        recipient=self.user,
+                        verb="{user.username} liked your story".format(user=user),
+                        target=self,
+                        )
+
 
 class Picture(models.Model):
     latitude = models.FloatField(blank=True, null=True)
@@ -189,6 +198,15 @@ class Picture(models.Model):
                 'ORDER BY distance;' % (latitude, longitude))
         list_of_pictures = list(Picture.objects.raw(req))
         return list_of_pictures
+
+    def notify(self, user):
+        not_notify = UserNotify.objects.filter(notification_off=True)
+        if user != self.story.user and not not_notify.filter(user=self.story.user).exists():
+            notify.send(user,
+                        recipient=self.story.user,
+                        verb="{user.username} liked your picture".format(user),
+                        target=self.story,
+                        )
 
 
 class Stored_picture(models.Model):

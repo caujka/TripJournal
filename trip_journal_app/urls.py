@@ -39,10 +39,12 @@ urlpatterns = [
     url(r'^put_tag/$', views.put_tag, name='put_tag'),
     # delete tag in DB
     url(r'^delete_story_tag/$', views.delete_story_tag, name='delete_tag'),
-    url(r'^authorization_page/', views.show_authorization_page, 
+    url(r'^authorization_page/', views.show_authorization_page,
         name='show_authorization_page'),
-    url(r'^story/comment/(?P<story_id>\d*)/$',views.add_comment, name='add_comment'),
+    url(r'^story/comment/(?P<story_id>\d*)/$', views.add_comment,
+        name='add_comment'),
     url(r'^user_messages/$', views.user_messages, name='user_messages'),
     url(r'^mark_as_read/$', views.mark_as_read, name='mark_as_read'),
+    url(r'^toggle_notifications/$', views.toggle_notifications,
+        name='toggle_notifications')
 ]
-

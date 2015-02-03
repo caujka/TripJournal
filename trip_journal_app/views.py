@@ -13,7 +13,7 @@ from django.views.decorators.http import require_POST
 from notifications.models import Notification
 from notifications import notify
 
-from trip_journal_app.models import Story, Picture, Tag, Map_artifact, Comment
+from trip_journal_app.models import Story, Picture, Tag, Map_artifact, Comment, UserNotify
 
 from trip_journal_app.forms import UploadFileForm
 from trip_journal_app.utils.story_utils import story_contents
@@ -271,14 +271,13 @@ def stories_by_user(request):
 
 @login_required
 @ensure_csrf_cookie
-def add_comment(request,story_id):
+def add_comment(request, story_id):
     """Add a new comment."""
     if request.POST["text"]:
-        comment = Comment()
         author = auth.get_user(request)
-        comment.user_id = author.id
-        comment.story_id = story_id
-        comment.text = request.POST["text"]
+        comment = Comment(user_id=author.id,
+                          story_id=story_id,
+                          text=request.POST["text"])
         comment.save()
         comment.notify(story_id)
     return HttpResponseRedirect('/story/{id}'.format(id=story_id))
@@ -287,11 +286,34 @@ def add_comment(request,story_id):
 def user_messages(request):
     user = auth.get_user(request)
     notifications = user.notifications.order_by('-timestamp')
-    context = {'user': user, 'notifications':notifications}
-    return render(request,'user_messages.html',context)
+    try:
+        is_notified = not UserNotify.objects.get(user=user).notification_off
+    except:
+        is_notified = True
+    context = {'user': user,
+               'notifications': notifications,
+               'is_notified': is_notified}
+    return render(request, 'user_messages.html', context)
 
 @login_required
 def mark_as_read(request):
     request.user.notifications.unread().mark_all_as_read()
     return HttpResponseRedirect('/user_messages/')
-           
+
+@login_required
+def toggle_notifications(request):
+    user = auth.get_user(request)
+    try:
+        is_notified = not UserNotify.objects.get(user=user).notification_off
+    except:
+        notify_off = UserNotify(user=user, notification_off=True)
+        notify_off.save()
+        return HttpResponseRedirect('/user_messages/')
+    if is_notified:
+        user_notify = UserNotify.objects.get(user=user)
+        user_notify.notification_off = True
+        user_notify.save()
+    else:
+        UserNotify.objects.get(user=user).delete()
+    return HttpResponseRedirect('/user_messages/')
+    

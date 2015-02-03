@@ -222,7 +222,8 @@ class Comment(models.Model):
     def notify(self, story_id):
         author = Story.objects.get(pk=story_id).user
         story = Story.objects.get(pk=story_id)
-        if self.user != author:
+        not_notify = UserNotify.objects.filter(notification_off=True)
+        if self.user != author and not not_notify.filter(user=author).exists():
             notify.send(self.user,
                         recipient=author,
                         verb="Your story was commented",
@@ -233,11 +234,12 @@ class Comment(models.Model):
         if self.user in commenters:
             commenters.remove(self.user)
         for user in commenters:
-            notify.send(self.user,
-                        recipient=user,
-                        verb="The story which you'd commented was commented",
-                        target=story,
-                        )
+            if not not_notify.filter(user=user).exists():
+                notify.send(self.user,
+                            recipient=user,
+                            verb="The story which you'd commented was commented",
+                            target=story,
+                            )
 
 class Map_artifact(models.Model):
     text = models.TextField()
@@ -263,4 +265,4 @@ class UserNotify(models.Model):
     notification_off = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return self.user
+        return self.user.username

@@ -7,6 +7,7 @@
 
         <div >
             <div ><a href="{% url 'mark_as_read' %}">Mark all as read</a></div>
+            <div ><a href="{% url 'toggle_notifications' %}">{%if is_notified%}Dis{%else%}En{%endif%}able notifications</a></div>
             <table >
                 <tbody>
                     {% for notification in notifications %}

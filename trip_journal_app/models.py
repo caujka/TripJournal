@@ -113,8 +113,8 @@ class Story(models.Model):
     def notify(self, user):
         not_notify = UserNotify.objects.filter(notification_off=True)
         banned_stories = Notification_ban.objects.filter(banned_story=self)
-        if self.user != user and not not_notify.filter(user=user).exists() and \
-            not banned_stories.filter(user=user).exists():
+        if self.user != user and not not_notify.filter(user=self.user).exists() and \
+            not banned_stories.filter(user=self.user).exists():
             notify.send(user,
                         recipient=self.user,
                         verb="{user.username} liked your story".format(user=user),
@@ -203,12 +203,12 @@ class Picture(models.Model):
 
     def notify(self, user):
         not_notify = UserNotify.objects.filter(notification_off=True)
-        banned_stories = Notification_ban.objects.filter(banned_story=self)
-        if self.user != user and not not_notify.filter(user=user).exists() and \
-            not banned_stories.filter(user=user).exists():
+        banned_stories = Notification_ban.objects.filter(banned_story=self.story)
+        if self.story.user != user and not not_notify.filter(user=self.story.user).exists() and \
+            not banned_stories.filter(user=self.story.user).exists():
             notify.send(user,
                         recipient=self.story.user,
-                        verb="{user.username} liked your picture".format(user),
+                        verb="{user.username} liked your picture".format(user=user),
                         target=self.story,
                         )
 

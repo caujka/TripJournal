@@ -300,7 +300,14 @@ def user_messages(request):
 
 
 @login_required
-def mark_as_read(request):
+def mark_as_read(request, notification_id, story_id):
+    request.user.notifications.get(pk=notification_id).mark_as_read()
+    return story(request, story_id)
+    
+
+
+@login_required
+def mark_all_as_read(request):
     request.user.notifications.unread().mark_all_as_read()
     return HttpResponseRedirect('/user_messages/')
 

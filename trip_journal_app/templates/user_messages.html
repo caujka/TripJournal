@@ -6,7 +6,7 @@
 {% block content %}
 
         <div >
-            <div ><a href="{% url 'mark_as_read' %}">Mark all as read</a></div>
+            <div ><a href="{% url 'mark_all_as_read' %}">Mark all as read</a></div>
             <div ><a href="{% url 'toggle_notifications' %}">{%if is_notified%}Dis{%else%}En{%endif%}able notifications</a></div>
             <table >
                 <tbody>
@@ -14,7 +14,8 @@
                     <tr {% if notification.unread%} style="background-color:#FFFF85" {%endif%}>
                         <td>{{ notification.timesince }}</td>
                         <td>
-                            <a href="{%url 'story' notification.target.id %}" onclick= "{{ notification.mark_as_read }}">{{ notification.verb|default:"" }}
+                            <a href="{%url 'mark_as_read' notification.id notification.target.id %}">
+                                {{ notification.verb|default:"" }}
                             </a>
                         </td> 
                     </tr>

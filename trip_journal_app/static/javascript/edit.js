@@ -1,13 +1,13 @@
- var Images = []; //Array of pictures for upload
- var Markers=[]; //Array of markers 
+ var Images = [];//Array of pictures that will be uploaded.
+ var Markers=[]; //Array of markers, index of marker in this array is equal to the index of the block that it belongs. 
 
 window.onload=function(){
         initialize(); // initialize the google map API
-        getStoryTags(); // get story tegs using AJAX
+        getStoryTags(); // get story tegs using Ajax request.
 
 //Variables
     var geocoder,
-        indexOfMarket=-1,
+        indexOfMarket=-1, // index of marker with which we wont to work (default=-1)
         add_title = document.getElementById('add_title'),
         story_title=document.getElementById('story_title'),
         tag_input = document.getElementById('tag_input'),
@@ -123,7 +123,8 @@ function appendBlock(blockContent, block_type){
            buttons= ['top','bottom','delete','addmarkerArtifact','removemarker']; 
         }
         container.className = "block_story";
-        container.setAttribute("block_type", block_type) //write type as an attribute of the element
+        // Write type as an attribute of the element !!!
+        container.setAttribute("block_type", block_type) 
         story_cont.appendChild(container)
         container.appendChild(blockContent)   
         keybar.className = "key_panel"
@@ -158,20 +159,22 @@ function save_photo_artifact(){
         savePage();          
 }
 
-//function shows the image in photo_cont using HTML5 ObjectURL
+//function shows the image in temporary panel using HTML5 ObjectURL
 function add_img() {       
         var i, URL, imageUrl, id, file,
-            files = fileSelect.files;
+            files = fileSelect.files; // all files in input
         if (files.length > 0) {
             for (i = 0; i < files.length; i++) {
                 file = files[i];
                 if (!file.type.match('image.*')) { //Select from files only pictures 
                     continue;
                 }
+                // Create array Images to be able to choose what pictures will be uploaded.
+                // You cannot change the value of an <input type="file"> using JavaScript.
                 Images.push(file);
                 URL = window.URL;
                 if (URL) {
-                    var imageUrl = URL.createObjectURL(files[i]);            
+                    var imageUrl = URL.createObjectURL(files[i]); // create object URL for image          
                     var img_block=document.createElement("div");
                         img_block.className="img_block";
                         photo_cont.appendChild(img_block)
@@ -179,7 +182,7 @@ function add_img() {
                         img_story.className="img_story";
                         img_story.src=imageUrl;
                         img_block.appendChild(img_story);
-                    var button_delete=document.createElement("button");
+                    var button_delete=document.createElement("button");// create button to delete picture
                         button_delete.className="button_3";
                     var x=document.createTextNode("x");
                         button_delete.appendChild(x)
@@ -190,7 +193,7 @@ function add_img() {
         }
     }
 
-//function delete image from photo_cont
+//function delete image from temporary panel.
 function deleteImageFromPhotoCont(e){
     var index=-1;
     var target = e.target;
@@ -199,11 +202,11 @@ function deleteImageFromPhotoCont(e){
             var imgblocks=photo_cont.getElementsByClassName("img_block");
                 for(var i=0; i<imgblocks.length; i++){
                     if(imgblocks[i]==imgblock){
-                        index=i;
+                        index=i; // define index of our image
                     }
                 }         
             photo_cont.removeChild(imgblock);
-            Images.splice(index, 1);
+            Images.splice(index, 1); //delete image from array Images[] that will be uploaded.
         }   
 }
 
@@ -211,7 +214,7 @@ function deleteImageFromPhotoCont(e){
 function save_photo_story() {       
     var arr = document.getElementsByClassName("img_story")
         story_cont.style.display = 'block';
-        if(arr.length>1){
+        if(arr.length>1){ // gallery will be created if many  pictures  are in the temporary panel.
         var gallery=document.createElement("div");
             gallery.className="gallery_container"          
             for (var i = 0; i < arr.length; i++) {
@@ -221,7 +224,7 @@ function save_photo_story() {
                      gallery.appendChild(imageInGallery)
             }
             appendBlock(gallery, "img");
-        }else{
+        }else{  //only one picture is in temporary panel.
             oneImage=document.createElement("img")
             oneImage.className="image_story"
             oneImage.src=arr[0].src
@@ -238,18 +241,18 @@ function galleryChangePicture(element){
         countPicture=gallery_pictures.length;
         for(var i=0; i<countPicture; i++){
             if(gallery_pictures[i]==element){
-               number=i;
+               number=i; //define index of clicked picture
                 break;
             }                       
         } 
         for(j=0;j<countPicture;j++){
-            gallery_pictures[j].style.display="none";
+            gallery_pictures[j].style.display="none"; //hide all picture
         }
         number++;
         if(number==countPicture){
             number=0;
         }    
-        gallery_pictures[number].style.display="block"
+        gallery_pictures[number].style.display="block" //show picture whith index number.
 }
 
 //function shows buttons when the mouse pointer moves over the "block_story"
@@ -311,8 +314,10 @@ function moveBlockUp(element){
         bloks=story_cont.getElementsByClassName("block_story"),
         block=bloks[index];
         if(index==0) return;
+        // Swap blocks
         story_cont.insertBefore(bloks[index].cloneNode(true), bloks[index-1]);
         story_cont.removeChild(block);
+        // Swap markers of blocks
         marker_1=Markers[index-1];
         marker_2=Markers[index];
         Markers.splice(index-1, 2, marker_2, marker_1);
@@ -323,9 +328,11 @@ function moveBlockUp(element){
 function moveBlockDown(element){
     var index=indexOfClickedBlock(element),
         bloks=story_cont.getElementsByClassName("block_story"),
-        block=bloks[index];        
+        block=bloks[index];
+        // Swap blocks        
         story_cont.insertBefore(bloks[index].cloneNode(true), bloks[index+2]);
         story_cont.removeChild(block);
+        // Swap markers of blocks
         marker_1=Markers[index];
         marker_2=Markers[index+1];
         Markers.splice(index, 2, marker_2, marker_1);
@@ -339,7 +346,7 @@ function deleteBlock(element){
         story_cont.removeChild(block);
         if(Markers[index]){
             Markers[index].setMap(null);         
-            Markers.splice(index,1);           
+            Markers.splice(index,1); //delete marker of block          
         }
         savePage();
 }
@@ -347,13 +354,13 @@ function deleteBlock(element){
 //create textarea in block to edit it
 function editBlock(element){       
         if(element.edit || element.getAttribute("block_type")=="img"){
-            return;
+            return; // you can edit only block with type "text" or "artifact"
         }else{
             element.edit="true";
         var textAreaEditBlock=document.createElement("textarea");
             textAreaEditBlock.className="text_area_edit";
             textAreaEditBlock.addEventListener("keypress", endEditBlock)
-            textAreaEditBlock.value=element.children[0].innerHTML;
+            textAreaEditBlock.value=element.children[0].innerHTML;// value of textarea = value of block's text  
             element.children[0].style.display="none"
             element.className="block_story block_edited";
             element.insertBefore(textAreaEditBlock, element.children[1])
@@ -368,7 +375,7 @@ function endEditBlock(e){
     var block=textarea.parentNode;
     if (e.keyCode === 13) {
         block.className="block_story";
-        block.children[0].innerHTML=textarea.value
+        block.children[0].innerHTML=textarea.value // value of block's text = value of textarea 
         block.children[0].style.display="block"
         block.removeChild(textarea);
         block.edit=false;
@@ -376,8 +383,10 @@ function endEditBlock(e){
     }
 
 }
-
-// function to initialize the google map and put markers if "block_story" has attribyte "data-lng" and "data-lat")
+    /*
+     * Initialize the google map and put markers if blocks that were created
+     * on server side has attribyte "data-lng" and "data-lat.
+     */
 function initialize() {
     geocoder = new google.maps.Geocoder();
     var mapOptions = {
@@ -390,7 +399,7 @@ function initialize() {
         placeMarker(event.latLng);
     });
 
-    // put markers 
+    // put markers if blocks has coordinates
     var blocks=document.getElementsByClassName("block_story");
         for(i=0;i<blocks.length;i++){
             if(blocks[i].getAttribute("data-lng")){

@@ -9,11 +9,13 @@ if (typeof String.prototype.endsWith !== 'function') {
     };
 }
 
+//get story Id from URL
 function storyIdFromUrl() {
     var currUrl = document.URL.split(['/']);
     return currUrl[currUrl.length - 1];
 }
 
+// get coordinates of marker
 function getMarkerLocation(index){
     if(Markers[index]){
             var pos = Markers[index].getPosition();
@@ -25,6 +27,7 @@ function getMarkerLocation(index){
     return null;
 }
 
+// Convert story in JSON format 
 function storyBlocksJson(){
     var blocks=[];
         story_title=document.getElementById("story_title")
@@ -32,8 +35,7 @@ function storyBlocksJson(){
             var title=story_title.childNodes[0].nodeValue
         }else{
             var title="";
-        }
-    
+        }   
     var Blocks=document.getElementsByClassName("block_story");
         for(var i=0;i<Blocks.length;i++){          
         var block={
@@ -82,8 +84,7 @@ function postImages(storyId){
         }
             postData(true);
         } 
-    }
-    
+    }   
     for (i=0; i < Images.length; ++i){
         formData = new FormData();
         img = Images[i]

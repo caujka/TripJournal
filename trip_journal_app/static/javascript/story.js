@@ -158,23 +158,22 @@ google.maps.event.addDomListener(window, 'load', initialize);
 function subscribe_or_unsubscribe() {
     var button = document.getElementsByClassName("subscribe-btn")[0];
     var url = button.getAttribute("value");
-    console.log(url)
+    var action = "subscribe"
+    if (button.classList.contains("unsubscribe")) {
+        action = "unsubscribe"
+    }
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
-                if (xhr.responseText === "subscribed") {
-                    button.classList.add("unsubscribe")
-                }
-                else {
-                    button.classList.remove("unsubscribe")
-                }
+                button.classList.toggle("unsubscribe")
             }
     };
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
     xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-    xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');        
+    xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');
+    xhr.setRequestHeader('ACTION', action);
     xhr.send();
 };
 

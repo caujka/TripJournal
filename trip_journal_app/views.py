@@ -291,13 +291,16 @@ def stories_by_user(request):
 def make_subscription_or_unsubscribe(request, subscribe_on):
     user = auth.get_user(request)
     author = User.objects.get(id=int(subscribe_on))
+    action = request.META['HTTP_ACTION']
 
-    if Subscriptions.objects.filter(subscriber=user.id, subscription=author.id):
-        Subscriptions.objects.filter(subscriber=user.id, subscription=author.id).delete()
+    if action == "subscribe":
+        if not Subscriptions.objects.filter(subscriber=user.id, subscription=author.id):
+            Subscriptions(subscriber=user, subscription=author).save()
         return HttpResponse(status=200)
     else:
-        Subscriptions(subscriber=user, subscription=author).save()
-        return HttpResponse('subscribed', status=200)
+        if Subscriptions.objects.filter(subscriber=user.id, subscription=author.id):
+            Subscriptions.objects.filter(subscriber=user.id, subscription=author.id).delete()
+        return HttpResponse(status=200)
 
 
 def rss_20(request):

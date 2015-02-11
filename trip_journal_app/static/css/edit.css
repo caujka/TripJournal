@@ -344,3 +344,7 @@ p.description_story {
     overflow:hidden;
     position:relative;
 }
+.block_story p{
+  margin:0;
+  padding:0;
+}

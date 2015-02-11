@@ -2,7 +2,9 @@
 {% load staticfiles %}
 {% for story_block in story_blocks %}
     {% if story_block.type == 'text' %}
-        <div class="block_story" block_type="text" {{story_block|coordinates_data}}>{{ story_block.content|safe }}<div class="key_panel" style="display:none">
+        <div class="block_story" block_type="text" {{story_block|coordinates_data}}>
+            <p>{{ story_block.content|safe }}</p>
+            <div class="key_panel" style="display:none">
                 <button class="top"></button>
                 <button class="bottom"></button>
                 <button class="delete"></button>
@@ -31,7 +33,8 @@
     </div>
     {% elif story_block.type == 'artifact' %}
      <div class="block_story" block_type="artifact"{{story_block|coordinates_data}}>
-        {{ story_block.content|safe }}<div class="key_panel" style="display:none">
+        <p>{{ story_block.content|safe }}</p>
+        <div class="key_panel" style="display:none">
                 <button class="top"></button>
                 <button class="bottom"></button>
                 <button class="delete"></button>

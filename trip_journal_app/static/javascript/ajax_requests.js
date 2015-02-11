@@ -41,10 +41,10 @@ function storyBlocksJson(){
                 "marker":getMarkerLocation(i)
             };
             if (block.type === 'text') {
-                block.content = Blocks[i].childNodes[0].nodeValue;
+                block.content = Blocks[i].children[0].innerHTML;
             }
             if (block.type === 'artifact') {
-                block.content = Blocks[i].childNodes[0].nodeValue;
+                block.content = Blocks[i].children[0].innerHTML;
             }
             if (block.type === 'img') {
                 var imagesInBlock=Blocks[i].getElementsByClassName("image_story")

@@ -137,9 +137,10 @@ function appendBlock(blockContent, block_type){
 }
 
 //save text block
-function save_text_story(){       
-    var text = document.createTextNode(escape_html_tags(textarea.value))        
-        appendBlock(text, "text");
+function save_text_story(){
+    var pText=document.createElement("p")
+        pText.innerHTML=escape_html_tags(textarea.value)             
+        appendBlock(pText, "text");
         clear();
         savePage();       
     }
@@ -150,8 +151,9 @@ function escape_html_tags(str) {
 
 //save artifact block
 function save_photo_artifact(){
-    var artifact=document.createTextNode(escape_html_tags(textarea_artifact.value));       
-        appendBlock(artifact, "artifact")
+    var pArtifact=document.createElement("p")
+        pArtifact.innerHTML=escape_html_tags(textarea_artifact.value)     
+        appendBlock(pArtifact, "artifact")
         clear();
         savePage();          
 }
@@ -351,10 +353,10 @@ function editBlock(element){
         var textAreaEditBlock=document.createElement("textarea");
             textAreaEditBlock.className="text_area_edit";
             textAreaEditBlock.addEventListener("keypress", endEditBlock)
-            textAreaEditBlock.value=element.childNodes[0].nodeValue;
-            element.removeChild(element.childNodes[0]);
+            textAreaEditBlock.value=element.children[0].innerHTML;
+            element.children[0].style.display="none"
             element.className="block_story block_edited";
-            element.insertBefore(textAreaEditBlock, element.children[0])
+            element.insertBefore(textAreaEditBlock, element.children[1])
             element.getElementsByClassName("key_panel")[0].style.display="none"
             textAreaEditBlock.focus();
         }   
@@ -364,10 +366,10 @@ function editBlock(element){
 function endEditBlock(e){
     var textarea=e.target;
     var block=textarea.parentNode;
-    var value=document.createTextNode(textarea.value)
     if (e.keyCode === 13) {
         block.className="block_story";
-        block.insertBefore(value, textarea);
+        block.children[0].innerHTML=textarea.value
+        block.children[0].style.display="block"
         block.removeChild(textarea);
         block.edit=false;
         savePage();

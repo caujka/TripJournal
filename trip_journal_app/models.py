@@ -64,6 +64,8 @@ class Story(models.Model):
         for block in text:
             if block[u'type'] == u'img':
                 block[u'pic'] = Picture.objects.get(pk=int(block[u'id']))
+                galleryId=block.get('galleryId', '')               
+                block[u'galery_picture']=Picture.objects.filter(id__in=galleryId)
         return text
 
 #         req = 'SELECT (POWER(latitude - %f, 2) + POWER(longitude - %f, 2)) as distance, id, latitude, longitude from trip_journal_app_picture WHERE latitude IS NOT NULL AND longitude IS NOT NULL ORDER BY distance;' % (latitude, longitude)

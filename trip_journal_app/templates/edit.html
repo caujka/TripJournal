@@ -10,6 +10,7 @@
         <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false&libraries=drawing">
 </script>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+        <script type="text/javascript" src="{% static "javascript/jquery.exif.js" %}"></script>
         <script type="text/javascript" src="{% static "javascript/utils.js"%}"></script>
         <script type="text/javascript" src="{% static "javascript/mapping.js" %}"></script>
         <script type="text/javascript" src="{% static "javascript/ajax_requests.js" %}"></script>
@@ -19,22 +20,27 @@
     <div id="map-canvas-wrapper">
         <div id="panel">
             <input id="address" type="textbox" value="">
-            <input type="button" value="Знайти" onclick="codeAddress()">
+            <input type="button" id="findAddres" value="Знайти">
         </div>
         <div id="map-canvas"></div>
     </div>
 
     <main>
     <div id="story_content" class="block">
-        {% if not story.title %}
-        <div id="title_panel" class="block hide">
+        {% if story.title %}
+         <div id="title_panel" class="block">
+            <h2 id="story_title" contenteditable="true">{{story.title}}</h2>
+            <input id="title" type="text" name="title_story" class="text_story hidden" placeholder="+ Title of story">
+            <button id="add_title" class="button_2 hidden">+</button>
+         </div>
+        {% else %}
+        <div id="title_panel" class="block">
+            <h2 id="story_title" contenteditable="true" class="hidden"></h2>
             <input id="title" type="text" name="title_story" class="text_story" placeholder="+ Title of story">
             <button id="add_title" class="button_2">+</button>
         </div>
         {% endif %}
-
-        <h2 id="story_title" contenteditable="true">{{ story.title }}</h2>
-
+        
         {% block tags %}
         <div id="tags_list">
             <div id="button_list"></div>
@@ -45,7 +51,7 @@
         </div>
         {% endblock %}
 
-        {% include 'story_content.html' with page="edit" %}
+        {% include 'story_content_edit.html' %}
     </div>
 
         <div id="text_panel" class="block hide" >
@@ -118,3 +124,4 @@
         </div>
     </main>
     {% endblock %}
+

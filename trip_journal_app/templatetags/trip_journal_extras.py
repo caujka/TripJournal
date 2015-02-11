@@ -1,4 +1,5 @@
 from django import template
+from TripJournal import utils
 
 register = template.Library()
 
@@ -16,6 +17,11 @@ def is_liked_by(obj, user):
 @register.filter(name='login_next')
 def login_next(request):
     return request.GET.get('next', request.path)
+
+
+@register.assignment_tag
+def social_up(social):
+    return utils.social_status[social]
 
 
 @register.filter(name='coordinates_data')

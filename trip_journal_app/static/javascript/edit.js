@@ -2,8 +2,15 @@
  var Markers=[]; //Array of markers 
 
 window.onload=function(){
+    getStoryTags(); // get story tegs using AJAX
+    
+    if(checkInternetConnection()) {
         initialize(); // initialize the google map API
-        getStoryTags(); // get story tegs using AJAX
+    }
+    else {
+        setMenu(); // Show in menu only editor element
+    }
+        
 
 //Variables
     var geocoder,
@@ -46,6 +53,21 @@ window.onload=function(){
         for(var i=0;i<clearBlocks.length;i++){
             clearBlocks[i].addEventListener("click", clear);
         }
+
+// ====== LocalStorage =======
+
+// Main menu in offline mode
+function setMenu() {
+    var menu = document.getElementById('menu');
+    var menu_elements = menu.children;
+    for(var i = 0; i < menu_elements.length; i++) {
+        if(menu_elements[i].textContent != "my stories") {
+            menu_elements[i].style.display = 'none';
+        }
+    }
+}
+
+// ======================
 
 //Functions
 //add title of story
@@ -464,6 +486,3 @@ function removeMarker(element){
     }
 }
 }
-
-
-

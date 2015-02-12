@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
     {% load staticfiles %}
+    {% block manifest %}
+    <!-- <html manifest="{% static "manifest/offline.manifest"%}" type="text/cache-manifest"> -->
+    {% endblock %}
     {% load trip_journal_extras %}
     {% block title %}Edit story{% endblock %}
     {% block css %}
@@ -79,14 +82,14 @@
 
         </div>
 
-    <div id="text_panel" class="block hide" >
+<!--     <div id="text_panel" class="block hide" >
             <textarea id="textarea" name="text" class="element_story" placeholder="+ Text to story"></textarea>
             <br>
             <button id="adds_block_t" class="button_2 adds_block">+</button>
             <button id="clear_block_t" class="button_2 delete_block">-</button>
 
         </div>
-
+ -->
         <div id="artifact_panel" class="block hide">
             <textarea id="textarea_artifact" name="artifact" class="element_story" placeholder="Add artifact"></textarea>
             <br>

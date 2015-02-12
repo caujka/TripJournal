@@ -1,0 +1,18 @@
+CACHE MANIFEST
+# revision 01
+../css/base.css
+../css/edit.css
+../images/arrow-down.png
+../images/arrow-up.png
+../images/artifact_marker.png
+../images/delete.png
+../images/deletemarker.png
+../images/marker.png
+../javascript/edit.js
+../javascript/ajax_requests.js
+
+FALLBACK:
+/ /edit/
+
+NETWORK:
+*

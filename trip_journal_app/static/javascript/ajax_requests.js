@@ -173,8 +173,12 @@ function getStoryTags() {
         xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var str = xhr.responseText;
+            if(str==""){
+               tags_arr=[] 
+            }else{
             var tags_arr = str.split(',');
             tags_view(tags_arr);
+            }
         }
     }
     params = 'Story_id=' + story_id;
@@ -190,6 +194,23 @@ function tags_view(tags_arr){
         button_list.innerHTML += '<div class="tags_button">'+tags_arr[i]+
         ' <span class="tags_delete" onclick="tag_delete('+i+')">x</span></div>'
     }
+}
+
+//function delete tag
+function tag_delete(i) {
+    deleteStoryTags(i);
+}
+
+//function adds tag
+function tags_add(e) {
+    var reg = /^[а-яa-z0-9іїє\s]+$/i;
+    if (tag_input.value.search(reg) >= 0) {
+        putTag(tag_input.value);
+    } else {
+        alert('input a-z, а-я, 0-9');
+    }
+    tag_input.focus();
+    e.stopPropagation()
 }
 
 function deleteStoryTags(i) {

@@ -59,23 +59,6 @@ function addTitle(e){
         savePage();
 }
 
-//function adds tag
-function tags_add(e) {
-    var reg = /^[а-яa-z0-9іїє\s]+$/i;
-    if (tag_input.value.search(reg) >= 0) {
-        putTag(tag_input.value);
-    } else {
-        alert('input a-z, а-я, 0-9');
-    }
-    tag_input.focus();
-    e.stopPropagation()
-}
-
-//function delete tag
-function tag_delete(i) {
-    deleteStoryTags(i);
-}
-
 //show panel of text
 function showTextPanel(){
     clear()

@@ -5,52 +5,31 @@ window.onload=function(){
         initialize(); // initialize the google map API
         getStoryTags(); // get story tegs using Ajax request.
 
-//Variables
-    var geocoder,
-        indexOfMarket=-1, // index of marker with which we wont to work (default=-1)
-        add_title = getId('add_title'),
-        story_title=getId('story_title'),
-        tag_input = getId('tag_input'),
-        tag_add = getId('tag_add'),
-        story_cont = getId('story_content'),       
-        added_artifact=getId("added_artifact"),       
-        added_image=getId("added_image"),       
-        added_text=getId("added_text"),        
-        textarea = getId('textarea'),
-        textarea_artifact = getId('textarea_artifact'),
-        photo_cont = getId('photo_cont'),
-        plusText=getId("adds_block_t"),
-        plusPhoto=getId("adds_block_p"),
-        plusArtifact=getId("adds_block_a"),       
-        fileSelect = getId('type_file'),
-        clearBlocks=document.getElementsByClassName("delete_block"),
-        findAddres=getId('findAddres');
-
-//Events
-        add_title.addEventListener("click", addTitle);
-        story_title.addEventListener("blur", savePage);
-        tag_input.addEventListener("change", tags_add);
-        tag_add.addEventListener("click", tags_add);
-        fileSelect.addEventListener("change", add_img);
-        story_cont.addEventListener("mouseover", showKeybar);
-        story_cont.addEventListener("mouseout", hideKeybar);
-        story_cont.addEventListener("click", buttonsClick);
-        added_artifact.addEventListener("click", showArtifactPanel);
-        added_image.addEventListener("click", showImagePanel);
-        added_text.addEventListener("click", showTextPanel);
-        plusText.addEventListener("click", save_text_story);
-        plusPhoto.addEventListener("click", save_photo_story);
-        photo_cont.addEventListener("click", deleteImageFromPhotoCont);
-        plusArtifact.addEventListener("click", save_photo_artifact);
-        findAddres.addEventListener("click", codeAddress);
+//EventListeners
+        getId('add_title').addEventListener("click", addTitle);
+        getId('story_title').addEventListener("blur", savePage);
+        getId('tag_input').addEventListener("change", tags_add);
+        getId('tag_add').addEventListener("click", tags_add);
+        getId('type_file').addEventListener("change", add_img);
+        getId('story_content').addEventListener("mouseover", showKeybar);
+        getId('story_content').addEventListener("mouseout", hideKeybar);
+        getId('story_content').addEventListener("click", buttonsClick);
+        getId("added_artifact").addEventListener("click", showArtifactPanel);
+        getId("added_image").addEventListener("click", showImagePanel);
+        getId("added_text").addEventListener("click", showTextPanel);
+        getId("adds_block_t").addEventListener("click", save_text_story);
+        getId("adds_block_p").addEventListener("click", save_photo_story);
+        getId('photo_cont').addEventListener("click", deleteImageFromPhotoCont);
+        getId("adds_block_a").addEventListener("click", save_photo_artifact);
+        getId('findAddres').addEventListener("click", codeAddress);
+        clearBlocks=document.getElementsByClassName("delete_block")
         for(var i=0;i<clearBlocks.length;i++){
             clearBlocks[i].addEventListener("click", clear);
         }
 }
 
-
 //Functions
-
+//get elements by Id
 function getId(id){
     return document.getElementById(id)
 }
@@ -163,7 +142,7 @@ function save_text_story(){
         appendBlock(pText, "text");
         clear();
         savePage();       
-    }
+}
 
 function escape_html_tags(str) {
     return str.replace(/>/g, '&gt;').replace(/</g, '&lt;');
@@ -181,7 +160,6 @@ function save_photo_artifact(){
 
 //function shows the image in temporary panel using HTML5 ObjectURL
 function add_img() {
-
         var i, URL, imageUrl, id, file,
             photo_cont = getId('photo_cont'),
             fileSelect = getId('type_file')
@@ -213,8 +191,8 @@ function add_img() {
                 }
             }
         getId('photo_cont').style.display = 'inline-block';
-        }
     }
+}
 
 //function delete image from temporary panel.
 function deleteImageFromPhotoCont(e){
@@ -256,7 +234,7 @@ function save_photo_story() {
             appendBlock(oneImage, "img");
         }            
         clear();
-    }
+}
 
 //change image when you click on gallery
 function galleryChangePicture(element){
@@ -416,6 +394,7 @@ function endEditBlock(e){
      * on server side has attribyte "data-lng" and "data-lat.
      */
 function initialize() {
+    indexOfMarket=-1 // index of marker with which we wont to work (default=-1)
     geocoder = new google.maps.Geocoder();
     var mapOptions = {
         zoom: 14

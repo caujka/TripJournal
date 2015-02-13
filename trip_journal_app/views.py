@@ -49,6 +49,13 @@ def save(request, story_id):
         story.text = json.dumps(request_body['blocks'], ensure_ascii=False)
         story.date_publish = datetime.datetime.now()
         story.save()
+        for block in request_body['blocks']:
+            if block["type"]=="img":
+                if block["marker"]!=None:                
+                    picture=Picture.objects.get(id=block["id"])
+                    picture.latitude=block["marker"]["lat"]
+                    picture.longitude=block["marker"]["lng"]
+                    picture.save()
         return HttpResponse(story.id)
 
 

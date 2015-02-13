@@ -8,7 +8,7 @@ from django.http import HttpResponse
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.sessions.backends.db import SessionStore
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
 
 from django.contrib.auth.models import User
@@ -291,20 +291,25 @@ def stories_by_user(request):
 def make_subscription_or_unsubscribe(request, subscribe_on):
     user = auth.get_user(request)
     author = User.objects.get(id=int(subscribe_on))
-    action = request.META['HTTP_ACTION']
+    action = request.POST.get('action')
 
     if action == "subscribe":
-        if not Subscriptions.objects.filter(subscriber=user.id, subscription=author.id):
+        if not Subscriptions.objects.filter(subscriber=user.id,
+                                            subscription=author.id):
             Subscriptions(subscriber=user, subscription=author).save()
         return HttpResponse(status=200)
     else:
-        if Subscriptions.objects.filter(subscriber=user.id, subscription=author.id):
-            Subscriptions.objects.filter(subscriber=user.id, subscription=author.id).delete()
+        if Subscriptions.objects.filter(subscriber=user.id,
+                                        subscription=author.id):
+            Subscriptions.objects.filter(
+                subscriber=user.id, subscription=author.id).delete()
         return HttpResponse(status=200)
 
 
-def rss_20(request):
+def general_rss(request):
     date = datetime.datetime.now().date()
-    stories = Story.objects.filter(published=True)
+    yesterday = date - datetime.timedelta(days=1)
+    stories = Story.objects.filter(date_publish__gt=yesterday).order_by("-date_publish")
     context = {'stories': stories, 'date': date}
-    return render(request, 'rss20.xml', context, content_type="application/xhtml+xml")
+    return render(request, 'rss.xml', context,
+                  content_type="application/xhtml+xml")

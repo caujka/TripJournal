@@ -158,9 +158,11 @@ google.maps.event.addDomListener(window, 'load', initialize);
 function subscribe_or_unsubscribe() {
     var button = document.getElementsByClassName("subscribe-btn")[0];
     var url = button.getAttribute("value");
-    var action = "subscribe"
+    var params = "";
     if (button.classList.contains("unsubscribe")) {
-        action = "unsubscribe"
+        params += "&action=unsubscribe"
+    } else {
+        params += "&action=subscribe"
     }
 
     var xhr = new XMLHttpRequest();
@@ -173,8 +175,7 @@ function subscribe_or_unsubscribe() {
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
     xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
     xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');
-    xhr.setRequestHeader('ACTION', action);
-    xhr.send();
+    xhr.send(params);
 };
 
 window.onload = function() {

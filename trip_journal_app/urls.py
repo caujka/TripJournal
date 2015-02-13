@@ -47,5 +47,5 @@ urlpatterns = [
     url(r'^subscribe/(?P<subscribe_on>\d+)$',
         views.make_subscription_or_unsubscribe, name='subscribe'),
     # rss
-    url(r'^rss/$', views.rss_20, name='rss'),
+    url(r'^rss/$', views.general_rss, name='rss'),
 ]

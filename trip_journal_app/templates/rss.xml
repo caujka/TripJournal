@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>TripJournal RSS</title>
+    <link>http://127.0.0.1:8000/</link>
+    <language>ua-ua</language>
+    <pubDate>{{date}}</pubDate>
+    
+    <docs>http://127.0.0.1:8000/</docs>
+    {% for story in stories %}
+    <item>
+      <title>{{story.title}}</title>
+      <link>http://127.0.0.1:8000/story/{{story.id}}</link>
+      <author>{{story.user}}</author>
+      <pubDate>{{story.date_publish.date}}</pubDate>
+    </item>
+    {% endfor %}
+  </channel>
+</rss>

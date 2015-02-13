@@ -41,7 +41,7 @@ urlpatterns = [
     url(r'^delete_story_tag/$', views.delete_story_tag, name='delete_tag'),
     url(r'^authorization_page/', views.show_authorization_page,
         name='show_authorization_page'),
-    url(r'^story/comment/(?P<story_id>\d*)/$', views.add_comment,
+    url(r'^story/(?P<story_id>\d*)/comment/$', views.add_comment,
         name='add_comment'),
     url(r'^user_messages/$', views.user_messages, name='user_messages'),
     url(r'^mark_as_read/(?P<notification_id>\d*)/(?P<story_id>\d*)/$',

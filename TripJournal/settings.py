@@ -14,7 +14,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # local settings
-#import TripJournal.local_settings as local_settings
+import TripJournal.local_settings as local_settings
 
 from utils import client_key_and_secret
 
@@ -76,10 +76,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'TripJournal',
-        #'USER': local_settings.db_user,
-        #'PASSWORD': local_settings.db_password,
-        'USER': 'root',
-        'PASSWORD': 'problema',
+        'USER': local_settings.db_user,
+        'PASSWORD': local_settings.db_password,
     }
 }
 

@@ -15,17 +15,6 @@ function storyIdFromUrl() {
     return currUrl[currUrl.length - 1];
 }
 
-// get coordinates of marker
-function getMarkerLocation(index){
-    if(Markers[index]){
-            var pos = Markers[index].getPosition();
-            return {
-                'lat': pos.lat(),
-                'lng': pos.lng()
-            };       
-    }
-    return null;
-}
 
 // Convert story in JSON format 
 function storyBlocksJson(){
@@ -143,6 +132,7 @@ function savePage() {
     }
 }
 
+// Tags
 function jsonTagStory(tag_name) {
     var block = {};
     block.story_id = storyIdFromUrl();
@@ -151,6 +141,7 @@ function jsonTagStory(tag_name) {
 }
 
 function putTag(tag_name) {
+    var tag_input = document.getElementById('tag_input')
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '/put_tag/', true);
     xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
@@ -189,6 +180,7 @@ function getStoryTags() {
 }
 
 function tags_view(tags_arr){
+    button_list=document.getElementById("button_list")
     button_list.innerHTML = '';
     for (var i = 0; i < tags_arr.length; i++) {
         button_list.innerHTML += '<div class="tags_button">'+tags_arr[i]+
@@ -196,22 +188,6 @@ function tags_view(tags_arr){
     }
 }
 
-//function delete tag
-function tag_delete(i) {
-    deleteStoryTags(i);
-}
-
-//function adds tag
-function tags_add(e) {
-    var reg = /^[а-яa-z0-9іїє\s]+$/i;
-    if (tag_input.value.search(reg) >= 0) {
-        putTag(tag_input.value);
-    } else {
-        alert('input a-z, а-я, 0-9');
-    }
-    tag_input.focus();
-    e.stopPropagation()
-}
 
 function deleteStoryTags(i) {
     var xhr = new XMLHttpRequest();
@@ -228,8 +204,7 @@ function deleteStoryTags(i) {
 }
 
 function getId() {
-    var xhr = new XMLHttpRequest();
-    
+    var xhr = new XMLHttpRequest();   
          xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             getStoryTags();

@@ -46,11 +46,15 @@ window.onload=function(){
         for(var i=0;i<clearBlocks.length;i++){
             clearBlocks[i].addEventListener("click", clear);
         }
+}
+
 
 //Functions
 //add title of story
 function addTitle(e){
-    var titleInput=document.getElementById("title");
+    var titleInput=document.getElementById("title"),
+        add_title = document.getElementById('add_title'),
+        story_title=document.getElementById('story_title')
         story_title.innerHTML=titleInput.value
         story_title.style.display="block"
         titleInput.style.display="none"
@@ -59,8 +63,26 @@ function addTitle(e){
         savePage();
 }
 
+//function delete tag
+function tag_delete(i) {
+    deleteStoryTags(i);
+}
+
+//function adds tag
+function tags_add(e) {
+    var reg = /^[а-яa-z0-9іїє\s]+$/i;
+    if (tag_input.value.search(reg) >= 0) {
+        putTag(tag_input.value);
+    } else {
+        alert('input a-z, а-я, 0-9');
+    }
+    tag_input.focus();
+    e.stopPropagation()
+}
+
 //show panel of text
 function showTextPanel(){
+    var textarea = document.getElementById('textarea')
     clear()
     this.style.background = '#8ed41f';
     text_panel.style.display = 'block';
@@ -76,6 +98,7 @@ function showImagePanel(){
 
 //show panel of artifact
 function showArtifactPanel(){
+    var textarea_artifact = document.getElementById('textarea_artifact')
     clear()
     this.style.background = '#8ed41f';
     artifact_panel.style.display = 'block';
@@ -84,7 +107,13 @@ function showArtifactPanel(){
 
 //function returns all panels of text, images, artifacts in default condition 
 function clear() {
-    var hidePanels = document.getElementsByClassName('hide');
+    var added_artifact=document.getElementById("added_artifact"),
+        added_image=document.getElementById("added_image"),
+        added_text=document.getElementById("added_text"),
+        textarea = document.getElementById('textarea'),
+        photo_cont = document.getElementById('photo_cont'),
+        textarea_artifact = document.getElementById('textarea_artifact')
+        hidePanels = document.getElementsByClassName('hide');
         for(var i=0; i<hidePanels.length; i++){
             hidePanels[i].style.display = 'none'; 
         }
@@ -99,6 +128,7 @@ function clear() {
 
 //function adds a block of a given type ("text","img","artifact")
 function appendBlock(blockContent, block_type){
+    var story_cont = document.getElementById('story_content')
     var container = document.createElement('div'),
         keybar = document.createElement('div'),        
         buttons= ['top','bottom','delete','addmarker','removemarker'];
@@ -122,6 +152,7 @@ function appendBlock(blockContent, block_type){
 
 //save text block
 function save_text_story(){
+    var textarea = document.getElementById('textarea');
     var pText=document.createElement("p")
         pText.innerHTML=escape_html_tags(textarea.value)             
         appendBlock(pText, "text");
@@ -135,6 +166,7 @@ function escape_html_tags(str) {
 
 //save artifact block
 function save_photo_artifact(){
+    var textarea_artifact = document.getElementById('textarea_artifact')
     var pArtifact=document.createElement("p")
         pArtifact.innerHTML=escape_html_tags(textarea_artifact.value)     
         appendBlock(pArtifact, "artifact")
@@ -143,8 +175,11 @@ function save_photo_artifact(){
 }
 
 //function shows the image in temporary panel using HTML5 ObjectURL
-function add_img() {       
+function add_img() {
+
         var i, URL, imageUrl, id, file,
+            photo_cont = document.getElementById('photo_cont'),
+            fileSelect = document.getElementById('type_file')
             files = fileSelect.files; // all files in input
         if (files.length > 0) {
             for (i = 0; i < files.length; i++) {
@@ -178,6 +213,7 @@ function add_img() {
 
 //function delete image from temporary panel.
 function deleteImageFromPhotoCont(e){
+    var photo_cont = document.getElementById('photo_cont')
     var index=-1;
     var target = e.target;
         if(target.className=="button_3"){           
@@ -194,7 +230,8 @@ function deleteImageFromPhotoCont(e){
 }
 
 //save photo block, add single image or gallery with many images in one block
-function save_photo_story() {       
+function save_photo_story() {
+    var story_cont = document.getElementById('story_content')       
     var arr = document.getElementsByClassName("img_story")
         story_cont.style.display = 'block';
         if(arr.length>1){ // gallery will be created if many  pictures  are in the temporary panel.
@@ -293,6 +330,7 @@ function indexOfClickedBlock(element){
 
 //move block up
 function moveBlockUp(element){
+    var story_cont = document.getElementById('story_content')
     var index=indexOfClickedBlock(element),
         bloks=story_cont.getElementsByClassName("block_story"),
         block=bloks[index];
@@ -309,6 +347,7 @@ function moveBlockUp(element){
 
 //move block down
 function moveBlockDown(element){
+    var story_cont = document.getElementById('story_content')
     var index=indexOfClickedBlock(element),
         bloks=story_cont.getElementsByClassName("block_story"),
         block=bloks[index];
@@ -324,6 +363,7 @@ function moveBlockDown(element){
 
 //delete block
 function deleteBlock(element){
+    var story_cont = document.getElementById('story_content')
     var index=indexOfClickedBlock(element);
         block=story_cont.getElementsByClassName("block_story")[index];
         story_cont.removeChild(block);
@@ -446,6 +486,18 @@ function placeMarker(location){
     savePage();
 }
 
+// get coordinates of marker
+function getMarkerLocation(index){
+    if(Markers[index]){
+            var pos = Markers[index].getPosition();
+            return {
+                'lat': pos.lat(),
+                'lng': pos.lng()
+            };       
+    }
+    return null;
+}
+
 // function remove marker
 function removeMarker(element){
     var index=indexOfClickedBlock(element)
@@ -455,7 +507,7 @@ function removeMarker(element){
            savePage();
     }
 }
-}
+
 
 
 

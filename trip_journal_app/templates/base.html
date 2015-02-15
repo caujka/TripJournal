@@ -29,16 +29,24 @@
                 </div>
             {% else %}
                 <div>
-                    sign in:
-                    <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request|login_next }}">
-                        <div class='login_image'><img src="{% static "images/Google_Plus_logo.png"%}"></div>
-                    </a>
-                    <a href="{% url 'social:begin' 'facebook' %}?next={{ request|login_next }}">
-                        <div class='login_image'><img src="{% static "images/fb_logo.png"%}"></div>
-                    </a>
-                    <a href="{% url 'social:begin' 'vk-oauth2' %}?next={{ request|login_next }}">
-                        <div class='login_image'><img src="{% static "images/vk_logo.png"%}"></div>
-                    </a>
+                    {% social_up "google" as google_soc%}
+                    {% if google_soc %}
+                        <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request|login_next }}">
+                            <div class='login_image'><img src="{% static "images/Google_Plus_logo.png"%}"></div>
+                        </a>
+                    {%endif%}
+                    {% social_up "facebook" as facebook_soc%}
+                    {% if facebook_soc %}
+                        <a href="{% url 'social:begin' 'facebook' %}?next={{ request|login_next }}">
+                            <div class='login_image'><img src="{% static "images/fb_logo.png"%}"></div>
+                        </a>
+                    {%endif%}
+                    {% social_up "vk" as vk_soc%}
+                    {% if vk_soc %}
+                        <a href="{% url 'social:begin' 'vk-oauth2' %}?next={{ request|login_next }}">
+                            <div class='login_image'><img src="{% static "images/vk_logo.png"%}"></div>
+                        </a>
+                    {%endif%}
                 </div>
             {% endif %}
             {% endblock %}

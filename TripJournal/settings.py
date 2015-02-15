@@ -77,6 +77,7 @@ DATABASES = {
         'NAME': 'TripJournal',
         'USER': local_settings.db_user,
         'PASSWORD': local_settings.db_password,
+        
     }
 }
 

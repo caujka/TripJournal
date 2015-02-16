@@ -36,15 +36,12 @@ function getId(id){
 
 //add title of story
 function addTitle(e){
-    var titleInput=getId("title"),
-        add_title = getId('add_title'),
-        story_title=getId('story_title')
-        story_title.innerHTML=titleInput.value
-        story_title.style.display="block"
-        titleInput.style.display="none"
-        add_title.style.display="none"
-        e.stopPropagation()
-        savePage();
+    getId('story_title').innerHTML=getId("title").value
+    getId('story_title').style.display="block"
+    getId("title").style.display="none"
+    getId('add_title').style.display="none"
+    e.stopPropagation()
+    savePage();
 }
 
 //function delete tag
@@ -54,6 +51,7 @@ function tag_delete(i) {
 
 //function adds tag
 function tags_add(e) {
+    var tag_input=getId('tag_input')
     var reg = /^[а-яa-z0-9іїє\s]+$/i;
     if (tag_input.value.search(reg) >= 0) {
         putTag(tag_input.value);
@@ -66,48 +64,40 @@ function tags_add(e) {
 
 //show panel of text
 function showTextPanel(){
-    var textarea = getId('textarea')
     clear()
     this.style.background = '#8ed41f';
-    text_panel.style.display = 'block';
-    textarea.focus();  
+    getId('text_panel').style.display = 'block';
+    getId('textarea').focus();  
 }
 
 //show panel of image
 function showImagePanel(){
     clear()  
     this.style.background = '#8ed41f';
-    photo_panel.style.display = 'block';    
+    getId('photo_panel').style.display = 'block';    
 }
 
 //show panel of artifact
 function showArtifactPanel(){
-    var textarea_artifact = getId('textarea_artifact')
     clear()
     this.style.background = '#8ed41f';
-    artifact_panel.style.display = 'block';
-    textarea_artifact.focus();
+    getId('artifact_panel').style.display = 'block';
+    getId('textarea_artifact').focus();
 }
 
 //function returns all panels of text, images, artifacts in default condition 
 function clear() {
-    var added_artifact=getId("added_artifact"),
-        added_image=getId("added_image"),
-        added_text=getId("added_text"),
-        textarea = getId('textarea'),
-        photo_cont = getId('photo_cont'),
-        textarea_artifact = getId('textarea_artifact')
-        hidePanels = document.getElementsByClassName('hide');
+    var hidePanels = document.getElementsByClassName('hide');
         for(var i=0; i<hidePanels.length; i++){
             hidePanels[i].style.display = 'none'; 
         }
-        added_text.style.background = "#80B098";
-        added_image.style.background = "#80B098";
-        added_artifact.style.background = "#80B098";
-        textarea.value = '';
-        textarea_artifact.value = '';
-        photo_cont.innerHTML = '';
-        photo_cont.style.display = 'none';
+        getId("added_text").style.background = "#80B098";
+        getId("added_image").style.background = "#80B098";
+        getId("added_artifact").style.background = "#80B098";
+        getId('textarea').value = '';
+        getId('textarea_artifact').value = '';
+        getId('photo_cont').innerHTML = '';
+        getId('photo_cont').style.display = 'none';
 }
 
 //function adds a block of a given type ("text","img","artifact")

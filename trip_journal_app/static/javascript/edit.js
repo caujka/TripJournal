@@ -51,8 +51,8 @@ function tag_delete(i) {
 
 //function adds tag
 function tags_add(e) {
-    var tag_input=getId('tag_input')
-    var reg = /^[а-яa-z0-9іїє\s]+$/i;
+    var tag_input=getId('tag_input'),
+        reg = /^[а-яa-z0-9іїє\s]+$/i;
     if (tag_input.value.search(reg) >= 0) {
         putTag(tag_input.value);
     } else {
@@ -102,7 +102,6 @@ function clear() {
 
 //function adds a block of a given type ("text","img","artifact")
 function appendBlock(blockContent, block_type){
-    var story_cont = getId('story_content')
     var container = document.createElement('div'),
         keybar = document.createElement('div'),        
         buttons= ['top','bottom','delete','addmarker','removemarker'];
@@ -112,7 +111,7 @@ function appendBlock(blockContent, block_type){
         container.className = "block_story";
         // Write type as an attribute of the element !!!
         container.setAttribute("block_type", block_type) 
-        story_cont.appendChild(container)
+        getId('story_content').appendChild(container)
         container.appendChild(blockContent)   
         keybar.className = "key_panel"
         container.appendChild(keybar);   
@@ -151,9 +150,7 @@ function save_photo_artifact(){
 //function shows the image in temporary panel using HTML5 ObjectURL
 function add_img() {
         var i, URL, imageUrl, id, file,
-            photo_cont = getId('photo_cont'),
-            fileSelect = getId('type_file')
-            files = fileSelect.files; // all files in input
+            files = getId('type_file').files; // all files in input
         if (files.length > 0) {
             for (i = 0; i < files.length; i++) {
                 file = files[i];
@@ -168,7 +165,7 @@ function add_img() {
                     var imageUrl = URL.createObjectURL(files[i]); // create object URL for image          
                     var img_block=document.createElement("div");
                         img_block.className="img_block";
-                        photo_cont.appendChild(img_block)
+                        getId('photo_cont').appendChild(img_block)
                     var img_story=document.createElement("img")
                         img_story.className="img_story";
                         img_story.src=imageUrl;
@@ -203,10 +200,9 @@ function deleteImageFromPhotoCont(e){
 }
 
 //save photo block, add single image or gallery with many images in one block
-function save_photo_story() {
-    var story_cont = getId('story_content')       
+function save_photo_story() {     
     var arr = document.getElementsByClassName("img_story")
-        story_cont.style.display = 'block';
+        getId('story_content').style.display = 'block';
         if(arr.length>1){ // gallery will be created if many  pictures  are in the temporary panel.
         var gallery=document.createElement("div");
             gallery.className="gallery_container"          
@@ -228,8 +224,8 @@ function save_photo_story() {
 
 //change image when you click on gallery
 function galleryChangePicture(element){
-    var number;
-    var gallery_container=element.parentNode;
+    var number,
+        gallery_container=element.parentNode;
         gallery_pictures=gallery_container.getElementsByClassName("gallery")
         countPicture=gallery_pictures.length;
         for(var i=0; i<countPicture; i++){

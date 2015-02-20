@@ -39,7 +39,8 @@ urlpatterns = [
     url(r'^put_tag/$', views.put_tag, name='put_tag'),
     # delete tag in DB
     url(r'^delete_story_tag/$', views.delete_story_tag, name='delete_tag'),
-    url(r'^authorization_page/', views.show_authorization_page, 
+    # # get all text
+    url(r'^get_story_content/$', views.get_story_content, name='get_content'),
+    url(r'^authorization_page/', views.show_authorization_page,
         name='show_authorization_page'),
 ]
-

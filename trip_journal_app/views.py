@@ -43,9 +43,6 @@ def save(request, story_id):
             story.user = auth.get_user(request)
             story.date_travel = datetime.datetime.now().date()
         request_body = json.loads(request.body)
-        print "=" * 50
-        print request_body
-        print "=" * 50
         story.title = request_body['title']
         story.text = json.dumps(request_body['blocks'], ensure_ascii=False)
         story.date_publish = datetime.datetime.now()
@@ -238,6 +235,25 @@ def get_story_tags(request):
                 tag.datetime)})
 
         return HttpResponse(json.dumps(tags_data))
+
+
+def get_story_content(request):
+    """
+    Get text from story
+    """
+    if request.is_ajax():
+        story_id = request.GET.get('id')
+        story = Story.objects.get(pk=int(story_id))
+        pictures = Picture.objects.filter(story_id=int(story_id))
+        get_picture = []
+        for picture in pictures:
+            get_picture.append(str(picture.get_stored_pic_by_size(800)))
+
+        content = {"text": str(story.text), "title": str(story.title),
+                   "datetime": str(story.date_publish),
+                   "picture": get_picture}
+
+        return HttpResponse(json.dumps(content))
 
 
 @login_required

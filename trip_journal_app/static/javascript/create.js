@@ -321,6 +321,7 @@ window.onload = function() {
                 URL = window.URL;
                 if (URL) {
                     imageUrl = URL.createObjectURL(files[i]);
+                    alert(imageUrl);
                     id = 'story_' + number + '_' + files[i].name.substr(0, files[i].name.indexOf('.'));
                     document.getElementById('photo_cont').innerHTML +=
                     '<div id="' + id + '" class="img_block">' +

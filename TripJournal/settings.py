@@ -123,6 +123,12 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+CONFIGS = {
+    "codeExpirationTime": 10,
+    "codeLength": 4,
+    "emptyUserName": "restrictedNameForUserCreation",
+}
+
 CLIENT_SECRETS_DIR = os.path.join(BASE_DIR, 'TripJournal', 'client_secrets')
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY, SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = (
@@ -136,3 +142,7 @@ SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET = (
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
+EMAIL_HOST = local_settings.emailHost
+EMAIL_HOST_USER = local_settings.emailHostUser
+EMAIL_HOST_PASSWORD = local_settings.emailHostPassword

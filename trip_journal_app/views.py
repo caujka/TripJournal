@@ -1,6 +1,11 @@
 import json
 import datetime
+import string
+import time
 
+from random import choice
+
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -10,11 +15,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sessions.backends.db import SessionStore
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.views.decorators.http import require_POST
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
 
-from trip_journal_app.models import Story, Picture, Tag, Map_artifact
+from trip_journal_app.models import Story, Picture, Tag, Map_artifact, Confirmation_code
 
 from trip_journal_app.forms import UploadFileForm
 from trip_journal_app.utils.story_utils import story_contents
+from TripJournal.settings import CONFIGS
+import TripJournal.local_settings as local_settings
 
 def home(request):
     """
@@ -266,3 +275,85 @@ def stories_by_user(request):
         context = {'stories': stories}
         return render(request, 'stories_by_user.html', context)
         
+@require_POST
+@csrf_exempt
+def log_in(request):
+    SECONDS_IN_MINUTE = 60
+
+    body = json.loads(request.body)
+    email = body["mail"]
+    code = body["code"]
+    userLogin = body["login"]
+    now = time.time()   
+    try:
+        user = User.objects.get(email=email)
+        conf_code = Confirmation_code.objects.get(user_id=user.id)
+    except:
+        return HttpResponse("Problems with code or email.")
+    if user.username==CONFIGS["emptyUserName"]:
+        if userLogin and userLogin!=CONFIGS["emptyUserName"]:
+            try:
+                user = User.objects.get(username=userLogin)
+                return HttpResponse("This login is already used.")
+            except:
+                user.username = userLogin
+                user.save()
+        elif userLogin==CONFIGS["emptyUserName"]:
+            return HttpResponse("This login is restricted.")
+        else:
+            return HttpResponse("Please enter your login.")
+    if (code == conf_code.code):
+        timeDiffInMinutes = (float(now)-float(conf_code.start_time))/SECONDS_IN_MINUTE
+        if timeDiffInMinutes<CONFIGS["codeExpirationTime"]:
+            if user.username==CONFIGS["emptyUserName"]:
+                if userLogin and userLogin!=CONFIGS["emptyUserName"]:
+                    try:
+                        user = User.objects.get(username=userLogin)
+                        return HttpResponse("This login is already used.")
+                    except:
+                        user.username = userLogin
+                        user.save()
+                elif userLogin==CONFIGS["emptyUserName"]:
+                    return HttpResponse("This login is restricted.")
+                else:
+                    return HttpResponse("Please enter your login.")
+            user.set_password(code)
+            user.save()
+            user = authenticate(username=user.username,password=code)
+            login(request, user)
+            return HttpResponse("ok")
+        else:
+            return HttpResponse("Your code is out of date.")
+    else:
+        return HttpResponse("Email and code doesn't match.")
+
+
+@csrf_exempt
+@require_POST
+def send_code(request):
+    body = json.loads(request.body)
+    email = body["mail"]
+    try:
+        user = User.objects.get(email=email)
+    except:
+        user = User.objects.create_user(username=CONFIGS["emptyUserName"],email=email)
+    code = generate_codeMsg()
+    try:
+        conf_code = Confirmation_code.objects.get(user_id=user.id)
+    except:    
+        conf_code = Confirmation_code()
+        conf_code.user = user
+    conf_code.code = code
+    conf_code.start_time = time.time()
+    conf_code.save()
+    msg = "Your confirmation code = {0}.\nIt will be avaliable only for {1} minutes".format(code, CONFIGS["codeExpirationTime"])
+    send_mail('Hello!', msg, local_settings.emailHostUser,
+    [email])
+    return HttpResponse("Code has been sent to your mail.")
+
+
+
+def generate_codeMsg():
+    digits = string.digits
+    code = "".join(choice(digits) for _ in range(CONFIGS["codeLength"]))
+    return code

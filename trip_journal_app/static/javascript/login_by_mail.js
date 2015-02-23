@@ -1,4 +1,6 @@
-window.onload = function(){
+window.addEventListener("load", loginByEmail)
+
+function loginByEmail() {
 	bind();
 	
 	function bind(){
@@ -38,7 +40,7 @@ window.onload = function(){
 			msg = document.getElementById("msg");
 
 		msg.innerHTML = "";
-		if (checkMail(email) && code != ''){
+		if (isEmailCorrect(email) && code != ''){
 			xhr = new XMLHttpRequest();
 			xhr.open('POST', '/log_in/', true);
 			xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
@@ -71,7 +73,7 @@ window.onload = function(){
 			msg = document.getElementById("msg");
 
 		msg.innerHTML = "";
-		if (checkMail(email)){
+		if (isEmailCorrect(email)){
 			xhr = new XMLHttpRequest();
 			xhr.open('POST', '/send_code/', true);
 			xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
@@ -87,7 +89,7 @@ window.onload = function(){
 		}
 	}
 
-	function checkMail(mail){
+	function isEmailCorrect(mail){
 		var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 		return re.test(mail);
 	}

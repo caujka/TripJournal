@@ -22,7 +22,7 @@ from trip_journal_app.models import Story, Picture, Tag, Map_artifact, Confirmat
 
 from trip_journal_app.forms import UploadFileForm
 from trip_journal_app.utils.story_utils import story_contents
-from TripJournal.settings import CONFIGS
+from TripJournal.settings import AUTH_BY_EMAIL
 import TripJournal.local_settings as local_settings
 
 def home(request):
@@ -290,30 +290,30 @@ def log_in(request):
         conf_code = Confirmation_code.objects.get(user_id=user.id)
     except:
         return HttpResponse("Problems with code or email.")
-    if user.username==CONFIGS["emptyUserName"]:
-        if userLogin and userLogin!=CONFIGS["emptyUserName"]:
+    if user.username==AUTH_BY_EMAIL["emptyUserName"]:
+        if userLogin and userLogin!=AUTH_BY_EMAIL["emptyUserName"]:
             try:
                 user = User.objects.get(username=userLogin)
                 return HttpResponse("This login is already used.")
             except:
                 user.username = userLogin
                 user.save()
-        elif userLogin==CONFIGS["emptyUserName"]:
+        elif userLogin==AUTH_BY_EMAIL["emptyUserName"]:
             return HttpResponse("This login is restricted.")
         else:
             return HttpResponse("Please enter your login.")
     if (code == conf_code.code):
         timeDiffInMinutes = (float(now)-float(conf_code.start_time))/SECONDS_IN_MINUTE
-        if timeDiffInMinutes<CONFIGS["codeExpirationTime"]:
-            if user.username==CONFIGS["emptyUserName"]:
-                if userLogin and userLogin!=CONFIGS["emptyUserName"]:
+        if timeDiffInMinutes<AUTH_BY_EMAIL["codeExpirationTime"]:
+            if user.username==AUTH_BY_EMAIL["emptyUserName"]:
+                if userLogin and userLogin!=AUTH_BY_EMAIL["emptyUserName"]:
                     try:
                         user = User.objects.get(username=userLogin)
                         return HttpResponse("This login is already used.")
                     except:
                         user.username = userLogin
                         user.save()
-                elif userLogin==CONFIGS["emptyUserName"]:
+                elif userLogin==AUTH_BY_EMAIL["emptyUserName"]:
                     return HttpResponse("This login is restricted.")
                 else:
                     return HttpResponse("Please enter your login.")
@@ -336,7 +336,7 @@ def send_code(request):
     try:
         user = User.objects.get(email=email)
     except:
-        user = User.objects.create_user(username=CONFIGS["emptyUserName"],email=email)
+        user = User.objects.create_user(username=AUTH_BY_EMAIL["emptyUserName"],email=email)
     code = generate_codeMsg()
     try:
         conf_code = Confirmation_code.objects.get(user_id=user.id)
@@ -346,7 +346,7 @@ def send_code(request):
     conf_code.code = code
     conf_code.start_time = time.time()
     conf_code.save()
-    msg = "Your confirmation code = {0}.\nIt will be avaliable only for {1} minutes".format(code, CONFIGS["codeExpirationTime"])
+    msg = "Your confirmation code = {0}.\nIt will be avaliable only for {1} minutes".format(code, AUTH_BY_EMAIL["codeExpirationTime"])
     send_mail('Hello!', msg, local_settings.emailHostUser,
     [email])
     return HttpResponse("Code has been sent to your mail.")
@@ -355,5 +355,5 @@ def send_code(request):
 
 def generate_codeMsg():
     digits = string.digits
-    code = "".join(choice(digits) for _ in range(CONFIGS["codeLength"]))
+    code = "".join(choice(digits) for _ in range(AUTH_BY_EMAIL["codeLength"]))
     return code

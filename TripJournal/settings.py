@@ -123,7 +123,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-CONFIGS = {
+AUTH_BY_EMAIL = {
     "codeExpirationTime": 10,
     "codeLength": 4,
     "emptyUserName": "restrictedNameForUserCreation",

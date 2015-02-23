@@ -237,6 +237,7 @@ def get_story_tags(request):
         return HttpResponse(json.dumps(tags_data))
 
 
+@ensure_csrf_cookie
 def get_story_content(request):
     """
     Get text from story
@@ -245,15 +246,21 @@ def get_story_content(request):
         story_id = request.GET.get('id')
         story = Story.objects.get(pk=int(story_id))
         pictures = Picture.objects.filter(story_id=int(story_id))
-        get_picture = []
+        picture_list = []
         for picture in pictures:
-            get_picture.append(str(picture.get_stored_pic_by_size(800)))
+            picture_list.append(str(picture.get_stored_pic_by_size(800)))
+
+        print "=" * 50
+        print json.loads(story.text)
+        print "=" * 50
 
         content = {"text": str(story.text), "title": str(story.title),
                    "datetime": str(story.date_publish),
-                   "picture": get_picture}
+                   "picture": picture_list}
 
         return HttpResponse(json.dumps(content))
+    else:
+        return HttpResponse("REQUEST ERROR")
 
 
 @login_required

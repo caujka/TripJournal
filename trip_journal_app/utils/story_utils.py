@@ -25,6 +25,9 @@ def story_contents(request, story_id, template,
             if check_published:
                 if user != story.user and story.published == 0:
                     return render(request, 'story_error_page.html')
+                print "=" * 50
+                print "sdfdsfsdf"
+                print "=" * 50
         # if story_id doesn't exist redirects user to list of his/her stoires
         except Story.DoesNotExist:
             msg = ("Such a story doesn't exist. But you can create a new one.")

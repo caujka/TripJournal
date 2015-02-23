@@ -10,6 +10,7 @@ if (typeof String.prototype.endsWith !== 'function') {
 
 // Check internet connection, and return condition.
 function checkInternetConnection() {
+    // return false;
     return navigator.onLine;
 }
 
@@ -233,42 +234,6 @@ function getStoryTags() {
 
     }
 }
-
-// function getStoryContent() {
-//     if (checkInternetConnection()) {
-//         story_id = storyIdFromUrl();
-//         if (story_id) {
-//             var xhr = new XMLHttpRequest();
-//             xhr.onreadystatechange = function() {
-//                 if (xhr.readyState === 4 && xhr.status === 200) {
-//                     var str = xhr.responseText;
-//                     var content = JSON.parse(str);
-//                     content_view(content);
-//                 }
-//             }
-//             params = 'id=' + story_id;
-//             xhr.open('GET', '/get_story_content/?' + params, true);
-//             xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');
-//             xhr.send();
-//         }
-//     }
-//     // else {
-//     //     var str = localStorage.getItem("Block_content");
-//     //     if (str) {
-
-//     //     }
-//     // }
-// }
-
-// function content_view(content) {
-//     if(content.title) {
-//         var titleInput = document.getElementById("title");
-//         story_title.innerHTML = content.title;
-//         story_title.style.display = "block";
-//         titleInput.style.display = "none";
-//         add_title.style.display = "none";
-//     }
-// }
 
 
 // comparing tags time on the server, and in the localStorage

@@ -140,7 +140,8 @@ def search_items_near_by(request):
         sess = SessionStore()
         if request.GET.get('item_type', '') == u'pictures':
             sess['items_list'] = {'item_type': 'pictures',
-                                  'items': Picture.get_sorted_picture_list(x, y)}
+                                  'items': Picture.get_sorted_picture_list(x, y
+                                                                           )}
             sess.save()
         elif request.GET.get('item_type', '') == u'stories':
             sess['items_list'] = {'item_type': 'stories',
@@ -177,7 +178,8 @@ def make_paging_for_items_search(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         items = paginator.page(paginator.num_pages)
     return render(request, 'items_near_by.html', {'items_list': items,
-                                                  'item_type': list_of_items['item_type']})
+                                                  'item_type': list_of_items[
+                                                      'item_type']})
 
 
 @login_required
@@ -246,19 +248,17 @@ def get_story_content(request):
         story_id = request.GET.get('id')
         story = Story.objects.get(pk=int(story_id))
         pictures = Picture.objects.filter(story_id=int(story_id))
-        picture_list = []
+        picture_dic = {}
         for picture in pictures:
-            picture_list.append(str(picture.get_stored_pic_by_size(800)))
+            picture_dic[str(picture.id)] = str(picture.get_stored_pic_by_size(
+                800))
 
         content = {"text": str(story.text), "title": str(story.title),
                    "datetime": str(story.date_publish),
-                   "picture": picture_list}
-
-        print "=" * 50
-        print content
-        print "=" * 50
+                   "picture": picture_dic}
 
         return HttpResponse(json.dumps(content))
+        # return HttpResponse(status=200)
     else:
         return HttpResponse("REQUEST ERROR")
 

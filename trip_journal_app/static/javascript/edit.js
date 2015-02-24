@@ -3,6 +3,14 @@
 
  window.onload = function() {
 
+    function toDo() {
+         console.log(" ");
+         console.log("TODO LIST");
+         console.log(" 1. In file ajax_requests, uncomment 'check_actual_tags' \
+             ");
+         console.log(" ");
+     }
+
      //Variables
      var geocoder,
          indexOfMarket = -1,
@@ -104,7 +112,9 @@
 
                         if(content_list[i].type === "img") {
                             if(content.picture) {
-                                picture_view(content.picture);
+                                var picture_id = content_list[i].id;
+                                var picture = content.picture[picture_id]
+                                picture_view(picture_id, picture);
                             }
                         }
         
@@ -150,14 +160,12 @@
         appendBlock(pArtifact, "artifact");
     }
 
-    function picture_view(imgs) {
-        
-        for (var i = 0; i < imgs.length; i++) {            
-            var oneImage = document.createElement("img");
-            oneImage.className = "image_story";
-            oneImage.src = imgs[i];
-            appendBlock(oneImage, "img");
-        };
+    function picture_view(id, img) {
+        var oneImage = document.createElement("img");
+        oneImage.className = "image_story";
+        oneImage.src = img;
+        oneImage.setAttribute("data-dbid", id);
+        appendBlock(oneImage, "img");
     }
 
      // ====== LocalStorage =======
@@ -612,4 +620,6 @@
              savePage();
          }
      }
+
+     toDo();
 }

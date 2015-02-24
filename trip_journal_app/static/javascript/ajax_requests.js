@@ -184,9 +184,10 @@ function putTag(tag_name) {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 tag_input.value = '';
                 getStoryTags();
+                savePage();
             }
         }
-        savePage();
+        
         request_body = JSON.stringify(jsonTagStory(tag_name));
 
         if (supportsLocalStorage()) {
@@ -261,7 +262,8 @@ function check_actual_tags(server_data) {
 }
 
 function tags_view(tags_arr) {
-    var actual_data = check_actual_tags(tags_arr);
+    // var actual_data = check_actual_tags(tags_arr);
+    var actual_data = tags_arr;
 
     button_list.innerHTML = '';
 
@@ -322,5 +324,4 @@ function addToLocalStorrage(key, json_value) {
     }
     json_list.push(parsed_json);
     localStorage.setItem(key, JSON.stringify(json_list));
-    // return json_list;
 }

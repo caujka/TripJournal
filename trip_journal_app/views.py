@@ -250,13 +250,13 @@ def get_story_content(request):
         for picture in pictures:
             picture_list.append(str(picture.get_stored_pic_by_size(800)))
 
-        print "=" * 50
-        print json.loads(story.text)
-        print "=" * 50
-
         content = {"text": str(story.text), "title": str(story.title),
                    "datetime": str(story.date_publish),
                    "picture": picture_list}
+
+        print "=" * 50
+        print content
+        print "=" * 50
 
         return HttpResponse(json.dumps(content))
     else:

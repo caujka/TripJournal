@@ -98,15 +98,17 @@
                             text_view(content_list[i].content);
                         } 
         
-                        else if (content_list[i].type === "artifact") {
+                        if(content_list[i].type === "artifact") {
                             artifact_view(content_list[i].content);
+                        }
+
+                        if(content_list[i].type === "img") {
+                            if(content.picture) {
+                                picture_view(content.picture);
+                            }
                         }
         
                     }
-                }
-        
-                if(content.picture) {
-                    picture_view(content.picture);
                 }
         }
         else {
@@ -149,6 +151,7 @@
     }
 
     function picture_view(imgs) {
+        
         for (var i = 0; i < imgs.length; i++) {            
             var oneImage = document.createElement("img");
             oneImage.className = "image_story";

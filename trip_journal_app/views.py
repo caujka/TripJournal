@@ -290,18 +290,6 @@ def log_in(request):
         conf_code = Confirmation_code.objects.get(user_id=user.id)
     except:
         return HttpResponse("Problems with code or email.")
-    if user.username==AUTH_BY_EMAIL["emptyUserName"]:
-        if userLogin and userLogin!=AUTH_BY_EMAIL["emptyUserName"]:
-            try:
-                user = User.objects.get(username=userLogin)
-                return HttpResponse("This login is already used.")
-            except:
-                user.username = userLogin
-                user.save()
-        elif userLogin==AUTH_BY_EMAIL["emptyUserName"]:
-            return HttpResponse("This login is restricted.")
-        else:
-            return HttpResponse("Please enter your login.")
     if (code == conf_code.code):
         timeDiffInMinutes = (float(now)-float(conf_code.start_time))/SECONDS_IN_MINUTE
         if timeDiffInMinutes<AUTH_BY_EMAIL["codeExpirationTime"]:

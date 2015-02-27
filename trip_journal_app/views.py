@@ -4,17 +4,21 @@ import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render_to_response
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.sessions.backends.db import SessionStore
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.views.decorators.http import require_POST
-
 from trip_journal_app.models import Story, Picture, Tag, Map_artifact
-
 from trip_journal_app.forms import UploadFileForm
 from trip_journal_app.utils.story_utils import story_contents
+from django.core.context_processors import csrf
+from django.utils.translation import get_language_info
+from django.utils.translation import activate
+from django.utils import translation
+from django.conf import settings as TripJournal_settings
 
 
 def home(request):
@@ -303,3 +307,23 @@ def stories_by_user(request):
 
 def check_connection(request):
     return HttpResponse(status=200)
+
+def settings(request):
+    args={}
+    args.update(csrf(request))
+    if request.user.is_authenticated():    
+        args['user']=request.user
+    current_language=get_language_info(request.LANGUAGE_CODE)
+    args['current_language']=current_language
+    another_language=[]
+    for lang in TripJournal_settings.LANGUAGES:
+        if lang[0] != request.LANGUAGE_CODE:
+            another_language.append(get_language_info(lang[0]))
+    args['another_language']=another_language
+    return render(request, "settings.html", args)
+
+
+def logout(request):
+    auth.logout(request)
+    request.session[translation.LANGUAGE_SESSION_KEY] =''
+    return redirect('/')

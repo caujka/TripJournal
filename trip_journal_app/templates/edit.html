@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
+{% load i18n %}
     {% load staticfiles %}
-    {% block manifest %}
-    {# <html manifest="{% static "manifest/offline.manifest"%}" type="text/cache-manifest"> #}
-    {% endblock %}
     {% load trip_journal_extras %}
     {% block title %}Edit story{% endblock %}
     {% block css %}
@@ -23,7 +21,7 @@
     <div id="map-canvas-wrapper">
         <div id="panel">
             <input id="address" type="textbox" value="">
-            <input type="button" id="findAddres" value="Знайти">
+            <input type="button" id="findAddres" value=' {% trans "Search" %}'>
         </div>
         <div id="map-canvas"></div>
     </div>
@@ -33,13 +31,13 @@
         {% if story.title %}
          <div id="title_panel" class="block">
             <h2 id="story_title" contenteditable="true">{{story.title}}</h2>
-            <input id="title" type="text" name="title_story" class="text_story hidden" placeholder="+ Title of story">
+            <input id="title" type="text" name="title_story" class="text_story hidden" placeholder='+ {% trans "Title of story" %}'>
             <button id="add_title" class="button_2 hidden">+</button>
          </div>
         {% else %}
         <div id="title_panel" class="block">
             <h2 id="story_title" contenteditable="true" class="hidden"></h2>
-            <input id="title" type="text" name="title_story" class="text_story" placeholder="+ Title of story">
+            <input id="title" type="text" name="title_story" class="text_story" placeholder='+ {% trans "Title of story" %}'>
             <button id="add_title" class="button_2">+</button>
         </div>
         {% endif %}
@@ -48,7 +46,7 @@
         <div id="tags_list">
             <div id="button_list"></div>
             <div id="tag_input_block">
-                <input type="text" id="tag_input" placeholder=" + Tags">
+                <input type="text" id="tag_input" placeholder='+ {% trans "Tags" %}'>
                 <span id="tag_add">+</span>
             </div>
         </div>
@@ -56,20 +54,10 @@
 
         {% include 'story_content_edit.html' %}
     </div>
-
-        <div id="text_panel" class="block hide" >
-            <textarea id="textarea" name="text" class="element_story" placeholder="+ Text to story"></textarea>
-            <br>
-            <button id="adds_block_t" class="button_2 adds_block">+</button>
-            <button id="clear_block_t" class="button_2 delete_block">-</button>
-
-        </div>
-
-
         <div id="photo_panel" class="block hide">
             <div id="file">
                 <form id="file-form">
-	             <input id="type_file" type="file" class="add_file" name="img" multiple>
+                 <input id="type_file" type="file" class="add_file" name="img" multiple>
                 </form>
             </div>
 
@@ -82,16 +70,16 @@
 
         </div>
 
-<!--     <div id="text_panel" class="block hide" >
-            <textarea id="textarea" name="text" class="element_story" placeholder="+ Text to story"></textarea>
+    <div id="text_panel" class="block hide" >
+            <textarea id="textarea" name="text" class="element_story" placeholder='+ {% trans "Text to story" %}'></textarea>
             <br>
             <button id="adds_block_t" class="button_2 adds_block">+</button>
             <button id="clear_block_t" class="button_2 delete_block">-</button>
 
         </div>
- -->
+
         <div id="artifact_panel" class="block hide">
-            <textarea id="textarea_artifact" name="artifact" class="element_story" placeholder="Add artifact"></textarea>
+            <textarea id="textarea_artifact" name="artifact" class="element_story" placeholder='+ {% trans "Add artifact" %}'></textarea>
             <br>
             <button id="adds_block_a" class="button_2 adds_block">+</button>
             <button id="clear_block_a" class="button_2 delete_block">-</button>
@@ -100,13 +88,13 @@
 
         <div id="add_panel" class="block">
             <div id="added_text" class="add_block">
-                <span class="block_title">text</span>
+                <span class="block_title"> {% trans "text" %}</span>
             </div>
             <div id="added_image" class="add_block">
-                <span class="block_title">image</span>
+                <span class="block_title">{% trans "image" %}</span>
             </div>
             <div id="added_artifact" class="add_block">
-                <span class="block_title">artifact</span>
+                <span class="block_title">{% trans "artifact" %}</span>
             </div>
 
         </div>
@@ -114,17 +102,16 @@
         {% if story.id %}
         <div id="publish_panel" class="block">
            <form id="view_form" action="{% url "story" story.id %}">
-                <input type="submit" value="view" class="button" id="view">
+                <input type="submit" value='{% trans "view" %}' class="button" id="view">
             </form>
             {% include 'toggle_publish_buttons.html' with story_id=story.id %}
         {% else %}
         <div id="publish_panel" class="invisible">
            <form id="view_form" action="{% url "story" "0" %}">
-                <input type="submit" value='view' class="button" id="view">
+                <input type="submit" value='{% trans "view" %}' class="button" id="view">
             </form>
             {% include 'toggle_publish_buttons.html' with story_id=0 %}
         {% endif %}
         </div>
     </main>
     {% endblock %}
-

@@ -50,11 +50,13 @@ INSTALLED_APPS = (
     # 'debug_toolbar',
     'trip_journal_app',
     'social.apps.django_app.default',
+    'localization',
 )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -84,6 +86,11 @@ DATABASES = {
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
+
+LANGUAGES = (
+    ('uk', 'Ukraine'),
+    ('en', 'English'),
+)
 
 TIME_ZONE = 'UTC'
 
@@ -135,3 +142,7 @@ SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET = (
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+ )

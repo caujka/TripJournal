@@ -1,4 +1,5 @@
  {% extends 'base.html' %}
+ {% load i18n %}
     {% load staticfiles %}
     {% load trip_journal_extras %}
     {% block title %}View story{% endblock %}
@@ -23,11 +24,11 @@
         <div id="story_info">
             <p>
                 <span id="pub_date">{{ story.date_publish|date }} </span>
-                by
+                {% trans "by" %}
                 <span id="author">{{ story.user }}</span>
                 <span id="like_story">
                     <span class="likes_count">{{ story.likes_count }}</span>
-                    <a class="like_story_link {% if story|is_liked_by:story.user %}liked{% endif %}"
+                    <a class="like_story_link {% if story|is_liked_by:user %}liked{% endif %}"
                        title="like this story"
                        href="{% url 'like' item_to_like="story" item_id=story.id %}"><span>Like</span></a>
                 </span>
@@ -37,7 +38,7 @@
         <div id="user_buttons">
             {% if user == story.user %}
                 <form action="{% url 'edit' story.id%}">
-                    <input type="submit" value="Edit this story" />
+                    <input type="submit" value='{% trans "Edit this story" %}' />
                 </form>
                 {% include 'toggle_publish_buttons.html' with story_id=story.id %}
 

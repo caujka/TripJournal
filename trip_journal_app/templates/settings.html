@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% load trip_journal_extras %}
+{% block css %}
+{{ block.super }}
+	<link rel="stylesheet" href="{% static "css/base.css" %}">
+	<link rel="stylesheet" href="{% static "css/settings.css" %}">
+{% endblock %}
+{% block scripts %}
+	<script type="text/javascript" src="{% static "javascript/settings.js" %}"></script>
+{% endblock %}
+{% block content %}
+<div class="settings_context">
+<table  id="table_settings">
+	<tr>
+		<td>
+			<h3>{% trans "Prefered language" %}</h3>			
+		</td>
+		<td>
+		<form action="/localization/change_language/" method="POST" id="form_change_language">
+		{% csrf_token %}
+		<select name='language' id="select_language">
+				<option value='{{current_language.code}}'>{{current_language.name_local}}</option>
+			{% for lang  in another_language %}
+				<option value='{{lang.code}}'>{{lang.name_local}}</option>
+			{% endfor %}
+		</select>	
+	</form>  
+		</td>
+	</tr>
+</table>
+</div>
+{% endblock %}

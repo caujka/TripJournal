@@ -45,4 +45,7 @@ urlpatterns = [
         name='show_authorization_page'),
     # check connection with server
     url(r'^check_connection', views.check_connection, name='check_connection'),
+    url(r'^settings/$', views.settings ,name='settings'),
+
+    url(r'^logout/$', views.logout , name='logout'),
 ]

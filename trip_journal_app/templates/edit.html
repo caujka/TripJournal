@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% load i18n %}
     {% load staticfiles %}
+    {% block manifest %}
+    {# <html manifest="{% static "manifest/offline.manifest"%}" type="text/cache-manifest"> #}
+    {% endblock %}
     {% load trip_journal_extras %}
     {% block title %}Edit story{% endblock %}
     {% block css %}
@@ -51,8 +54,7 @@
             </div>
         </div>
         {% endblock %}
-
-        {% include 'story_content_edit.html' %}
+         {% include 'story_content_edit.html' %}
     </div>
         <div id="photo_panel" class="block hide">
             <div id="file">

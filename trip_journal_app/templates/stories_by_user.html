@@ -2,10 +2,10 @@
 {% block title %}Stories by needed user{% endblock %}
 
 {% block content %}
-    <h3>Here you can find stories by user you like</h3>
+    <h3>{% trans "Here you can find stories by user you like" %}</h3>
     <form action="/stories_by_user/" method="get">
         {% csrf_token %}
-        Enter user's name: <br>
+        {% trans "Enter user's name" %}: <br>
         <input type="text" name="needed_user" id="needed_user" required><br>
         <input type="submit" value="Search">
     </form>
@@ -31,11 +31,11 @@
             {% endif %}
 
             <span>
-                {{ stories_list.number }} of {{ stories_list.paginator.num_pages }}
+                {{ stories_list.number }} {% trans "of" %} {{ stories_list.paginator.num_pages }}
             </span>
 
             {% if stories_list.has_next %}
-                <a href="?page={{ stories_list.next_page_number }}">Next</a>
+                <a href="?page={{ stories_list.next_page_number }}">{% trans "Next" %}</a>
             {% endif %}
         </span>
         </div>

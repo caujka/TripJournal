@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-27 11:42+0200\n"
+"POT-Creation-Date: 2015-02-27 20:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,66 +19,66 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: trip_journal_app/templates/base.html:24
+#: trip_journal_app/templates/base.html:26
 msgid "stories nearby"
 msgstr "історії поблизу"
 
-#: trip_journal_app/templates/base.html:25
+#: trip_journal_app/templates/base.html:27
 msgid "pictures nearby"
 msgstr "картинки поблизу"
 
-#: trip_journal_app/templates/base.html:26
+#: trip_journal_app/templates/base.html:28
 msgid "settings"
 msgstr "настройки"
 
-#: trip_journal_app/templates/base.html:28
+#: trip_journal_app/templates/base.html:30
 msgid "my stories"
 msgstr "мої історії"
 
-#: trip_journal_app/templates/base.html:30
+#: trip_journal_app/templates/base.html:32
 msgid "logout"
 msgstr "вийти"
 
-#: trip_journal_app/templates/base.html:34
+#: trip_journal_app/templates/base.html:36
 msgid "sign in"
 msgstr "ввійти"
 
-#: trip_journal_app/templates/edit.html:24
+#: trip_journal_app/templates/edit.html:27
 #: trip_journal_app/templates/items_near_by.html:23
 msgid "Search"
 msgstr "Знайти"
 
-#: trip_journal_app/templates/edit.html:34
-#: trip_journal_app/templates/edit.html:40
+#: trip_journal_app/templates/edit.html:37
+#: trip_journal_app/templates/edit.html:43
 msgid "Title of story"
 msgstr "Заголовок історії"
 
-#: trip_journal_app/templates/edit.html:49
+#: trip_journal_app/templates/edit.html:52
 msgid "Tags"
 msgstr "Теги"
 
-#: trip_journal_app/templates/edit.html:74
+#: trip_journal_app/templates/edit.html:76
 msgid "Text to story"
 msgstr "текст історії"
 
-#: trip_journal_app/templates/edit.html:82
+#: trip_journal_app/templates/edit.html:84
 msgid "Add artifact"
 msgstr "артефакт історії"
 
-#: trip_journal_app/templates/edit.html:91
+#: trip_journal_app/templates/edit.html:93
 msgid "text"
 msgstr "текст"
 
-#: trip_journal_app/templates/edit.html:94
+#: trip_journal_app/templates/edit.html:96
 msgid "image"
 msgstr "картинка"
 
-#: trip_journal_app/templates/edit.html:97
+#: trip_journal_app/templates/edit.html:99
 msgid "artifact"
 msgstr "артефакт"
 
-#: trip_journal_app/templates/edit.html:105
-#: trip_journal_app/templates/edit.html:111
+#: trip_journal_app/templates/edit.html:107
+#: trip_journal_app/templates/edit.html:113
 msgid "view"
 msgstr "Переглянути"
 
@@ -123,9 +123,26 @@ msgid "delete"
 msgstr "видалити"
 
 #: trip_journal_app/templates/settings.html:18
-#| msgid "Choose language"
 msgid "Prefered language"
 msgstr "Оберіть мову"
+
+#: trip_journal_app/templates/stories_by_user.html:5
+#, fuzzy
+#| msgid "Here you can search stories near the place"
+msgid "Here you can find stories by user you like"
+msgstr "Тут ви зможете переглянути історії поблизу"
+
+#: trip_journal_app/templates/stories_by_user.html:8
+msgid "Enter user's name"
+msgstr "Введіть ім'я користувача"
+
+#: trip_journal_app/templates/stories_by_user.html:34
+msgid "of"
+msgstr "з"
+
+#: trip_journal_app/templates/stories_by_user.html:38
+msgid "Next"
+msgstr "Наступні"
 
 #: trip_journal_app/templates/story.html:27
 msgid "by"
@@ -135,6 +152,10 @@ msgstr "створена"
 msgid "Edit this story"
 msgstr "Редагувати історію"
 
+#: trip_journal_app/templates/story_error_page.html:17
+msgid "This story doesn't exist or isn't published yet. Sorry"
+msgstr "Цієї історії не існує, або вона не опублікована."
+
 #: trip_journal_app/templates/toggle_publish_buttons.html:6
 msgid "Unpublish"
 msgstr "Скасувати публікацію"
@@ -142,5 +163,3 @@ msgstr "Скасувати публікацію"
 #: trip_journal_app/templates/toggle_publish_buttons.html:8
 msgid "publish"
 msgstr "Опублікувати"
-
-

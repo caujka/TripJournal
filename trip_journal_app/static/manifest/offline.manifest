@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# revision 01
+# revision 12
 ../css/base.css
 ../css/edit.css
 ../images/arrow-down.png
@@ -10,6 +10,12 @@ CACHE MANIFEST
 ../images/marker.png
 ../javascript/edit.js
 ../javascript/ajax_requests.js
+../javascript/utils.js
+../javascript/mapping.js
+
+http://code.jquery.com/qunit/qunit-1.15.0.css
+http://code.jquery.com/qunit/qunit-1.15.0.js
+http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js
 
 FALLBACK:
 / /edit/

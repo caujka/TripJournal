@@ -1,5 +1,5 @@
 /**
- * Module for sending ajax POST request with block contents from edit page. 
+ * Module for sending ajax POST request with block contents from edit page.
  */
 // for browser that don't support endsWith method for strings
 if (typeof String.prototype.endsWith !== 'function') {
@@ -8,12 +8,24 @@ if (typeof String.prototype.endsWith !== 'function') {
     };
 }
 
-// Check internet connection, and return condition.
-function checkInternetConnection() {
+// Check connection with server, and return condition.
+function checkServerConnection() {
     // return false;
-    return navigator.onLine;
+    // return navigator.onLine;
+    var xhr = new XMLHttpRequest;
+    var condition = false;
+    xhr.open('GET', '/check_connection/', false);
+
+    xhr.onreadystatechange = function() {
+        if (xhr.status === 200) {
+            condition = true;
+        }
+    }
+    xhr.send();
+    return condition;
 }
 
+// get story Id
 function storyIdFromUrl() {
     var currUrl = document.URL.split(['/']);
     return currUrl[currUrl.length - 1];
@@ -80,10 +92,10 @@ function storyBlocksJson() {
 function postImages(storyId) {
     var i, formData, xhr, img, pic;
     countPicture = Images.length
-        /**
-         * Sets hidden element with
-         * picture id from database when picture is saved.
-         */
+    /**
+     * Sets hidden element with
+     * picture id from database when picture is saved.
+     */
     function addImageIdFromDB() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             picIdInDB = parseInt(xhr.responseText);
@@ -113,7 +125,7 @@ function postImages(storyId) {
 
 
 function postData(async) {
-    if (checkInternetConnection()) {
+    if (checkServerConnection()) {
         var xhr = new XMLHttpRequest(),
             requestBody = JSON.stringify(storyBlocksJson());
 
@@ -175,7 +187,7 @@ function jsonTagStory(tag_name) {
 }
 
 function putTag(tag_name) {
-    if (checkInternetConnection()) {
+    if (checkServerConnection()) {
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/put_tag/', true);
         xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
@@ -187,7 +199,7 @@ function putTag(tag_name) {
                 savePage();
             }
         }
-        
+
         request_body = JSON.stringify(jsonTagStory(tag_name));
 
         if (supportsLocalStorage()) {
@@ -210,7 +222,7 @@ function putTag(tag_name) {
 }
 
 function getStoryTags() {
-    if (checkInternetConnection()) {
+    if (checkServerConnection()) {
         story_id = storyIdFromUrl();
         if (story_id) {
             var xhr = new XMLHttpRequest();
@@ -312,16 +324,17 @@ function supportsLocalStorage() {
 function addToLocalStorrage(key, json_value) {
     var json_list = [];
     var parsed_json = JSON.parse(json_value);
+
     if (localStorage.getItem(key)) {
         for (var i = 0; i < JSON.parse(localStorage.getItem(key)).length; i++) {
             // Next line only for  tags
             if (JSON.parse(localStorage.getItem(key))[i].tag_name === parsed_json.tag_name) {
                 continue
             };
-
             json_list.push(JSON.parse(localStorage.getItem(key))[i]);
         }
     }
+    
     json_list.push(parsed_json);
     localStorage.setItem(key, JSON.stringify(json_list));
 }

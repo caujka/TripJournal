@@ -39,8 +39,10 @@ urlpatterns = [
     url(r'^put_tag/$', views.put_tag, name='put_tag'),
     # delete tag in DB
     url(r'^delete_story_tag/$', views.delete_story_tag, name='delete_tag'),
-    # # get all text
+    # get all text
     url(r'^get_story_content/$', views.get_story_content, name='get_content'),
     url(r'^authorization_page/', views.show_authorization_page,
         name='show_authorization_page'),
+    # check connection with server
+    url(r'^check_connection', views.check_connection, name='check_connection'),
 ]

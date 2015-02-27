@@ -187,6 +187,7 @@ function jsonTagStory(tag_name) {
 }
 
 function putTag(tag_name) {
+    var tag_input=gId('tag_input')
     if (checkServerConnection()) {
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/put_tag/', true);

@@ -1,8 +1,15 @@
 var Images = []; //Array of pictures for upload
 var Markers = []; //Array of markers 
 
-window.onload = function() {
 
+
+//get elements by Id
+function gId(id){
+    return document.getElementById(id)
+}
+
+window.onload = function() {
+    alert("work")
     // List of things, that I have to do, when the file offline.manifest will be right configured.
     function toDo() {
         console.log(" ");
@@ -15,41 +22,38 @@ window.onload = function() {
     //Variables
     var geocoder,
         indexOfMarket = -1,
-        add_title = document.getElementById('add_title'),
-        story_title = document.getElementById('story_title'),
-        tag_input = document.getElementById('tag_input'),
-        tag_add = document.getElementById('tag_add'),
-        story_cont = document.getElementById('story_content'),
-        added_artifact = document.getElementById("added_artifact"),
-        added_image = document.getElementById("added_image"),
-        added_text = document.getElementById("added_text"),
-        textarea = document.getElementById('textarea'),
-        textarea_artifact = document.getElementById('textarea_artifact'),
-        photo_cont = document.getElementById('photo_cont'),
-        plusText = document.getElementById("adds_block_t"),
-        plusPhoto = document.getElementById("adds_block_p"),
-        plusArtifact = document.getElementById("adds_block_a"),
-        fileSelect = document.getElementById('type_file'),
-        clearBlocks = document.getElementsByClassName("delete_block"),
-        findAddres = document.getElementById('findAddres');
+        add_title = gId('add_title'),
+        story_title = gId('story_title'),
+        tag_input = gId('tag_input'),
+        tag_add = gId('tag_add'),
+        story_cont = gId('story_content'),
+        added_artifact = gId("added_artifact"),
+        added_image = gId("added_image"),
+        added_text = gId("added_text"),
+        textarea = gId('textarea'),
+        textarea_artifact = gId('textarea_artifact'),
+        photo_cont = gId('photo_cont'),
+        fileSelect = gId('type_file')
+        
 
     //Events
-    add_title.addEventListener("click", addTitle);
-    story_title.addEventListener("blur", savePage);
-    tag_input.addEventListener("change", tags_add);
-    tag_add.addEventListener("click", tags_add);
-    fileSelect.addEventListener("change", add_img);
-    story_cont.addEventListener("mouseover", showKeybar);
-    story_cont.addEventListener("mouseout", hideKeybar);
-    story_cont.addEventListener("click", buttonsClick);
-    added_artifact.addEventListener("click", showArtifactPanel);
-    added_image.addEventListener("click", showImagePanel);
-    added_text.addEventListener("click", showTextPanel);
-    plusText.addEventListener("click", save_text_story);
-    plusPhoto.addEventListener("click", save_photo_story);
-    photo_cont.addEventListener("click", deleteImageFromPhotoCont);
-    plusArtifact.addEventListener("click", save_photo_artifact);
-    findAddres.addEventListener("click", codeAddress);
+    gId('add_title').addEventListener("click", addTitle);
+    gId('story_title').addEventListener("blur", savePage);
+    gId('tag_input').addEventListener("change", tags_add);
+    gId('tag_add').addEventListener("click", tags_add);
+    gId('type_file').addEventListener("change", add_img);
+    gId('story_content').addEventListener("mouseover", showKeybar);
+    gId('story_content').addEventListener("mouseout", hideKeybar);
+    gId('story_content').addEventListener("click", buttonsClick);
+    gId("added_artifact").addEventListener("click", showArtifactPanel);
+    gId("added_image").addEventListener("click", showImagePanel);
+    gId("added_text").addEventListener("click", showTextPanel);
+    gId("adds_block_t").addEventListener("click", save_text_story);
+    gId("adds_block_p").addEventListener("click", save_photo_story);
+    gId('photo_cont').addEventListener("click", deleteImageFromPhotoCont);
+    gId("adds_block_a").addEventListener("click", save_photo_artifact);
+    gId('findAddres').addEventListener("click", codeAddress);
+    clearBlocks = document.getElementsByClassName("delete_block")
     for (var i = 0; i < clearBlocks.length; i++) {
         clearBlocks[i].addEventListener("click", clear);
     }
@@ -147,11 +151,11 @@ window.onload = function() {
 
     // view title on page
     function title_view(title) {
-        var titleInput = document.getElementById("title");
-        story_title.innerHTML = title;
-        story_title.style.display = "block";
+        var titleInput = gId("title");
+        gId('story_title').innerHTML = title;
+        gId('story_title').style.display = "block";
         titleInput.style.display = "none";
-        add_title.style.display = "none";
+        gId('add_title').style.display = "none";
     }
 
     // create text block, and view text
@@ -179,7 +183,7 @@ window.onload = function() {
 
     // Main menu in offline mode
     function setMenu() {
-        var menu = document.getElementById('menu');
+        var menu = gId('menu');
         var menu_elements = menu.children;
         for (var i = 0; i < menu_elements.length; i++) {
             if (menu_elements[i].textContent != "my stories") {
@@ -192,17 +196,18 @@ window.onload = function() {
     //Functions
     //add title of story
     function addTitle(e) {
-        var titleInput = document.getElementById("title");
-        story_title.innerHTML = titleInput.value
-        story_title.style.display = "block"
+        var titleInput = gId("title");
+        gId('story_title').innerHTML = titleInput.value
+        gId('story_title').style.display = "block"
         titleInput.style.display = "none"
-        add_title.style.display = "none"
+        gId('add_title').style.display = "none"
         e.stopPropagation()
         savePage();
     }
 
     //function adds tag
     function tags_add(e) {
+        var tag_input=gId('tag_input')
         var reg = /^[а-яa-z0-9іїє\s]+$/i;
         if (tag_input.value.search(reg) >= 0) {
             putTag(tag_input.value);
@@ -223,7 +228,7 @@ window.onload = function() {
         clear()
         this.style.background = '#8ed41f';
         text_panel.style.display = 'block';
-        textarea.focus();
+        gId('textarea').focus();
     }
 
     //show panel of image
@@ -238,7 +243,7 @@ window.onload = function() {
         clear()
         this.style.background = '#8ed41f';
         artifact_panel.style.display = 'block';
-        textarea_artifact.focus();
+        gId('textarea_artifact').focus();
     }
 
     //function returns all panels of text, images, artifacts in default condition 
@@ -247,13 +252,13 @@ window.onload = function() {
         for (var i = 0; i < hidePanels.length; i++) {
             hidePanels[i].style.display = 'none';
         }
-        added_text.style.background = "#80B098";
-        added_image.style.background = "#80B098";
-        added_artifact.style.background = "#80B098";
-        textarea.value = '';
-        textarea_artifact.value = '';
-        photo_cont.innerHTML = '';
-        photo_cont.style.display = 'none';
+        gId("added_text").style.background = "#80B098";
+        gId("added_image").style.background = "#80B098";
+        gId("added_artifact").style.background = "#80B098";
+        gId('textarea').value = '';
+        gId('textarea_artifact').value = '';
+        gId('photo_cont').innerHTML = '';
+        gId('photo_cont').style.display = 'none';
     }
 
     //function adds a block of a given type ("text","img","artifact")
@@ -266,7 +271,7 @@ window.onload = function() {
         }
         container.className = "block_story";
         container.setAttribute("block_type", block_type) //write type as an attribute of the element
-        story_cont.appendChild(container)
+        gId('story_content').appendChild(container)
         container.appendChild(blockContent)
         keybar.className = "key_panel"
         container.appendChild(keybar);
@@ -281,7 +286,7 @@ window.onload = function() {
     //save text block
     function save_text_story() {
         var pText = document.createElement("p")
-        pText.innerHTML = escape_html_tags(textarea.value)
+        pText.innerHTML = escape_html_tags(gId('textarea').value)
         appendBlock(pText, "text");
         clear();
         savePage();
@@ -294,7 +299,7 @@ window.onload = function() {
     //save artifact block
     function save_photo_artifact() {
         var pArtifact = document.createElement("p")
-        pArtifact.innerHTML = escape_html_tags(textarea_artifact.value)
+        pArtifact.innerHTML = escape_html_tags(gId('textarea_artifact').value)
         appendBlock(pArtifact, "artifact")
         clear();
         savePage();
@@ -303,7 +308,7 @@ window.onload = function() {
     //function shows the image in photo_cont using HTML5 ObjectURL
     function add_img() {
         var i, URL, imageUrl, id, file,
-            files = fileSelect.files;
+            files = gId('type_file').files;
         if (files.length > 0) {
             for (i = 0; i < files.length; i++) {
                 file = files[i];
@@ -316,7 +321,7 @@ window.onload = function() {
                     var imageUrl = URL.createObjectURL(files[i]);
                     var img_block = document.createElement("div");
                     img_block.className = "img_block";
-                    photo_cont.appendChild(img_block)
+                    gId('photo_cont').appendChild(img_block)
                     var img_story = document.createElement("img")
                     img_story.className = "img_story";
                     img_story.src = imageUrl;
@@ -328,7 +333,7 @@ window.onload = function() {
                     img_block.appendChild(button_delete);
                 }
             }
-            document.getElementById('photo_cont').style.display = 'inline-block';
+            gId('photo_cont').style.display = 'inline-block';
         }
     }
 
@@ -338,13 +343,13 @@ window.onload = function() {
         var target = e.target;
         if (target.className == "button_3") {
             var imgblock = target.parentNode;
-            var imgblocks = photo_cont.getElementsByClassName("img_block");
+            var imgblocks = gId('photo_cont').getElementsByClassName("img_block");
             for (var i = 0; i < imgblocks.length; i++) {
                 if (imgblocks[i] == imgblock) {
                     index = i;
                 }
             }
-            photo_cont.removeChild(imgblock);
+            gId('photo_cont').removeChild(imgblock);
             Images.splice(index, 1);
         }
     }
@@ -352,7 +357,7 @@ window.onload = function() {
     //save photo block, add single image or gallery with many images in one block
     function save_photo_story() {
         var arr = document.getElementsByClassName("img_story")
-        story_cont.style.display = 'block';
+        gId('story_content').style.display = 'block';
         if (arr.length > 1) {
             var gallery = document.createElement("div");
             gallery.className = "gallery_container"
@@ -465,7 +470,8 @@ window.onload = function() {
 
     //move block up
     function moveBlockUp(element) {
-        var index = indexOfClickedBlock(element),
+        var story_cont=gId('story_content'),
+            index = indexOfClickedBlock(element),
             bloks = story_cont.getElementsByClassName("block_story"),
             block = bloks[index];
         if (index == 0) return;
@@ -479,7 +485,8 @@ window.onload = function() {
 
     //move block down
     function moveBlockDown(element) {
-        var index = indexOfClickedBlock(element),
+        var story_cont=gId('story_content'),
+            index = indexOfClickedBlock(element),
             bloks = story_cont.getElementsByClassName("block_story"),
             block = bloks[index];
         story_cont.insertBefore(bloks[index].cloneNode(true), bloks[index + 2]);
@@ -492,7 +499,8 @@ window.onload = function() {
 
     //delete block
     function deleteBlock(element) {
-        var index = indexOfClickedBlock(element);
+        var story_cont=gId('story_content'),
+            index = indexOfClickedBlock(element);
         block = story_cont.getElementsByClassName("block_story")[index];
         story_cont.removeChild(block);
         if (Markers[index]) {
@@ -542,7 +550,7 @@ window.onload = function() {
             zoom: 14
         };
         map = new google.maps.Map(
-            document.getElementById('map-canvas'),
+            gId('map-canvas'),
             mapOptions);
         google.maps.event.addListener(map, 'click', function(event) {
             placeMarker(event.latLng);
@@ -570,7 +578,7 @@ window.onload = function() {
 
     // find a place on the google map and set the center map on it 
     function codeAddress() {
-        var address = document.getElementById('address').value;
+        var address = gId('address').value;
         geocoder.geocode({
             'address': address
         }, function(results, status) {

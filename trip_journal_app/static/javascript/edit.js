@@ -1,12 +1,13 @@
 var Images = []; //Array of pictures that will be uploaded.
 var Markers = []; //Array of markers, index of marker in this array is equal to the index of the block that it belongs. 
+var serverConnect = checkServerConnection();
 
 window.onload = function() {
     getStoryContent(); // get story content using AJAX
     getStoryTags(); // get story tegs using AJAX
 
     // In online mode initialize the google map API. In offline show short menu
-    if (checkServerConnection()) {
+    if (serverConnect) {
         initialize(); // initialize the google map API
     } else {
         setMenu(); // Show in menu only editor element
@@ -46,7 +47,7 @@ function gId(id) {
 
 // Get content from server
 function getStoryContent() {
-    if (checkServerConnection()) {
+    if (serverConnect) {
         story_id = storyIdFromUrl();
         if (story_id) {
             var xhr = new XMLHttpRequest();
@@ -77,7 +78,7 @@ function initialize_story(content) {
     if (content.title) {
         title_view(content.title);
     }
-    if (checkServerConnection()) {
+    if (serverConnect) {
 
         if (content.text) {
             content_list = JSON.parse(content.text);

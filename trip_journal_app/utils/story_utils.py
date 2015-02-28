@@ -18,6 +18,10 @@ def story_contents(request, story_id, template,
                 if user != story.user:
                     messages.info(request, 'Edit your own stories!')
                     return redirect('/my_stories/')
+            # if story.text:
+            #             story_blocks = (
+            #                 story.get_text_with_pic_objects()
+            #             )
             if check_published:
                 if user != story.user and story.published == 0:
                     return render(request, 'story_error_page.html')

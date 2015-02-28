@@ -40,7 +40,7 @@ window.onload = function() {
 
 
 //get elements by Id
-function gId(id){
+function gId(id) {
     return document.getElementById(id)
 }
 
@@ -58,7 +58,7 @@ function getStoryContent() {
                 }
             }
             params = 'id=' + story_id;
-            xhr.open('GET', '/get_story_content/?' + params, true);
+            xhr.open('GET', '/get_story_content/?' + params, false);
             xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');
             xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
             xhr.send();
@@ -83,16 +83,17 @@ function initialize_story(content) {
             content_list = JSON.parse(content.text);
             for (var i = 0; i < content_list.length; i++) {
                 if (content_list[i].type === "text") {
-                    text_view(content_list[i].content);
+                    console.log(content_list[i]);
+                    text_view(content_list[i].content, content_list[i].marker);
                 }
                 if (content_list[i].type === "artifact") {
-                    artifact_view(content_list[i].content);
+                    artifact_view(content_list[i].content, content_list[i].marker);
                 }
                 if (content_list[i].type === "img") {
                     if (content.picture) {
                         var picture_id = content_list[i].id;
                         var picture = content.picture[picture_id]
-                        picture_view(picture_id, picture);
+                        picture_view(picture_id, picture, content_list[i].marker);
                     }
                 }
             }
@@ -119,26 +120,38 @@ function title_view(title) {
 }
 
 // create text block, and view text
-function text_view(text) {
+function text_view(text, marker_coordinates) {
+    // function text_view(text) {
     var pText = document.createElement("p");
     pText.innerHTML = escape_html_tags(text);
     appendBlock(pText, "text");
+    set_block_coordinates(pText, marker_coordinates);
 }
 
 // create artifact block, and view artifact
-function artifact_view(artifact) {
+function artifact_view(artifact, marker_coordinates) {
     var pArtifact = document.createElement("p");
     pArtifact.innerHTML = escape_html_tags(artifact);
     appendBlock(pArtifact, "artifact");
+    set_block_coordinates(pArtifact, marker_coordinates);
 }
 
 // create picture block, and view picture
-function picture_view(id, img) {
+function picture_view(id, img, marker_coordinates) {
     var oneImage = document.createElement("img");
     oneImage.className = "image_story";
     oneImage.src = img;
     oneImage.setAttribute("data-dbid", id);
     appendBlock(oneImage, "img");
+    set_block_coordinates(oneImage, marker_coordinates);
+}
+
+// set coordinates in block
+function set_block_coordinates(block_element, coordinates) {
+    if(coordinates !== null) {
+        block_element.parentNode.setAttribute("data-lat", coordinates.lat);
+        block_element.parentNode.setAttribute("data-lng", coordinates.lng);
+    }
 }
 
 // Main menu in offline mode
@@ -166,7 +179,7 @@ function addTitle(e) {
 
 //function adds tag
 function tags_add(e) {
-    var tag_input=gId('tag_input')
+    var tag_input = gId('tag_input')
     var reg = /^[а-яa-z0-9іїє\s]+$/i;
     if (tag_input.value.search(reg) >= 0) {
         putTag(tag_input.value);
@@ -230,7 +243,7 @@ function appendBlock(blockContent, block_type) {
     }
     container.className = "block_story";
     // Write type as an attribute of the element !!!
-    container.setAttribute("block_type", block_type) 
+    container.setAttribute("block_type", block_type)
     gId('story_content').appendChild(container)
     container.appendChild(blockContent)
     keybar.className = "key_panel"
@@ -268,7 +281,7 @@ function save_photo_artifact() {
 //function shows the image in photo_cont using HTML5 ObjectURL
 function add_img() {
     var i, URL, imageUrl, id, file,
-        files = gId('type_file').files;  // all files in input
+        files = gId('type_file').files; // all files in input
     if (files.length > 0) {
         for (i = 0; i < files.length; i++) {
             file = files[i];
@@ -434,7 +447,7 @@ function indexOfClickedBlock(element) {
 
 //move block up
 function moveBlockUp(element) {
-    var story_cont=gId('story_content'),
+    var story_cont = gId('story_content'),
         index = indexOfClickedBlock(element),
         bloks = story_cont.getElementsByClassName("block_story"),
         block = bloks[index];
@@ -451,11 +464,11 @@ function moveBlockUp(element) {
 
 //move block down
 function moveBlockDown(element) {
-    var story_cont=gId('story_content'),
+    var story_cont = gId('story_content'),
         index = indexOfClickedBlock(element),
         bloks = story_cont.getElementsByClassName("block_story"),
         block = bloks[index];
-        // Swap blocks
+    // Swap blocks
     story_cont.insertBefore(bloks[index].cloneNode(true), bloks[index + 2]);
     story_cont.removeChild(block);
     // Swap markers of blocks
@@ -467,7 +480,7 @@ function moveBlockDown(element) {
 
 //delete block
 function deleteBlock(element) {
-    var story_cont=gId('story_content'),
+    var story_cont = gId('story_content'),
         index = indexOfClickedBlock(element);
     block = story_cont.getElementsByClassName("block_story")[index];
     story_cont.removeChild(block);
@@ -513,8 +526,8 @@ function endEditBlock(e) {
 }
 
 /*
-     * Initialize the google map and put markers if blocks that were created
-     * on server side has attribyte "data-lng" and "data-lat.
+ * Initialize the google map and put markers if blocks that were created
+ * on server side has attribyte "data-lng" and "data-lat.
  */
 function initialize() {
     indexOfMarket = -1
@@ -615,5 +628,3 @@ function toDo() {
          ");
     console.log(" ");
 }
-
-   

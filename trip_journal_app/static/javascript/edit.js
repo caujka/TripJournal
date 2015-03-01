@@ -83,22 +83,24 @@ function initialize_story(content) {
         if (content.text) {
             content_list = JSON.parse(content.text);
             for (var i = 0; i < content_list.length; i++) {
+                var marker = content_list[i].marker
+                    // create text block
                 if (content_list[i].type === "text") {
-                    console.log(content_list[i]);
-                    text_view(content_list[i].content, content_list[i].marker);
+                    text_view(content_list[i].content, marker);
                 }
+                // create artifack block
                 if (content_list[i].type === "artifact") {
-                    artifact_view(content_list[i].content, content_list[i].marker);
+                    artifact_view(content_list[i].content, marker);
                 }
+                // create image or gallery block
                 if (content_list[i].type === "img") {
-                    if (content.picture) {
-                        var picture_id = content_list[i].id;
-                        var picture = content.picture[picture_id]
-                        picture_view(picture_id, picture, content_list[i].marker);
-                    }
+                    var galleryId = content_list[i].galleryId || [content_list[i].id];
+                    var imgs = content.picture;
+                    show_pictures(galleryId, imgs, marker);
                 }
             }
         }
+
     } else {
         for (var i = 0; i < content.blocks.length; i++) {
             if (content.blocks[i].type === "text") {
@@ -137,19 +139,37 @@ function artifact_view(artifact, marker_coordinates) {
     set_block_coordinates(pArtifact, marker_coordinates);
 }
 
-// create picture block, and view picture
-function picture_view(id, img, marker_coordinates) {
-    var oneImage = document.createElement("img");
-    oneImage.className = "image_story";
-    oneImage.src = img;
-    oneImage.setAttribute("data-dbid", id);
-    appendBlock(oneImage, "img");
-    set_block_coordinates(oneImage, marker_coordinates);
+// create pictures block, and view picture
+function show_pictures(galleryId, imgs, marker_coordinates) {
+    var arr = galleryId
+    gId('story_content').style.display = 'block';
+    if (arr.length > 1) {
+        // gallery will be created if many  pictures  are in the temporary panel.
+        var gallery = document.createElement("div");
+        gallery.className = "gallery_container";
+        for (var i = 0; i < arr.length; i++) {
+            var imageInGallery = document.createElement("img");
+            imageInGallery.className = "image_story gallery";
+            imageInGallery.src = imgs[arr[i]];
+            imageInGallery.setAttribute("data-dbid", arr[i]);
+            gallery.appendChild(imageInGallery);
+        }
+        appendBlock(gallery, "img");
+        set_block_coordinates(gallery, marker_coordinates);
+    } else {
+        //only one picture is in temporary panel.
+        oneImage = document.createElement("img");
+        oneImage.className = "image_story";
+        oneImage.src = imgs[arr[0]];
+        oneImage.setAttribute("data-dbid", arr[0]);
+        appendBlock(oneImage, "img");
+        set_block_coordinates(oneImage, marker_coordinates);
+    }
 }
 
 // set coordinates in block
 function set_block_coordinates(block_element, coordinates) {
-    if(coordinates !== null) {
+    if (coordinates !== null) {
         block_element.parentNode.setAttribute("data-lat", coordinates.lat);
         block_element.parentNode.setAttribute("data-lng", coordinates.lng);
     }

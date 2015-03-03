@@ -1,0 +1,51 @@
+{% load trip_journal_extras %}
+{% load staticfiles %}
+{% for story_block in story_blocks %}
+    {% if story_block.type == 'text' %}
+        <div class="block_story" block_type="text" {{story_block|coordinates_data}}>
+            <p>{{ story_block.content|safe }}</p>
+            <div class="key_panel" style="display:none">
+                <button class="top"></button>
+                <button class="bottom"></button>
+                <button class="delete"></button>
+                <button class="addmarker"></button>
+                <button class="removemarker"></button>
+            </div>
+        </div>
+    {% elif story_block.type == 'img' %}
+    <div class="block_story" block_type="img" {{story_block|coordinates_data}}>
+        {% if story_block.galery_picture %}
+            <div class="gallery_container">
+                {% for arr in story_block.galery_picture %}
+                    <img class="image_story gallery" src="{{ arr|get_stored_pic_by_size:800 }}" data-dbId="{{arr.id}}">
+                {% endfor %}
+            </div>
+        {% else %}
+        <img class="image_story" src="{{ story_block.pic|get_stored_pic_by_size:800 }}" data-dbId="{{story_block.id}}">
+        {% endif %}
+             <div class="key_panel" style="display:none">
+                <button class="top"></button>
+                <button class="bottom"></button>
+                <button class="delete"></button>
+                <button class="addmarker"></button>
+                <button class="removemarker"></button>
+            </div>
+    </div>
+    {% elif story_block.type == 'artifact' %}
+     <div class="block_story" block_type="artifact"{{story_block|coordinates_data}}>
+        <p>{{ story_block.content|safe }}</p>
+        <div class="key_panel" style="display:none">
+                <button class="top"></button>
+                <button class="bottom"></button>
+                <button class="delete"></button>
+                <button class="addmarkerArtifact"></button>
+                <button class="removemarker"></button>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
+
+
+
+
+

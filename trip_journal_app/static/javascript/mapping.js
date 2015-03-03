@@ -41,7 +41,9 @@ var UNACTIVE_MARKER_WIDTH = 20,
 function setBounds(map, markers) {
     var bounds = new google.maps.LatLngBounds();
     for (var i = 0; i < markers.length; i++) {
-        bounds.extend(markers[i].getPosition());
+        if(markers[i]){
+            bounds.extend(markers[i].getPosition());
+        }
     }
     map.fitBounds(bounds);
 }

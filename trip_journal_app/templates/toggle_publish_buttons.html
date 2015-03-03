@@ -1,5 +1,10 @@
+{% load i18n %}
 <form id="publish_form" action={% url 'publish' story_id %} method="POST">
 {% csrf_token %}
     <input class="button" type="hidden" name="publish" value={{ story.published }}>
-    <input class="button" type="submit" value="{% if story.published %}Un{% endif %}publish">
+    {% if story.published %}
+   		<input class="button" type="submit" value='{% trans "Unpublish" %}'>
+    {% else %}
+    	<input class="button" type="submit" value='{% trans "publish" %}'>
+    {% endif %}
 </form>

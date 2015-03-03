@@ -1,0 +1,32 @@
+.settings_context{
+	position:relative;
+	float:left;
+	width:980px;
+	left:50%;
+	margin-left:-490px;
+	text-align: center;
+}
+#select_language{
+	width:150px;
+	height:40px;
+	background-color: #31797d;
+	color:#fff;
+	border:2px solid #fff;
+	font-size:18px;
+	text-align: center;
+	-webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+#table_settings{
+	width:100%;
+}
+
+#select_language:hover{
+	color:#31797d;
+	background: #fff;
+	border:2px solid #31797d;
+}
+#table_settings td{
+	border:1px solid #ddd;
+}

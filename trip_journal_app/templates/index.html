@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load staticfiles %}
 {% load trip_journal_extras %}
 {% block title %}Trip Journal{% endblock %}
@@ -6,10 +7,11 @@
 {{ block.super }}
 <link rel="stylesheet" href="{% static "css/index.css" %}">
 {% endblock %}
+{% load i18n %}
 {% block content %}
     <div id="welcome">
-        <h2>Welcome to TripJournal</h2>
-        <p>Take first step to your journey of a thousand miles</p>
+        <h2>{% trans "Welcome to TripJournal" %}</h2>
+        <p>{% trans "Take first step to your journey of a thousand miles" %}</p>
         <p>. . .</p>
     </div>
     <div id="stories">

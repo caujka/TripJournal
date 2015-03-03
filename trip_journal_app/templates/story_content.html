@@ -1,29 +1,30 @@
 {% load trip_journal_extras %}
 {% load staticfiles %}
 {% for story_block in story_blocks %}
-{% if story_block.type == 'text' %}
-<div class="saved text" {{story_block|coordinates_data}}>
-    <p>{{ story_block.content|safe }}</p>
-</div>
-{% elif story_block.type == 'img' %}
-<div class="saved img" {{story_block|coordinates_data}}
-     data-dbId="{{story_block.id}}">
-    {% if page == 'story' %}
-    <img class="story_photo" src="{{ story_block.pic|get_stored_pic_by_size:800 }}">
-    <p class="like_picture">
-        <a class="like_pic_link {% if story_block.pic|is_liked_by:user %}liked{% endif %}"
-           href="{% url 'like' item_to_like="picture" item_id=story_block.pic.id %}"
-           title="like this picture">
-        <span>Like</span></a>
-        <span class="likes_count">{{ story_block.pic.likes_count }}</span>
-    </p>
-    {% elif page == 'edit' %}
-    <p>{{ story_block.pic|get_stored_pic_by_size:800 }}</p>
+    {% if story_block.type == 'text' %}
+    <div class="saved text block_story" {{story_block|coordinates_data}}>
+        <p>{{ story_block.content|safe }}</p>
+    </div>
+    {% elif story_block.type == 'img' %}
+    <div class="saved img block_story" {{story_block|coordinates_data}}
+         data-dbId="{{story_block.id}}">
+        <img class="story_photo" src="{{ story_block.pic|get_stored_pic_by_size:800 }}">
+        <p class="like_picture">
+            <a class="like_pic_link {% if story_block.pic|is_liked_by:user %}liked{% endif %}"
+               href="{% url 'like' item_to_like="picture" item_id=story_block.pic.id %}"
+               title="like this picture">
+            <span>Like</span></a>
+            <span class="likes_count">{{ story_block.pic.likes_count }}</span>
+        </p>
+    </div>
+    {% elif story_block.type == 'artifact' %}
+    <div class="saved artifact block_story" {{story_block|coordinates_data}}>
+        <p>{{ story_block.content|safe }}</p>
+    </div>
     {% endif %}
-</div>
-{% elif story_block.type == 'artifact' %}
-<div class="saved artifact" {{story_block|coordinates_data}}>
-    <p>{{ story_block.content|safe }}</p>
-</div>
-{% endif %}
 {% endfor %}
+
+
+
+
+

@@ -315,8 +315,12 @@ def log_in(request):
             return HttpResponse("ok")
         else:
             return HttpResponse("Your code is out of date.")
-    else:
+    elif conf_code.attempt < 3:
+        conf_code.attempt += 1
+        conf_code.save()
         return HttpResponse("Email and code doesn't match.")
+    else:
+        return HttpResponse("You need a new code.")
 
 
 @csrf_exempt
@@ -335,6 +339,7 @@ def send_code(request):
         conf_code = Confirmation_code()
         conf_code.user = user
     conf_code.code = code
+    conf_code.attempt = 0
     conf_code.start_time = time.time()
     conf_code.save()
     msg = "Your confirmation code = {0}.\nIt will be avaliable only for {1} minutes".format(code, AUTH_BY_EMAIL["codeExpirationTime"])

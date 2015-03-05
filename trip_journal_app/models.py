@@ -231,5 +231,6 @@ class Map_artifact(models.Model):
 class Confirmation_code(models.Model):
     code = models.TextField()
     start_time = models.TextField()
+    attempt = models.IntegerField(default=0)
     user = models.ForeignKey(User)
 

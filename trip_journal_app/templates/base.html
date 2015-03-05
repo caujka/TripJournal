@@ -32,9 +32,12 @@
                 </div>
             {% else %}
                 <div>
-                    <a id="mail_logo">
-                        <div class='login_image'><img src="{% static "images/mail_logo.png"%}"></div>
-                    </a>
+                    {% email_aval as email_avaliability %}
+                    {% if email_avaliability %}
+                        <a id="mail_logo">
+                            <div class='login_image'><img src="{% static "images/mail_logo.png"%}"></div>
+                        </a>
+                    {% endif %}
                     {% social_up "google" as google_soc%}
                     {% if google_soc %}
                         <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request|login_next }}">

@@ -1,5 +1,7 @@
 from django import template
 from TripJournal import utils
+from django.conf import settings
+
 
 register = template.Library()
 
@@ -31,3 +33,7 @@ def coordinates_data(block):
             block['marker']['lat'], block['marker']['lng']
         )
     return ''
+
+@register.assignment_tag
+def email_aval():
+    return settings.EMAIL_AUTH_AVALIABILITY

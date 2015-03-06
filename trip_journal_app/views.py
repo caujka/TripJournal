@@ -9,9 +9,10 @@ from django.shortcuts import render_to_response
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.sessions.backends.db import SessionStore
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
-from trip_journal_app.models import Story, Picture, Tag, Map_artifact
+from django.contrib.auth.models import User
+from trip_journal_app.models import Story, Picture, Tag, Map_artifact, Subscriptions
 from trip_journal_app.forms import UploadFileForm
 from trip_journal_app.utils.story_utils import story_contents
 from django.core.context_processors import csrf
@@ -19,6 +20,7 @@ from django.utils.translation import get_language_info
 from django.utils.translation import activate
 from django.utils import translation
 from django.conf import settings as TripJournal_settings
+
 
 
 def home(request):
@@ -137,6 +139,28 @@ def show_picture_near_by_page(request):
         request, 'items_near_by.html', {'item_type': 'pictures'})
 
 
+def my_news(request):
+    """
+    Shows a page with latest publications of my subscriptions
+    """
+    user = auth.get_user(request)
+    user_subscriptions = Subscriptions.objects.filter(subscriber=user)
+    exception = None
+    stories = []
+
+    if user_subscriptions:
+        for subscription in user_subscriptions:
+            for story in Story.objects.filter(user=subscription.subscription):
+                stories.append(story)
+        if not stories:
+            exception = "No stories"
+    else:
+        exception = "You have no subscriptions"
+
+    context = {'stories': stories, 'exception': exception}
+    return render(request, 'my_news.html', context)
+
+
 def search_items_near_by(request):
     if request.method == 'GET':
         x = float(request.GET.get('latitude', ''))
@@ -144,8 +168,7 @@ def search_items_near_by(request):
         sess = SessionStore()
         if request.GET.get('item_type', '') == u'pictures':
             sess['items_list'] = {'item_type': 'pictures',
-                                  'items': Picture.get_sorted_picture_list(x, y
-                                                                           )}
+                                  'items': Picture.get_sorted_picture_list(x, y)}
             sess.save()
         elif request.GET.get('item_type', '') == u'stories':
             sess['items_list'] = {'item_type': 'stories',
@@ -182,8 +205,7 @@ def make_paging_for_items_search(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         items = paginator.page(paginator.num_pages)
     return render(request, 'items_near_by.html', {'items_list': items,
-                                                  'item_type': list_of_items[
-                                                      'item_type']})
+                                                  'item_type': list_of_items['item_type']})
 
 
 @login_required
@@ -308,6 +330,7 @@ def stories_by_user(request):
 def check_connection(request):
     return HttpResponse(status=200)
 
+
 def settings(request):
     args={}
     args.update(csrf(request))
@@ -327,3 +350,32 @@ def logout(request):
     auth.logout(request)
     request.session[translation.LANGUAGE_SESSION_KEY] =''
     return redirect('/')
+
+
+@login_required
+@require_POST
+def make_subscription_or_unsubscribe(request, subscribe_on):
+    user = auth.get_user(request)
+    author = User.objects.get(id=int(subscribe_on))
+    action = request.POST.get('action')
+
+    if action == "subscribe":
+        if not Subscriptions.objects.filter(subscriber=user.id,
+                                            subscription=author.id):
+            Subscriptions(subscriber=user, subscription=author).save()
+        return HttpResponse(status=200)
+    else:
+        if Subscriptions.objects.filter(subscriber=user.id,
+                                        subscription=author.id):
+            Subscriptions.objects.filter(
+                subscriber=user.id, subscription=author.id).delete()
+        return HttpResponse(status=200)
+
+
+def general_rss(request):
+    date = datetime.datetime.now().date()
+    yesterday = date - datetime.timedelta(days=1)
+    stories = Story.objects.filter(date_publish__gt=yesterday).order_by("-date_publish")
+    context = {'stories': stories, 'date': date}
+    return render(request, 'rss.xml', context,
+                  content_type="application/xhtml+xml")

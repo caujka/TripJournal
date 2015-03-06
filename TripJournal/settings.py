@@ -25,7 +25,7 @@ from utils import client_key_and_secret
 SECRET_KEY = '@n=0!!+!agam579351jf=+ka7xp&-6j)ofv_2j38au#$lp@hv4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 TEMPLATE_DEBUG = True
 
@@ -47,10 +47,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'debug_toolbar',
     'trip_journal_app',
     'social.apps.django_app.default',
     'localization',
+    # 'debug_toolbar',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -131,7 +131,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 CLIENT_SECRETS_DIR = os.path.join(BASE_DIR, 'TripJournal', 'client_secrets')
-"""
+
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY, SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = (
      client_key_and_secret(CLIENT_SECRETS_DIR, 'google')
 )
@@ -141,7 +141,6 @@ SOCIAL_AUTH_FACEBOOK_KEY, SOCIAL_AUTH_FACEBOOK_SECRET = (
 SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET = (
      client_key_and_secret(CLIENT_SECRETS_DIR, 'vk')
 )
-"""
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 

@@ -28,6 +28,7 @@
             <div><a href="/settings">{% trans "settings" %}</a></div>
             {% if user and not user.is_anonymous %}
                 <div><a href="{% url 'user_stories' %}">{% trans "my stories" %}</a></div>
+                <div><a href="{% url 'my_news' %}">{% trans "my news" %}</a></div>
                 <div>
                     <a href="/logout">{% trans "logout" %} {{ user.username }}</a>
                 </div>
@@ -54,6 +55,7 @@
                     {%endif%}
                 </div>
             {% endif %}
+            <div><a href="{% url 'rss' %}">RSS</a></div>
             {% endblock %}
         </div>
         <div id="messages">

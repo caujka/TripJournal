@@ -154,7 +154,30 @@ function collectlikeObjects () {
 
 google.maps.event.addDomListener(window, 'load', initialize);
 
+//makes subscription or unsubscribe
+function subscribe_or_unsubscribe() {
+    var button = document.getElementsByClassName("subscribe-btn")[0];
+    var url = button.getAttribute("value");
+    var params = "";
+    if (button.classList.contains("unsubscribe")) {
+        params += "&action=unsubscribe"
+    } else {
+        params += "&action=subscribe"
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', url, true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+                button.classList.toggle("unsubscribe")
+            }
+    };
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+    xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+    xhr.setRequestHeader('X_REQUESTED_WITH', 'XMLHttpRequest');
+    xhr.send(params);
+};
+
 window.onload = function() {
     collectlikeObjects();
 };
-

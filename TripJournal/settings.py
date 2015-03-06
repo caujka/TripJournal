@@ -131,7 +131,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 CLIENT_SECRETS_DIR = os.path.join(BASE_DIR, 'TripJournal', 'client_secrets')
-
+"""
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY, SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = (
      client_key_and_secret(CLIENT_SECRETS_DIR, 'google')
 )
@@ -141,6 +141,7 @@ SOCIAL_AUTH_FACEBOOK_KEY, SOCIAL_AUTH_FACEBOOK_SECRET = (
 SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET = (
      client_key_and_secret(CLIENT_SECRETS_DIR, 'vk')
 )
+"""
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 

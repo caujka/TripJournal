@@ -8,8 +8,7 @@
         <link rel="stylesheet" href="{% static "css/story.css" %}">
     {% endblock %}
     {% block scripts %}
-        <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false&libraries=drawing">
-</script>
+        <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false&libraries=drawing"></script>
         <script type="text/javascript" src="{% static "javascript/utils.js" %}"></script>
         <script type="text/javascript" src="{% static "javascript/mapping.js" %}"></script>
         <script type="text/javascript" src="{% static "javascript/story.js" %}"></script>
@@ -26,6 +25,13 @@
                 <span id="pub_date">{{ story.date_publish|date }} </span>
                 {% trans "by" %}
                 <span id="author">{{ story.user }}</span>
+                <!-- Subscribe button -->
+                <button onclick="subscribe_or_unsubscribe()" 
+                        value="{% url 'subscribe' subscribe_on=story.user_id %}"
+                        class="subscribe-btn {% if is_subscribed %}unsubscribe{% endif %}"> 
+                    <span class="sibscribe-span">subscribe</span>
+                    <span class="unsibscribe-span">unsubscribe</span>
+                </button>
                 <span id="like_story">
                     <span class="likes_count">{{ story.likes_count }}</span>
                     <a class="like_story_link {% if story|is_liked_by:user %}liked{% endif %}"

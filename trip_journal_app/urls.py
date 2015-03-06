@@ -26,6 +26,8 @@ urlpatterns = [
     url(r'^search_items_near_by/', views.search_items_near_by,
         name='search_items_near_by'),
     url(r'^$', views.home, name='home'),
+    # a link to a profile
+    url(r'^my_news/$', views.my_news, name='my_news'),
     # list of stories by needed user
     url(r'^stories_by_user/$', views.stories_by_user, name='stories_by_user'),
     # toggling publish state for story
@@ -46,6 +48,10 @@ urlpatterns = [
     # check connection with server
     url(r'^check_connection', views.check_connection, name='check_connection'),
     url(r'^settings/$', views.settings ,name='settings'),
-
     url(r'^logout/$', views.logout , name='logout'),
+    # subscribe on author
+    url(r'^subscribe/(?P<subscribe_on>\d+)$',
+        views.make_subscription_or_unsubscribe, name='subscribe'),
+    # rss
+    url(r'^rss/$', views.general_rss, name='rss'),
 ]

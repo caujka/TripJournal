@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
 from trip_journal_app import views
-from TripJournal.settings import EMAIL_AUTH_AVALIABILITY
+from TripJournal import utils
 
 
 urlpatterns = [
@@ -44,7 +44,7 @@ urlpatterns = [
         name='show_authorization_page'),
 ]
 
-if EMAIL_AUTH_AVALIABILITY:
+if utils.social_status["email"]:
     urlpatterns.extend([
         url(r'^send_code/$', views.send_code, name='send_code'),
         url(r'^log_in/$', views.log_in, name='log_in'),        

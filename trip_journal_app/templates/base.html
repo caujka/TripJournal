@@ -8,8 +8,8 @@
         {% block css %}
         <link rel="stylesheet" href="{% static "css/base.css"%}">{% endblock %}
         <link href='http://fonts.googleapis.com/css?family=Ubuntu:400,300,500,400italic&subset=latin,cyrillic-ext' rel='stylesheet' type='text/css'>
-        {% email_aval as email_avaliability %}
-        {% if email_avaliability %}
+        {% social_up "email" as is_email_avaliable %}
+        {% if is_email_avaliable %}
             <script type="text/javascript" src="{% static "javascript/login_by_mail.js" %}"></script>
             <script type="text/javascript" src="{% static "javascript/utils.js" %}"></script>
         {% endif %}
@@ -34,8 +34,7 @@
                 </div>
             {% else %}
                 <div>
-                    {% email_aval as email_avaliability %}
-                    {% if email_avaliability %}
+                    {% if is_email_avaliable %}
                         <a id="mail_logo">
                             <div class='login_image'><img src="{% static "images/mail_logo.png"%}"></div>
                         </a>

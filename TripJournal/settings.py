@@ -143,7 +143,6 @@ SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET = (
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
-EMAIL_AUTH_AVALIABILITY = True
 EMAIL_HOST = local_settings.emailHost
 EMAIL_HOST_USER = local_settings.emailHostUser
 EMAIL_HOST_PASSWORD = local_settings.emailHostPassword

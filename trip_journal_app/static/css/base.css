@@ -189,3 +189,16 @@ body {
 .error{
     color: red;
 }
+
+/* ==================================
+    Subscribe buttons
+   ================================== */
+.subscribe-btn {
+    background-color: #ccc;
+    padding: 3px 15px;
+    border: none;
+    border-radius: 8px;
+}
+.subscribe-btn:hover {
+    cursor: pointer;
+}

@@ -1,6 +1,9 @@
+{% load i18n %}
 <!DOCTYPE html>
+{% block manifest %}
 <html>
-    <head>
+{% endblock %}
+   <head>
         {% load staticfiles %}
         {% load trip_journal_extras %}
         <meta charset="UTF-8">
@@ -25,15 +28,18 @@
         </div>
         <div id="menu">
             {% block menu %}
-            <div><a href="{% url 'stories_near_by' %}">stories nearby</a></div>
-            <div><a href="{% url 'pictures_near_by' %}">pictures nearby</a></div>
+            <div><a href="{% url 'stories_near_by' %}">{% trans "stories nearby" %}</a></div>
+            <div><a href="{% url 'pictures_near_by' %}">{% trans "pictures nearby" %}</a></div>
+            <div><a href="/settings">{% trans "settings" %}</a></div>
             {% if user and not user.is_anonymous %}
-                <div><a href="{% url 'user_stories' %}">my stories</a></div>
+                <div><a href="{% url 'user_stories' %}">{% trans "my stories" %}</a></div>
+                <div><a href="{% url 'my_news' %}">{% trans "my news" %}</a></div>
                 <div>
-                    <a href="{% url 'auth:logout' %}?next={% url 'home' %}">logout {{ user.username }}</a>
+                    <a href="/logout">{% trans "logout" %} {{ user.username }}</a>
                 </div>
             {% else %}
                 <div>
+                    {% trans "sign in" %}:
                     {% if is_email_avaliable %}
                         <a id="mail_logo">
                             <div class='login_image'><img src="{% static "images/mail_logo.png"%}"></div>
@@ -41,26 +47,26 @@
                     {% endif %}
                     {% social_up "google" as google_soc%}
                     {% if google_soc %}
-                        <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request|login_next }}">
+                        <a href="{% url 'social:begin' 'google-oauth2' %}?next=/localization/change_language_social{{ request.path }}">
                             <div class='login_image'><img src="{% static "images/Google_Plus_logo.png"%}"></div>
                         </a>
                     {%endif%}
                     {% social_up "facebook" as facebook_soc%}
                     {% if facebook_soc %}
-                        <a href="{% url 'social:begin' 'facebook' %}?next={{ request|login_next }}">
+                        <a href="{% url 'social:begin' 'facebook' %}?next=/localization/change_language_social{{ request.path }}">
                             <div class='login_image'><img src="{% static "images/fb_logo.png"%}"></div>
                         </a>
                     {%endif%}
                     {% social_up "vk" as vk_soc%}
                     {% if vk_soc %}
-                        <a href="{% url 'social:begin' 'vk-oauth2' %}?next={{ request|login_next }}">
+                        <a href="{% url 'social:begin' 'vk-oauth2' %}?next=/localization/change_language_social{{ request.path }}">
                             <div class='login_image'><img src="{% static "images/vk_logo.png"%}"></div>
                         </a>
                     {%endif%}
                 </div>
             {% endif %}
+            <div><a href="{% url 'rss' %}">RSS</a></div>
             {% endblock %}
-
         </div>
         <div id="messages">
             {% block messages %}

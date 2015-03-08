@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load trip_journal_extras %}
+{% block title %}My news{% endblock %}
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static "css/my_news.css" %}">
+{% endblock %}
+{% block content %}
+    <h2>Latest publications of my subscriptions</h2>
+    {% if exception %}
+        <h2>{{exception}}</h2>
+    {% else %}
+        <div id="stories">
+            {% for story in stories %}
+                <div class="story_list_container">
+                    {% if story.first_img %}
+                        <div class="story_img_container">
+                            <img src="{{ story.first_img.pic|get_stored_pic_by_size:400 }}">
+                        </div>
+                    {% endif %}
+                    <div class="story_name_container">
+                        <a href="{% url "story" story.id %}">{{ story.title }}</a>
+                    </div>
+                    <div class="story_text_container">
+                        <p>{{ story.first_text.content }}</p>
+                    </div>
+                    <div class="story_username_container">{{ story.user }}</div>
+                    <div class="story_datepublish_container">{{ story.date_publish|date }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

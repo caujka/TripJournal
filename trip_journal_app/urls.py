@@ -27,6 +27,8 @@ urlpatterns = [
     url(r'^search_items_near_by/', views.search_items_near_by,
         name='search_items_near_by'),
     url(r'^$', views.home, name='home'),
+    # a link to a profile
+    url(r'^my_news/$', views.my_news, name='my_news'),
     # list of stories by needed user
     url(r'^stories_by_user/$', views.stories_by_user, name='stories_by_user'),
     # toggling publish state for story
@@ -40,8 +42,19 @@ urlpatterns = [
     url(r'^put_tag/$', views.put_tag, name='put_tag'),
     # delete tag in DB
     url(r'^delete_story_tag/$', views.delete_story_tag, name='delete_tag'),
-    url(r'^authorization_page/', views.show_authorization_page, 
+    # get all text
+    url(r'^get_story_content/$', views.get_story_content, name='get_content'),
+    url(r'^authorization_page/', views.show_authorization_page,
         name='show_authorization_page'),
+    # check connection with server
+    url(r'^check_connection', views.check_connection, name='check_connection'),
+    url(r'^settings/$', views.settings ,name='settings'),
+    url(r'^logout/$', views.logout , name='logout'),
+    # subscribe on author
+    url(r'^subscribe/(?P<subscribe_on>\d+)$',
+        views.make_subscription_or_unsubscribe, name='subscribe'),
+    # rss
+    url(r'^rss/$', views.general_rss, name='rss'),
 ]
 
 if utils.social_status["email"]:

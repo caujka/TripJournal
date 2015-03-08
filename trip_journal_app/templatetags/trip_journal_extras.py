@@ -33,3 +33,7 @@ def coordinates_data(block):
         )
     return ''
 
+@register.filter(name='subscribed_or_not')
+def subscribed_or_not(obj, author):
+    return obj.subscribed_or_not(author)
+

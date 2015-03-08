@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load staticfiles %}
 {% load trip_journal_extras %}
 {% block title %}{{ item_type }} near the place{% endblock %}
@@ -8,14 +9,18 @@
 {% endblock %}
 
 {% block content %}
-    <h3>Here you can search {{ item_type }} near the place</h3>
+    {% if item_type == 'stories' %}
+        <h3>{% trans "Here you can search stories near the place" %}</h3>
+    {% else %}
+        <h3>{% trans "Here you can search pictures near the place" %}</h3>
+    {% endif %}
     <form action="/search_items_near_by/" method="get">
-        Enter Latitude: <br>
+        {% trans "Enter Latitude" %}: <br>
         <input type="text" name="latitude" id="latitude" required><br>
-        Enter Longitude:<br>
+        {% trans "Enter Longitude" %}:<br>
         <input type="text" name="longitude" id="longitude" required>
         <input type="hidden" name="item_type" value="{{ item_type }}">
-        <input type="submit" value="Search">
+        <input type="submit" value='{% trans "Search" %}'>
     </form>
     {% if items_list %}
         {% if item_type == 'stories' %}

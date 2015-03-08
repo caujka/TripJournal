@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load staticfiles %}
 {% load trip_journal_extras %}
 {% block css %}
@@ -7,8 +8,8 @@
 {% endblock %}
 {% block title %}My stories{% endblock %}
 {% block content %}
-    <h3>Your stories:</h3>
-    <p id="new_story_link"><a href="{% url "edit" '' %}">Create new story</a></p>
+    <h3>{% trans "Your stories" %}</h3>
+    <p id="new_story_link"><a href="{% url "edit" '' %}">{% trans "Create new story" %}</a></p>
 
     <div id="stories">
         {% for story in stories %}
@@ -32,12 +33,12 @@
                 </div>
                 <div class="story_buttons">
                     <form method="GET" action="{% url "edit" story.id %}">
-                        <input type="submit" value="edit"/>
+                        <input type="submit" value='{% trans "edit" %}'/>
                     </form>
                     {% include "toggle_publish_buttons.html" with story_id=story.id %}
                     <form method="POST" action="{% url "delete" story.id %}">
                         {% csrf_token %}
-                        <input type="submit" value="delete">
+                        <input type="submit" value='{% trans "delete" %}'>
                     </form>
                 </div>
             </div>

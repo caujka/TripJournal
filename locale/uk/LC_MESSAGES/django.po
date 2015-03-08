@@ -1,0 +1,165 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-02-28 13:47+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: trip_journal_app/templates/base.html:26
+msgid "stories nearby"
+msgstr "історії поблизу"
+
+#: trip_journal_app/templates/base.html:27
+msgid "pictures nearby"
+msgstr "картинки поблизу"
+
+#: trip_journal_app/templates/base.html:28
+msgid "settings"
+msgstr "настройки"
+
+#: trip_journal_app/templates/base.html:30
+msgid "my stories"
+msgstr "мої історії"
+
+#: trip_journal_app/templates/base.html:32
+msgid "logout"
+msgstr "вийти"
+
+#: trip_journal_app/templates/base.html:36
+msgid "sign in"
+msgstr "ввійти"
+
+#: trip_journal_app/templates/edit.html:27
+#: trip_journal_app/templates/items_near_by.html:23
+msgid "Search"
+msgstr "Знайти"
+
+#: trip_journal_app/templates/edit.html:37
+#: trip_journal_app/templates/edit.html:43
+msgid "Title of story"
+msgstr "Заголовок історії"
+
+#: trip_journal_app/templates/edit.html:52
+msgid "Tags"
+msgstr "Теги"
+
+#: trip_journal_app/templates/edit.html:76
+msgid "Text to story"
+msgstr "текст історії"
+
+#: trip_journal_app/templates/edit.html:84
+msgid "Add artifact"
+msgstr "артефакт історії"
+
+#: trip_journal_app/templates/edit.html:93
+msgid "text"
+msgstr "текст"
+
+#: trip_journal_app/templates/edit.html:96
+msgid "image"
+msgstr "картинка"
+
+#: trip_journal_app/templates/edit.html:99
+msgid "artifact"
+msgstr "артефакт"
+
+#: trip_journal_app/templates/edit.html:107
+#: trip_journal_app/templates/edit.html:113
+msgid "view"
+msgstr "Переглянути"
+
+#: trip_journal_app/templates/index.html:13
+msgid "Welcome to TripJournal"
+msgstr "Вітаємо в TripJournal"
+
+#: trip_journal_app/templates/index.html:14
+msgid "Take first step to your journey of a thousand miles"
+msgstr "Зроби перший крок назустріч подорожі в тисячу миль"
+
+#: trip_journal_app/templates/items_near_by.html:13
+msgid "Here you can search stories near the place"
+msgstr "Тут ви зможете переглянути історії поблизу"
+
+#: trip_journal_app/templates/items_near_by.html:15
+msgid "Here you can search pictures near the place"
+msgstr "Тут ви зможете переглянути картинки поблизу"
+
+#: trip_journal_app/templates/items_near_by.html:18
+msgid "Enter Latitude"
+msgstr "Введіть широту"
+
+#: trip_journal_app/templates/items_near_by.html:20
+msgid "Enter Longitude"
+msgstr "Введіть довготу"
+
+#: trip_journal_app/templates/my_stories.html:11
+msgid "Your stories"
+msgstr "Moї історії"
+
+#: trip_journal_app/templates/my_stories.html:12
+msgid "Create new story"
+msgstr "Створити нову історію"
+
+#: trip_journal_app/templates/my_stories.html:36
+msgid "edit"
+msgstr "редагувати"
+
+#: trip_journal_app/templates/my_stories.html:41
+msgid "delete"
+msgstr "видалити"
+
+#: trip_journal_app/templates/settings.html:18
+msgid "Prefered language"
+msgstr "Оберіть мову"
+
+#: trip_journal_app/templates/stories_by_user.html:5
+#, fuzzy
+#| msgid "Here you can search stories near the place"
+msgid "Here you can find stories by user you like"
+msgstr "Тут ви зможете переглянути історії поблизу"
+
+#: trip_journal_app/templates/stories_by_user.html:8
+msgid "Enter user's name"
+msgstr "Введіть ім'я користувача"
+
+#: trip_journal_app/templates/stories_by_user.html:34
+msgid "of"
+msgstr "з"
+
+#: trip_journal_app/templates/stories_by_user.html:38
+msgid "Next"
+msgstr "Наступні"
+
+#: trip_journal_app/templates/story.html:27
+msgid "by"
+msgstr "створена"
+
+#: trip_journal_app/templates/story.html:41
+msgid "Edit this story"
+msgstr "Редагувати історію"
+
+#: trip_journal_app/templates/story_error_page.html:17
+msgid "This story doesn't exist or isn't published yet. Sorry"
+msgstr "Цієї історії не існує, або вона не опублікована."
+
+#: trip_journal_app/templates/toggle_publish_buttons.html:6
+msgid "Unpublish"
+msgstr "Скасувати публікацію"
+
+#: trip_journal_app/templates/toggle_publish_buttons.html:8
+msgid "publish"
+msgstr "Опублікувати"

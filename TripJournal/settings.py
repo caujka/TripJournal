@@ -25,7 +25,7 @@ from utils import client_key_and_secret
 SECRET_KEY = '@n=0!!+!agam579351jf=+ka7xp&-6j)ofv_2j38au#$lp@hv4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 TEMPLATE_DEBUG = True
 
@@ -50,7 +50,7 @@ INSTALLED_APPS = (
     'trip_journal_app',
     'social.apps.django_app.default',
     'localization',
-    # 'debug_toolbar',
+    #'debug_toolbar',
 )
 
 MIDDLEWARE_CLASSES = (

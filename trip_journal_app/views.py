@@ -1,6 +1,11 @@
 import json
 import datetime
+import string
+import time
 
+from random import choice
+
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -9,19 +14,22 @@ from django.shortcuts import render_to_response
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.sessions.backends.db import SessionStore
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.views.decorators.http import require_POST
 from django.contrib.auth.models import User
-from trip_journal_app.models import Story, Picture, Tag, Map_artifact, Subscriptions
+from django.core.context_processors import csrf
+from django.contrib.auth import authenticate, login
+
+from trip_journal_app.models import Story, Picture, Tag, Map_artifact, Confirmation_code, Subscriptions
+
 from trip_journal_app.forms import UploadFileForm
 from trip_journal_app.utils.story_utils import story_contents
-from django.core.context_processors import csrf
+from TripJournal.settings import AUTH_BY_EMAIL
+import TripJournal.local_settings as local_settings
 from django.utils.translation import get_language_info
 from django.utils.translation import activate
 from django.utils import translation
 from django.conf import settings as TripJournal_settings
-
-
 
 def home(request):
     """
@@ -34,6 +42,7 @@ def home(request):
 
 @login_required
 @require_POST
+@csrf_exempt
 def save(request, story_id):
     """
     View for saving story contents. Responds only to ajax POST requests.
@@ -65,6 +74,7 @@ def save(request, story_id):
 
 @login_required
 @require_POST
+@csrf_exempt
 def publish(request, story_id):
     user = auth.get_user(request)
     story = get_object_or_404(Story, pk=int(story_id))
@@ -78,6 +88,7 @@ def publish(request, story_id):
 
 @login_required
 @require_POST
+@csrf_exempt
 def upload_img(request, story_id):
     # authorization part
     story = get_object_or_404(Story, pk=int(story_id))
@@ -325,6 +336,82 @@ def stories_by_user(request):
             stories = Story.objects.filter(user=needed_user)
         context = {'stories': stories}
         return render(request, 'stories_by_user.html', context)
+        
+@require_POST
+@csrf_exempt
+def log_in(request):
+    SECONDS_IN_MINUTE = 60
+
+    body = json.loads(request.body)
+    email = body["mail"]
+    code = body["code"]
+    userLogin = body["login"]
+    now = time.time()   
+    try:
+        user = User.objects.get(email=email)
+        conf_code = Confirmation_code.objects.get(user_id=user.id)
+    except:
+        return HttpResponse("Problems with code or email.")
+    if (code == conf_code.code):
+        timeDiffInMinutes = (float(now)-float(conf_code.start_time))/SECONDS_IN_MINUTE
+        if timeDiffInMinutes<AUTH_BY_EMAIL["codeExpirationTime"]:
+            if user.username==AUTH_BY_EMAIL["emptyUserName"]:
+                if userLogin and userLogin!=AUTH_BY_EMAIL["emptyUserName"]:
+                    try:
+                        user = User.objects.get(username=userLogin)
+                        return HttpResponse("This login is already used.")
+                    except:
+                        user.username = userLogin
+                        user.save()
+                elif userLogin==AUTH_BY_EMAIL["emptyUserName"]:
+                    return HttpResponse("This login is restricted.")
+                else:
+                    return HttpResponse("Please enter your login.")
+            user.set_password(code)
+            user.save()
+            user = authenticate(username=user.username,password=code)
+            login(request, user)
+            return HttpResponse("ok")
+        else:
+            return HttpResponse("Your code is out of date.")
+    elif conf_code.attempt < 3:
+        conf_code.attempt += 1
+        conf_code.save()
+        return HttpResponse("Email and code doesn't match.")
+    else:
+        return HttpResponse("You need a new code.")
+
+
+@csrf_exempt
+@require_POST
+def send_code(request):
+    body = json.loads(request.body)
+    email = body["mail"]
+    try:
+        user = User.objects.get(email=email)
+    except:
+        user = User.objects.create_user(username=AUTH_BY_EMAIL["emptyUserName"],email=email)
+    code = generate_codeMsg()
+    try:
+        conf_code = Confirmation_code.objects.get(user_id=user.id)
+    except:    
+        conf_code = Confirmation_code()
+        conf_code.user = user
+    conf_code.code = code
+    conf_code.attempt = 0
+    conf_code.start_time = time.time()
+    conf_code.save()
+    msg = "Your confirmation code = {0}.\nIt will be avaliable only for {1} minutes".format(code, AUTH_BY_EMAIL["codeExpirationTime"])
+    send_mail('Hello!', msg, local_settings.emailHostUser,
+    [email])
+    return HttpResponse("Code has been sent to your mail.")
+
+
+
+def generate_codeMsg():
+    digits = string.digits
+    code = "".join(choice(digits) for _ in range(AUTH_BY_EMAIL["codeLength"]))
+    return code
 
 
 def check_connection(request):
@@ -379,3 +466,4 @@ def general_rss(request):
     context = {'stories': stories, 'date': date}
     return render(request, 'rss.xml', context,
                   content_type="application/xhtml+xml")
+

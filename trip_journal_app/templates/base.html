@@ -11,6 +11,11 @@
         {% block css %}
         <link rel="stylesheet" href="{% static "css/base.css"%}">{% endblock %}
         <link href='http://fonts.googleapis.com/css?family=Ubuntu:400,300,500,400italic&subset=latin,cyrillic-ext' rel='stylesheet' type='text/css'>
+        {% social_up "email" as is_email_avaliable %}
+        {% if is_email_avaliable %}
+            <script type="text/javascript" src="{% static "javascript/login_by_mail.js" %}"></script>
+            <script type="text/javascript" src="{% static "javascript/utils.js" %}"></script>
+        {% endif %}
         {% block scripts %}{% endblock %}
     </head>
     <body>
@@ -35,6 +40,11 @@
             {% else %}
                 <div>
                     {% trans "sign in" %}:
+                    {% if is_email_avaliable %}
+                        <a id="mail_logo">
+                            <div class='login_image'><img src="{% static "images/mail_logo.png"%}"></div>
+                        </a>
+                    {% endif %}
                     {% social_up "google" as google_soc%}
                     {% if google_soc %}
                         <a href="{% url 'social:begin' 'google-oauth2' %}?next=/localization/change_language_social{{ request.path }}">
@@ -69,6 +79,30 @@
         </div>
         <div id="content">
             {% block content %}{% endblock %}
+        </div>
+        <div id="overlay" class="overlay hide">
+            <div class="popup">
+                <h3>Get confirmation code</h3>
+                <div id="close_icon" class="pointer close non_select">x</div>
+                <form id="mail_form" method="post">
+                    <div class="input_line">
+                        <label for="mail">Enter your mail:</label>
+                        <input type="text" name="mail">
+                    </div>
+                    <div class="input_line">
+                        <label for="code">Enter your code:</label>
+                        <input type="text" name="code">
+                    </div>
+                    <div id="login_qst" class="input_line pointer">First time here? Enter your login.</div>
+                    <div id="login_area" class="input_line hide">
+                        <label for="mail">Enter your login:</label>
+                        <input type="text" name="login">
+                    </div>
+                    <div id="msg" class="error"></div> 
+                    <input id="send_btn" class="btn" type="button" value="Send code to email">
+                    <input id="login_btn" class="btn" type="button" value="Login">
+                </form>
+            </div>
         </div>
     </body>
 </html>

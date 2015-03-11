@@ -1,6 +1,7 @@
 from django.conf.urls import url
 
 from trip_journal_app import views
+from TripJournal import utils
 
 
 urlpatterns = [
@@ -55,3 +56,10 @@ urlpatterns = [
     # rss
     url(r'^rss/$', views.general_rss, name='rss'),
 ]
+
+if utils.social_status["email"]:
+    urlpatterns.extend([
+        url(r'^send_code/$', views.send_code, name='send_code'),
+        url(r'^log_in/$', views.log_in, name='log_in'),        
+        ])
+

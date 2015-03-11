@@ -233,6 +233,11 @@ class Map_artifact(models.Model):
     def __unicode__(self):
         return self.name
 
+class Confirmation_code(models.Model):
+    code = models.TextField()
+    start_time = models.TextField()
+    attempt = models.IntegerField(default=0)
+    user = models.ForeignKey(User)
 
 class Subscriptions(models.Model):
     """ Subcriptions list """
@@ -241,3 +246,4 @@ class Subscriptions(models.Model):
 
     def __unicode__(self):
         return self.subscription
+

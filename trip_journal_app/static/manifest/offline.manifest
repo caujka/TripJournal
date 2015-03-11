@@ -1,0 +1,24 @@
+CACHE MANIFEST
+# revision 12
+../css/base.css
+../css/edit.css
+../images/arrow-down.png
+../images/arrow-up.png
+../images/artifact_marker.png
+../images/delete.png
+../images/deletemarker.png
+../images/marker.png
+../javascript/edit.js
+../javascript/ajax_requests.js
+../javascript/utils.js
+../javascript/mapping.js
+
+http://code.jquery.com/qunit/qunit-1.15.0.css
+http://code.jquery.com/qunit/qunit-1.15.0.js
+http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js
+
+FALLBACK:
+/ /edit/
+
+NETWORK:
+*

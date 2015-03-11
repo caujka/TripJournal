@@ -4,7 +4,6 @@ import math
 
 from django.db import models
 from django.contrib.auth.models import User
-from notifications.models import Notification
 from notifications import notify
 
 from TripJournal.settings import (IMAGE_SIZES, STORED_IMG_DOMAIN,
@@ -14,10 +13,10 @@ from trip_journal_app.utils.resize_image import resize_and_save_pics
 
 class Tag(models.Model):
     name = models.CharField(max_length=255, unique=True)
+    datetime = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
         return self.name
-
 
 class Story(models.Model):
     title = models.CharField(max_length=300)
@@ -41,7 +40,7 @@ class Story(models.Model):
         pictures = Picture.objects.filter(story=self.id)
         return dict([
             (pic.id, tuple({'size': stored_pic.size, 'url': stored_pic.url} for
-                      stored_pic in pic.get_stored_pics()))
+                           stored_pic in pic.get_stored_pics()))
             for pic in pictures
         ])
 
@@ -66,11 +65,12 @@ class Story(models.Model):
         for block in text:
             if block[u'type'] == u'img':
                 block[u'pic'] = Picture.objects.get(pk=int(block[u'id']))
+                galleryId = block.get('galleryId', '')
+                block[u'galery_picture'] = Picture.objects.filter(
+                    id__in=galleryId)
         return text
 
-#         req = 'SELECT (POWER(latitude - %f, 2) + POWER(longitude - %f, 2)) as distance, id, latitude, longitude from trip_journal_app_picture WHERE latitude IS NOT NULL AND longitude IS NOT NULL ORDER BY distance;' % (latitude, longitude)
-#         list_of_pictures = list(Picture.objects.raw(req))
-#         return list_of_pictu
+
 
     @classmethod
     def get_sorted_stories_list(cls, latitude, longitude):
@@ -84,16 +84,20 @@ class Story(models.Model):
                 artifacts = Map_artifact.objects.filter(story_id=st.id)
                 for picture in pictures:
                     if picture.latitude and picture.longitude:
-                        coordinates.append([float(picture.latitude), float(picture.longitude)])
+                        coordinates.append(
+                            [float(picture.latitude), float(picture.longitude)])
                 for artifact in artifacts:
                     if artifact.latitude and artifact.longitude:
-                        coordinates.append([float(artifact.latitude), float(artifact.longitude)])
+                        coordinates.append(
+                            [float(artifact.latitude), float(artifact.longitude)])
                 if coordinates:
                     for coordinate in coordinates:
-                        dist = math.sqrt((latitude - coordinate[0])**2 + (longitude - coordinate[1])**2)
+                        dist = math.sqrt(
+                            (latitude - coordinate[0]) ** 2 + (longitude - coordinate[1]) ** 2)
                         distance.append(dist)
-                    list_of_stories.append({'story': st, 'distance': min(distance)})
-        list_of_stories.sort(key = lambda k: k['distance'])
+                    list_of_stories.append(
+                        {'story': st, 'distance': min(distance)})
+        list_of_stories.sort(key=lambda k: k['distance'])
         return list_of_stories
 
     def likes_count(self):
@@ -104,11 +108,11 @@ class Story(models.Model):
 
     def first_text(self):
         return next((block for block in self.get_text_with_pic_objects()
-                    if block['type'] == 'text'), None)
+                     if block['type'] == 'text'), None)
 
     def first_img(self):
         return next((block for block in self.get_text_with_pic_objects()
-                    if block['type'] == 'img'), None)
+                     if block['type'] == 'img'), None)
 
     def notify(self, user):
         not_notify = UserNotify.objects.filter(notification_off=True)
@@ -195,9 +199,9 @@ class Picture(models.Model):
     @classmethod
     def get_sorted_picture_list(cls, latitude, longitude):
         req = ('SELECT (POWER(latitude - %f, 2) + POWER(longitude - %f, 2)) '
-                'as distance, id, latitude, longitude from trip_journal_app_picture '
-                'WHERE latitude IS NOT NULL AND longitude IS NOT NULL '
-                'ORDER BY distance;' % (latitude, longitude))
+               'as distance, id, latitude, longitude from trip_journal_app_picture '
+               'WHERE latitude IS NOT NULL AND longitude IS NOT NULL '
+               'ORDER BY distance;' % (latitude, longitude))
         list_of_pictures = list(Picture.objects.raw(req))
         return list_of_pictures
 
@@ -265,6 +269,7 @@ class Comment(models.Model):
                             target=story,
                             )
 
+
 class Map_artifact(models.Model):
     text = models.TextField()
     story = models.ForeignKey(Story)
@@ -274,6 +279,7 @@ class Map_artifact(models.Model):
 
     def __unicode__(self):
         return self.name
+
 
 class Notification_ban(models.Model):
     user = models.ForeignKey(User)
@@ -290,3 +296,12 @@ class UserNotify(models.Model):
 
     def __unicode__(self):
         return self.user.username
+
+
+class Subscriptions(models.Model):
+    """ Subcriptions list """
+    subscriber = models.ForeignKey(User)
+    subscription = models.ForeignKey(User, related_name = "subscription")
+
+    def __unicode__(self):
+        return self.subscription

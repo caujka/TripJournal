@@ -82,19 +82,20 @@ h3 {
 .story_buttons {
     position: absolute;
     bottom: 85px;
-    left: 109px;
+    left: 0px;
+    width:327px;
     visibility: hidden;
 }
 
 .story_buttons input {
-    margin: 0;
+    margin:auto;
     display: block;
     cursor: pointer;
     font-size: 1em;
     font-weight: bold;
     text-align: center;
     height: 40px;
-    width: 110px;
+    min-width: 110px;
     background-color: rgba(255, 255, 255, 0);
     border: 0;
     border-top: 2px solid #E6E6E6;

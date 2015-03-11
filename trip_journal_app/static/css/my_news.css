@@ -1,0 +1,105 @@
+html {
+    background: url("../images/cover1.jpg") no-repeat center center fixed #619C7E;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+}
+
+#welcome {
+    margin-right: auto;
+    margin-left: auto;
+    width: 80%;
+    text-align: center;
+    color: white;
+    position: relative;
+    top: 160px;
+}
+
+#welcome h2, #welcome p {
+    font-weight: 300;
+    margin: 15px;
+}
+#welcome h2 {
+    font-size: 3.5em;
+    letter-spacing: 2px;
+}
+
+#welcome p {
+    font-size: 2em;
+}
+
+#stories{
+    position: relative;
+    top: 170px;
+}
+
+.story_list_container {
+    display: inline-block;
+    width: 31%;
+    background-color: white;
+    margin: 8px;
+    vertical-align: top;
+}
+
+.story_img_container img {
+    width: 100%;
+}
+
+.story_text_container, .story_name_container, .story_username_container,
+.story_datepublish_container {
+    padding: 5px;
+    margin: 10px 8px 0px 8px;
+}
+
+.story_name_container {
+    margin-top: 10px;
+}
+
+.story_name_container a {
+    text-decoration: none;
+    font-size: 1.3em;
+    color: #AE3C3C;
+}
+
+.story_text_container p {
+    margin: 0;
+    color: #333;
+    padding-bottom: 12px;
+}
+
+.story_text_container {
+    border-bottom: 1px solid #999;
+}
+
+.story_username_container, .story_datepublish_container {
+    display: inline-block;
+    margin-top: 15px;
+    margin-bottom: 17px;
+    color: #333;
+}
+
+.story_datepublish_container {
+    float: right;
+}
+
+.login_form {
+    float: right;
+    position: relative;
+    top: 70px;
+    right: 20px;
+}
+
+.login_form input {
+    background-color: rgba(255, 255, 255, 0.4);
+    border: 0;
+    height: 30px;
+}
+
+.login_form {
+    float: right;
+}
+
+.login_form input {
+    display: inline-block;
+} 

@@ -1,5 +1,5 @@
 body{
-    background-color: #ddd;
+    background-color: #474;
     margin: 0;
     padding: 0;
 }
@@ -36,8 +36,12 @@ main{
     width: 215px;
     height: 25px;
     border: 1px solid #aaa;
-    margin-left:540px;
-    visibility:hidden;
+    position:absolute;
+    bottom:5px;
+    right:5px;
+    
+    display:none;
+    
 }
 .block_title{
     text-transform: uppercase;
@@ -56,6 +60,9 @@ main{
     text-align: center;
 }
 
+#publish_panel{
+    
+}
 
 #publish_panel form {
     display: inline-block;
@@ -89,6 +96,7 @@ main{
     outline: none;
     margin: 5px;
     border: 2px solid #ddd;
+
 }
 .element_story{
     height: 70px;
@@ -133,19 +141,12 @@ main{
     outline: none;
     margin: 5px;
     border: 2px solid #ddd;
-    display: none;
     position: relative;
 }
 
-.block_story{
-    border: 1px solid #aaa;
-    margin: 5px;
-    text-align: left;
-    padding: 10px;
-    position: relative;
-}
+
 .image_story{
-    width: 756px;
+    width: 614px;
 }
 .button_4{
     position: absolute;
@@ -182,13 +183,13 @@ main{
 #comment_but_t,#treasure_but_t,#comment_but_p,#treasure_but_p{
     position: relative;
 }
-#title_panel,#text_panel,#photo_panel,#video_panel,#add_panel,#publish_panel, #artifact_panel{
-    display: none;
+#text_panel,#photo_panel,#video_panel, #artifact_panel{
+   display: none;
 }
 #add_comment_t,#add_treasure_t,#add_comment_p,#add_treasure_p{
-    display: none;
+    
 }
-#bottom, #edit, #delete, #top,#addmarker,#removemarker,#addmarkerArtifact{
+.bottom, .edit, .delete, .top, .addmarker, .removemarker, .addmarkerArtifact{
     display: inline-block;
     width: 25px;
     height: 25px;
@@ -199,31 +200,31 @@ main{
     position: absolute;
     top: 0;
 }
-#bottom{
+.bottom{
     background:  url("../images/arrow-down.png") no-repeat;
 }
-#top{
+.top{
     top: 0px;
     background:  url("../images/arrow-up.png") no-repeat;
 }
 
-#edit{
+.edit{
     bottom: 0px;
     background:  url("../images/edit.png") no-repeat;
 }
-#delete{
+.delete{
     bottom: 0px;
     background:  url("../images/delete.png") no-repeat;
 }
-#addmarker{
+.addmarker{
     bottom: 0px;
     background:  url("../images/marker.png") no-repeat;
 }
-#addmarkerArtifact{
+.addmarkerArtifact{
     bottom: 0px;
     background:  url("../images/artifact_marker.png") no-repeat;
 }
-#removemarker{
+.removemarker{
     bottom: 0px;
     background:  url("../images/deletemarker.png") no-repeat;
 }
@@ -297,3 +298,53 @@ p.description_story {
     margin-top: 2px;
 }
 
+.text_area_edit{
+    min-height:72px;
+    width: 612px;
+    padding: 12px;
+    height: 80px;    
+    color:#000;
+    font-size:15px;
+    border:1px solid red;   
+}
+.invisible{
+    display:none;
+}  
+.block_story{
+    min-height:60px;
+    border: 1px solid #999;    
+    text-align: left;
+    padding: 12px;
+    padding-bottom: 30px;
+    position: relative;
+    width:614px;
+    left:50%;
+    margin:10px 0 10px -318px;
+}
+
+.block_edited{
+    padding:0;
+    width:638px;   
+}
+.hidden{
+    display:none;
+}
+.gallery{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+}
+.gallery_container{
+    width:590px;
+    height:400px;
+    padding:12px;
+    background:red;
+    overflow:hidden;
+    position:relative;
+}
+.block_story p{
+  margin:0;
+  padding:0;
+}

@@ -31,7 +31,7 @@
             {% block menu %}
             {% notifications_unread as unread_count %}
             {% if user and not user.is_anonymous %}
-            <div><a href="{% url 'user_messages' %}">messages {{unread_count}} </a></div>
+            <div><a href="{% url 'user_messages' %}">{% trans "messages" %} {{unread_count}} </a></div>
             {%endif%}
             <div><a href="{% url 'stories_near_by' %}">{% trans "stories nearby" %}</a></div>
             <div><a href="{% url 'pictures_near_by' %}">{% trans "pictures nearby" %}</a></div>

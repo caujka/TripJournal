@@ -51,7 +51,6 @@ INSTALLED_APPS = (
     'social.apps.django_app.default',
     'notifications',
     'localization',
-    'notifications',
     # 'debug_toolbar',
 )
 

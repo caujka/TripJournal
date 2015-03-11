@@ -5,6 +5,7 @@ PyJWT==0.2.1
 Unidecode==0.04.16
 coverage==3.7.1
 django-debug-toolbar==1.2.1
+django-notifications==0.6.2
 mock==1.0.1
 oauthlib==0.6.3
 python-openid==2.2.5

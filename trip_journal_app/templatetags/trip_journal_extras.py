@@ -1,6 +1,7 @@
 from django import template
 from TripJournal import utils
 
+
 register = template.Library()
 
 
@@ -35,3 +36,4 @@ def coordinates_data(block):
 @register.filter(name='subscribed_or_not')
 def subscribed_or_not(obj, author):
     return obj.subscribed_or_not(author)
+

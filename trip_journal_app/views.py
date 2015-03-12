@@ -95,7 +95,8 @@ def upload_img(request, story_id):
     user = auth.get_user(request)
     if user != story.user:
         return HttpResponse('Unauthorized', status=401)
-
+    print '=' * 20
+    print request.FILES
     form = UploadFileForm(request.POST, request.FILES)
     if form.is_valid():
         img = request.FILES['file']
@@ -285,7 +286,10 @@ def get_story_content(request):
     if request.is_ajax():
         story_id = request.GET.get('id')
         story = Story.objects.get(pk=int(story_id))
-        pictures = Picture.objects.filter(story_id=int(story_id))
+        user = story.user
+        # pictures = Picture.objects.filter(story_id=int(story_id))
+        user_stories = Story.objects.filter(user=user)
+        pictures = Picture.objects.filter(story=user_stories)
         picture_dic = {}
         for picture in pictures:
             picture_dic[str(picture.id)] = str(picture.get_stored_pic_by_size(
@@ -535,3 +539,16 @@ def toggle_story_notifications(request, story_id):
         ban = Notification_ban(user=user, banned_story_id=story_id)
         ban.save()
     return HttpResponseRedirect('/story/{id}'.format(id=story_id))
+
+
+@login_required
+def get_pics_by_user(request):
+    user = auth.get_user(request)
+    user_stories = Story.objects.filter(user=user)
+    pictures = Picture.objects.filter(story=user_stories)
+    picture_list = []
+    for picture in pictures:
+        picture_list.append((str(picture.get_stored_pic_by_size(300)),
+                            picture.id))
+    content = {"pictures": picture_list}
+    return HttpResponse(json.dumps(content))

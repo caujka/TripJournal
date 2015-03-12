@@ -67,6 +67,7 @@ urlpatterns = [
     url(r'^toggle_story_notifications/(?P<story_id>\d*)$',
         views.toggle_story_notifications,
         name='toggle_story_notifications'),
+    url(r'^get_pics_by_user/$', views.get_pics_by_user, name='get_pics_by_user'),
 ]
 
 if utils.social_status["email"]:

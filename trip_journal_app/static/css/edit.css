@@ -348,3 +348,84 @@ p.description_story {
   margin:0;
   padding:0;
 }
+
+/*=== Overlay gallery ===*/
+.overlay {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    z-index: 999;
+    background-color: rgba(128, 128, 128, 0.6);
+    text-align: center;
+}
+
+.overlay:before {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    content: "";
+}
+
+.hide{
+    display: none;
+}
+
+.show {
+    display: block;
+}
+
+.popup {
+    display: inline-block;
+    vertical-align: middle;
+    background-color: #31797d;
+    /*width: 350px;*/
+    width:700px;
+    border-radius: 10px;
+    margin: auto;
+    position: relative;
+    padding: 5px;
+}
+
+.pointer:hover{
+    cursor: pointer;
+    color: blue;
+}
+
+.close {
+    position: absolute;
+    top: 0;
+    right: 5px;
+    user-select: none;
+}
+
+.non_select {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;   
+    -o-user-select: none;
+}
+
+#gallery_cont{
+    width: 614px;
+    padding: 12px;
+    outline: none;
+    margin: 5px;
+    border: 2px solid #ddd;
+    position: relative;
+}
+.gallery_img_block{
+    float: left;
+    position: relative;
+    margin: 2px;
+}
+.gallery_img_story{
+    height: 100px;
+}
+.error{
+    color: red;
+}
+/*=========================*/
+

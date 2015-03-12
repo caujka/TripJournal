@@ -4,6 +4,7 @@ import math
 
 from django.db import models
 from django.contrib.auth.models import User
+from notifications import notify
 
 from TripJournal.settings import (IMAGE_SIZES, STORED_IMG_DOMAIN,
                                   IMG_STORAGE, TEMP_DIR)
@@ -113,6 +114,17 @@ class Story(models.Model):
         return next((block for block in self.get_text_with_pic_objects()
                      if block['type'] == 'img'), None)
 
+    def notify(self, user):
+        not_notify = UserNotify.objects.filter(notification_off=True)
+        banned_stories = Notification_ban.objects.filter(banned_story=self)
+        if self.user != user and not not_notify.filter(user=self.user).exists() and \
+            not banned_stories.filter(user=self.user).exists():
+            notify.send(user,
+                        recipient=self.user,
+                        verb="{user.username} liked your story".format(user=user),
+                        target=self,
+                        )
+
 
 class Picture(models.Model):
     latitude = models.FloatField(blank=True, null=True)
@@ -193,6 +205,17 @@ class Picture(models.Model):
         list_of_pictures = list(Picture.objects.raw(req))
         return list_of_pictures
 
+    def notify(self, user):
+        not_notify = UserNotify.objects.filter(notification_off=True)
+        banned_stories = Notification_ban.objects.filter(banned_story=self.story)
+        if self.story.user != user and not not_notify.filter(user=self.story.user).exists() and \
+            not banned_stories.filter(user=self.story.user).exists():
+            notify.send(user,
+                        recipient=self.story.user,
+                        verb="{user.username} liked your picture".format(user=user),
+                        target=self.story,
+                        )
+
 
 class Stored_picture(models.Model):
     picture = models.ForeignKey(Picture)
@@ -222,6 +245,30 @@ class Comment(models.Model):
     def __unicode__(self):
         return self.text
 
+    def notify(self, story_id):
+        author = Story.objects.get(pk=story_id).user
+        story = Story.objects.get(pk=story_id)
+        not_notify = UserNotify.objects.filter(notification_off=True)
+        banned_stories = Notification_ban.objects.filter(banned_story=story)
+        if self.user != author and not not_notify.filter(user=author).exists() and \
+            not banned_stories.filter(user=author).exists():
+                notify.send(self.user,
+                            recipient=author,
+                            verb="Your story was commented",
+                            target=story,
+                            )
+        comments = Comment.objects.filter(story_id=story_id)
+        commenters = {comment.user for comment in comments if comment.user != author}
+        if self.user in commenters:
+            commenters.remove(self.user)
+        for user in commenters:
+            if not not_notify.filter(user=user).exists():
+                notify.send(self.user,
+                            recipient=user,
+                            verb="The story which you'd commented was commented",
+                            target=story,
+                            )
+
 
 class Map_artifact(models.Model):
     text = models.TextField()
@@ -238,6 +285,23 @@ class Confirmation_code(models.Model):
     start_time = models.TextField()
     attempt = models.IntegerField(default=0)
     user = models.ForeignKey(User)
+
+class Notification_ban(models.Model):
+    user = models.ForeignKey(User)
+    banned_user = models.ForeignKey(User, related_name="banned_user", null=True)
+    banned_story = models.ForeignKey(Story, related_name="banned_story", null=True)
+
+    def __unicode__(self):
+        return self.user.username
+
+
+class UserNotify(models.Model):
+    user = models.ForeignKey(User, unique=True)
+    notification_off = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.user.username
+
 
 class Subscriptions(models.Model):
     """ Subcriptions list """

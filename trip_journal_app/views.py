@@ -19,9 +19,8 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login
-
-from trip_journal_app.models import Story, Picture, Tag, Map_artifact, Confirmation_code, Subscriptions
-
+from trip_journal_app.models import Story, Picture, Tag, Map_artifact, \
+    Subscriptions, Comment, UserNotify, Notification_ban, Confirmation_code
 from trip_journal_app.forms import UploadFileForm
 from trip_journal_app.utils.story_utils import story_contents
 from TripJournal.settings import AUTH_BY_EMAIL
@@ -30,6 +29,7 @@ from django.utils.translation import get_language_info
 from django.utils.translation import activate
 from django.utils import translation
 from django.conf import settings as TripJournal_settings
+
 
 def home(request):
     """
@@ -95,7 +95,8 @@ def upload_img(request, story_id):
     user = auth.get_user(request)
     if user != story.user:
         return HttpResponse('Unauthorized', status=401)
-
+    print '=' * 20
+    print request.FILES
     form = UploadFileForm(request.POST, request.FILES)
     if form.is_valid():
         img = request.FILES['file']
@@ -231,6 +232,7 @@ def like(request, item_id, item_to_like):
         item.likes.remove(user)
     else:
         item.likes.add(user)
+        item.notify(user=user)
     item.save()
     return HttpResponse(item.likes_count())
 
@@ -284,7 +286,10 @@ def get_story_content(request):
     if request.is_ajax():
         story_id = request.GET.get('id')
         story = Story.objects.get(pk=int(story_id))
-        pictures = Picture.objects.filter(story_id=int(story_id))
+        user = story.user
+        # pictures = Picture.objects.filter(story_id=int(story_id))
+        user_stories = Story.objects.filter(user=user)
+        pictures = Picture.objects.filter(story=user_stories)
         picture_dic = {}
         for picture in pictures:
             picture_dic[str(picture.id)] = str(picture.get_stored_pic_by_size(
@@ -467,3 +472,83 @@ def general_rss(request):
     return render(request, 'rss.xml', context,
                   content_type="application/xhtml+xml")
 
+
+@login_required
+@ensure_csrf_cookie
+def add_comment(request, story_id):
+    """Add a new comment."""
+    if request.POST["text"]:
+        author = auth.get_user(request)
+        comment = Comment(user_id=author.id,
+                          story_id=story_id,
+                          text=request.POST["text"])
+        comment.save()
+        comment.notify(story_id)
+    return HttpResponseRedirect('/story/{id}'.format(id=story_id))
+
+
+@login_required
+def user_messages(request):
+    user = auth.get_user(request)
+    notifications = user.notifications.order_by('-timestamp')
+    try:
+        is_notified = not UserNotify.objects.get(user=user).notification_off
+    except:
+        is_notified = True
+    context = {'user': user,
+               'notifications': notifications,
+               'is_notified': is_notified}
+    return render(request, 'user_messages.html', context)
+
+
+@login_required
+def mark_as_read(request, notification_id, story_id):
+    request.user.notifications.get(pk=notification_id).mark_as_read()
+    return story(request, story_id)
+
+
+@login_required
+def mark_all_as_read(request):
+    request.user.notifications.unread().mark_all_as_read()
+    return HttpResponseRedirect('/user_messages/')
+
+
+@login_required
+def toggle_notifications(request):
+    user = auth.get_user(request)
+    try:
+        is_notified = not UserNotify.objects.get(user=user).notification_off
+    except:
+        notify_off = UserNotify(user=user, notification_off=True)
+        notify_off.save()
+        return HttpResponseRedirect('/user_messages/')
+    if is_notified:
+        user_notify = UserNotify.objects.get(user=user, notification_off=True)
+        user_notify.save()
+    else:
+        UserNotify.objects.get(user=user).delete()
+    return HttpResponseRedirect('/user_messages/')
+
+
+@login_required
+def toggle_story_notifications(request, story_id):
+    user = auth.get_user(request)
+    if Notification_ban.objects.filter(user=user, banned_story_id=story_id).exists():
+        Notification_ban.objects.filter(user=user, banned_story_id=story_id).delete()
+    else:
+        ban = Notification_ban(user=user, banned_story_id=story_id)
+        ban.save()
+    return HttpResponseRedirect('/story/{id}'.format(id=story_id))
+
+
+@login_required
+def get_pics_by_user(request):
+    user = auth.get_user(request)
+    user_stories = Story.objects.filter(user=user)
+    pictures = Picture.objects.filter(story=user_stories)
+    picture_list = []
+    for picture in pictures:
+        picture_list.append((str(picture.get_stored_pic_by_size(300)),
+                            picture.id))
+    content = {"pictures": picture_list}
+    return HttpResponse(json.dumps(content))

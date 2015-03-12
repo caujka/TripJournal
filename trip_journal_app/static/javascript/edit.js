@@ -5,7 +5,6 @@ var serverConnect = checkServerConnection();
 window.onload = function() {
     getStoryContent(); // get story content using AJAX
     getStoryTags(); // get story tegs using AJAX
-
     // In online mode initialize the google map API. In offline show short menu
     if (serverConnect) {
         initialize(); // initialize the google map API
@@ -34,7 +33,6 @@ window.onload = function() {
     for (var i = 0; i < clearBlocks.length; i++) {
         clearBlocks[i].addEventListener("click", clear);
     }
-
     // call function what I have to do.
     toDo();
 }
@@ -649,3 +647,7 @@ function toDo() {
          ");
     console.log(" ");
 }
+
+
+   
+    

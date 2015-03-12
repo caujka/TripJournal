@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.contrib import messages, auth
 
-from trip_journal_app.models import Story, Subscriptions
+from trip_journal_app.models import Story, Subscriptions, Comment, Notification_ban
 
 
 def story_contents(request, story_id, template,
@@ -11,11 +11,13 @@ def story_contents(request, story_id, template,
     story = Story()
     user = auth.get_user(request)
     is_subscribed = None
+    comments = []
     # if story_id exists renders its content to story.html page
     if story_id:
         try:
             story = Story.objects.get(pk=int(story_id))
             is_subscribed = Subscriptions.objects.filter(subscriber=user.id, subscription=story.user_id)
+            comments = Comment.objects.filter(story_id=story_id)
             if check_user:
                 if user != story.user:
                     messages.info(request, 'Edit your own stories!')
@@ -44,11 +46,16 @@ def story_contents(request, story_id, template,
             msg = ("Such a story doesn't exist. But you can create a new one.")
             messages.info(request, msg)
             return redirect('/my_stories/')
+    if Notification_ban.objects.filter(user=user, banned_story=story).exists():
+        is_notified = False
+    else:
+        is_notified = True
     context_editor = {
         # 'story_blocks': story_blocks,
         'is_subscribed': is_subscribed,
         'story': story,
         'user': user,
+        'comments': comments,
+        'is_notified': is_notified
     }
     return render(request, template, context_editor)
-

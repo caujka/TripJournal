@@ -13,4 +13,3 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^localization/', include('localization.urls')),
 )
-

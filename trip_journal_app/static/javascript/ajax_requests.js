@@ -100,6 +100,8 @@ function postImages(storyId) {
         if (xhr.readyState === 4 && xhr.status === 200) {
             picIdInDB = parseInt(xhr.responseText);
             var pictures = document.getElementsByClassName("image_story");
+            // var gallery_pictures = document.getElementsByClassName("gallery_image_story");
+            // pictures = pictures.concat(gallery_pictures);
             for (var i = 0; i < countPicture; i++) {
                 pictures[pictures.length - i - 1].setAttribute("data-dbid", picIdInDB - i);
             }

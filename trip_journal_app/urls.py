@@ -55,6 +55,19 @@ urlpatterns = [
         views.make_subscription_or_unsubscribe, name='subscribe'),
     # rss
     url(r'^rss/$', views.general_rss, name='rss'),
+    url(r'^story/(?P<story_id>\d*)/comment/$', views.add_comment,
+        name='add_comment'),
+    url(r'^user_messages/$', views.user_messages, name='user_messages'),
+    url(r'^mark_as_read/(?P<notification_id>\d*)/(?P<story_id>\d*)/$',
+        views.mark_as_read, name='mark_as_read'),
+    url(r'^mark_all_as_read/$', views.mark_all_as_read,
+        name='mark_all_as_read'),
+    url(r'^toggle_notifications/$', views.toggle_notifications,
+        name='toggle_notifications'),
+    url(r'^toggle_story_notifications/(?P<story_id>\d*)$',
+        views.toggle_story_notifications,
+        name='toggle_story_notifications'),
+    url(r'^get_pics_by_user/$', views.get_pics_by_user, name='get_pics_by_user'),
 ]
 
 if utils.social_status["email"]:

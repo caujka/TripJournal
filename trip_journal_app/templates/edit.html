@@ -19,6 +19,7 @@
         <script type="text/javascript" src="{% static "javascript/mapping.js" %}"></script>
         <script type="text/javascript" src="{% static "javascript/ajax_requests.js" %}"></script>
         <script type="text/javascript" src="{% static "javascript/edit.js" %}"></script>
+        <script type="text/javascript" src="{% static "javascript/gallery.js" %}"></script>
     {% endblock %}
     {% block content %}
     <div id="map-canvas-wrapper">
@@ -101,6 +102,9 @@
         </div>
  
         {% if story.id %}
+        <a id="gallery_link">
+            <div class='login_image'>add image from gallery</div>
+        </a>
         <div id="publish_panel" class="block">
            <form id="view_form" action="{% url "story" story.id %}">
                 <input type="submit" value='{% trans "view" %}' class="button" id="view">
@@ -114,5 +118,19 @@
             {% include 'toggle_publish_buttons.html' with story_id=0 %}
         {% endif %}
         </div>
+        <div id="gal_overlay" class="overlay hide">
+        <div class="popup">
+            <h3>Choose images</h3>
+            <div id="close_icon" class="pointer close non_select">x</div>
+            <div id="gallery_cont"></div>
+            <div id="gallery_msg" class="error"></div> 
+            
+            <form id="gallery_form" method="post">
+                
+                 
+                <input id="upload_btn" class="btn" type="button" value="Upload">
+            </form>
+        </div>
+    </div>
     </main>
     {% endblock %}
